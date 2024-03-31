@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class ProductTile extends StatelessWidget {
   final String itemName;
@@ -7,45 +8,46 @@ class ProductTile extends StatelessWidget {
   final void Function()? onPressed;
 
   const ProductTile({
-    super.key,
+    Key? key,
     required this.itemName,
     required this.itemPrice,
     required this.imagePath,
     required this.onPressed,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
       padding: const EdgeInsets.all(12),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AspectRatio(
-              aspectRatio: 1, // Adjust aspect ratio as needed
-              child: Image.asset(
-                imagePath,
-                fit: BoxFit.cover,
-              ),
-            ),
-            const SizedBox(height: 8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        // crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(
+            imagePath,
+            height: 150,
+            // fit: BoxFit.cover,
+          ),
+          const SizedBox(height: 12),
+          Row(mainAxisAlignment: MainAxisAlignment.start, children: [
             Text(
               itemName,
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 4),
-            Text('\$$itemPrice'),
-            const SizedBox(height: 8),
-            ElevatedButton(
-              onPressed: onPressed,
-              child: const Text('Add to Cart'),
-            ),
-          ],
-        ),
+          ]),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                '\$$itemPrice',
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

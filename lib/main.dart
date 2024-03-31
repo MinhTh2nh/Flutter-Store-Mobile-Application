@@ -2,25 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:food_mobile_app/pages/home.dart';
 import 'package:food_mobile_app/pages/products.dart';
 import 'package:food_mobile_app/pages/settings.dart';
+import 'package:food_mobile_app/pages/cart_page.dart';
+import 'package:provider/provider.dart';
+import 'package:food_mobile_app/model/cart_model.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: HomePage(),
+    return ChangeNotifierProvider(
+      create: (context) => CartModel(),
+      child: const MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: HomePage(),
+      ),
     );
   }
 }
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _MyHomePageState();
@@ -48,42 +54,65 @@ class _MyHomePageState extends State<HomePage> {
         title: const Padding(
           padding: EdgeInsets.only(left: 24),
           child: Text(
-            'Fashion',
+            'D Baku',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
         ),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 12),
-            child: Container(
-              decoration: BoxDecoration(
-                  color: Colors.teal.shade200,
-                  borderRadius: BorderRadius.circular(18)),
-              child: IconButton(
-                onPressed: () {
-                  // Action for the first button
-                },
-                icon: const Icon(
-                  Icons.search,
-                  color: Colors.white,
-                ),
+            child: IconButton(
+              onPressed: () {
+                // Action for the first button
+              },
+              icon: const Icon(
+                Icons.search,
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 24),
-            child: Container(
-              decoration: BoxDecoration(
-                  color: Colors.teal.shade200,
-                  borderRadius: BorderRadius.circular(18)),
-              child: IconButton(
-                onPressed: () {
-                  // Action for the second button
-                },
-                icon: const Icon(
-                  Icons.shopping_basket,
-                  color: Colors.white,
-                ),
+          Consumer<CartModel>(
+            builder: (context, cart, child) => Padding(
+              padding: const EdgeInsets.only(right: 24.0),
+              child: Stack(
+                children: [
+                  IconButton(
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return const CartPage();
+                        },
+                      ),
+                    ),
+                    icon: const Icon(
+                      Icons.shopping_basket,
+                    ),
+                  ),
+                  if (cart.itemsCount > 0)
+                    Positioned(
+                      right: 6,
+                      top: 6,
+                      child: Container(
+                        padding: const EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        constraints: const BoxConstraints(
+                          minWidth: 14,
+                          minHeight: 14,
+                        ),
+                        child: Text(
+                          cart.itemsCount.toString(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 8,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                ],
               ),
             ),
           ),
