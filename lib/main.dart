@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:food_mobile_app/pages/home.dart';
 import 'package:food_mobile_app/pages/products.dart';
@@ -5,8 +6,11 @@ import 'package:food_mobile_app/pages/settings.dart';
 import 'package:food_mobile_app/pages/cart_page.dart';
 import 'package:provider/provider.dart';
 import 'package:food_mobile_app/model/cart_model.dart';
+import 'consts/consts.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
