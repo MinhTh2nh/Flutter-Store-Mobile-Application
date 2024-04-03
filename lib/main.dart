@@ -10,14 +10,22 @@ import 'package:provider/provider.dart';
 import 'package:food_mobile_app/model/cart_model.dart';
 import 'consts/consts.dart';
 
-// void main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-//   await Firebase.initializeApp();
-//   runApp(const MyApp());
-// }
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: const FirebaseOptions(
+      apiKey: "AIzaSyB1kAqS0nkUMIGpDI_wO401W-cA089ICBA",
+      appId: "1:456664540795:android:3df416474df819c60ae4de",
+      messagingSenderId: "456664540795",
+      projectId: "food-mobible-project",
+    ),
+  );
   runApp(const MyApp());
 }
+
+// void main() async {
+//   runApp(const MyApp());
+// }
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -27,7 +35,7 @@ class MyApp extends StatelessWidget {
       create: (context) => CartModel(),
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: SignupPage(),
+        home: HomePage(),
       ),
     );
   }

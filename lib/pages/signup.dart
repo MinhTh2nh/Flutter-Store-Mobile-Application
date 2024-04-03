@@ -4,8 +4,8 @@ import 'package:food_mobile_app/components/buttons.dart';
 import 'package:food_mobile_app/components/custom_textfield.dart';
 import 'package:food_mobile_app/consts/consts.dart';
 import 'package:velocity_x/velocity_x.dart';
-import 'package:get/get.dart';
 import 'package:food_mobile_app/pages/login.dart';
+import 'package:get/get.dart';
 
 class SignupPage extends StatelessWidget {
   const SignupPage({Key? key}) : super(key: key);
