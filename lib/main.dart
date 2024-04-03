@@ -1,15 +1,31 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:food_mobile_app/pages/home.dart';
+import 'package:food_mobile_app/pages/login.dart';
+import 'package:food_mobile_app/pages/signup.dart';
 import 'package:food_mobile_app/pages/products.dart';
 import 'package:food_mobile_app/pages/settings.dart';
 import 'package:food_mobile_app/pages/cart_page.dart';
 import 'package:provider/provider.dart';
 import 'package:food_mobile_app/model/cart_model.dart';
+import 'consts/consts.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: const FirebaseOptions(
+      apiKey: "AIzaSyB1kAqS0nkUMIGpDI_wO401W-cA089ICBA",
+      appId: "1:456664540795:android:3df416474df819c60ae4de",
+      messagingSenderId: "456664540795",
+      projectId: "food-mobible-project",
+    ),
+  );
   runApp(const MyApp());
 }
 
+// void main() async {
+//   runApp(const MyApp());
+// }
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
