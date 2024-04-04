@@ -41,6 +41,7 @@ dependencies:
   firebase_storage: ^11.6.11 # Firebase Storage
   firebase_auth: ^4.18.0 # Firebase Authentication
   velocity_x: ^3.0.0 # Use the latest version available at the time
+  crypto: ^3.0.0
 
 dev_dependencies:
   flutter_test:

@@ -110,10 +110,6 @@ class _SignupPageState extends State<SignupPage> {
                       title: "Sign Up",
                       textColor: Colors.white,
                       onPress: () async {
-                        print("Name: ${nameController.text}");
-                        print("Email: ${emailController.text}");
-                        print("Password: ${passwordController.text}");
-
                         if (nameController.text.isEmpty ||
                             emailController.text.isEmpty ||
                             passwordController.text.isEmpty ||
@@ -136,7 +132,6 @@ class _SignupPageState extends State<SignupPage> {
                             password: passwordController.text,
                             name: nameController.text, // Pass the name field here
                           ).then((value) {
-                            VxToast.show(context, msg: "Logged in successfully");
                             // Get.offAll(() => HomePage());
                           });
                         } catch (e) {
