@@ -14,10 +14,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: const FirebaseOptions(
-      apiKey: "AIzaSyB1kAqS0nkUMIGpDI_wO401W-cA089ICBA",
-      appId: "1:456664540795:android:3df416474df819c60ae4de",
-      messagingSenderId: "456664540795",
-      projectId: "food-mobible-project",
+      apiKey: "AIzaSyBEQoFBKiq8O39B7aCG3878KaaIpLKXlAc",
+      appId: "1:947403145687:android:39a5f3daa0f66fe4cf0b92",
+      messagingSenderId: "947403145687",
+      projectId: "store-mobile-e2ebc",
     ),
   );
   runApp(const MyApp());
@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
       create: (context) => CartModel(),
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: HomePage(),
+        home: SignupPage(),
       ),
     );
   }

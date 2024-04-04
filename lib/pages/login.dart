@@ -34,11 +34,13 @@ class LoginPage extends StatelessWidget {
                     customeTextField(
                       hint: emailHint,
                       title: email,
+                      isPass: false,
                     ),
                     SizedBox(height: 10), // Add some space between text fields
                     customeTextField(
                       hint: passwordHint,
                       title: password,
+                      isPass: true,
                     ),
                     SizedBox(height: 20), // Add more space after text fields
                     Align(
@@ -47,18 +49,23 @@ class LoginPage extends StatelessWidget {
                           onPressed: () {}, child: forgetPass.text.make()),
                     ),
                     SizedBox(height: 10), // Add more space after text fields
-                    buttons("Login", onPress: () {})
+                    buttons(
+                            title: "Login",
+                            color: Colors.red,
+                            textColor: Colors.white, // Text color set to black
+                            onPress: () {})
                         .box
                         .width(context.screenWidth - 50)
                         .make(),
                     SizedBox(height: 10), // Add more space after text fields
                     createNewAccount.text.color(Colors.grey).make(),
-                    buttons("Sign Up", onPress: () {
-                      Get.to(() => const SignupPage());
-                    })
-                        .box
-                        .width(context.screenWidth - 50)
-                        .make(),
+                    buttons(
+                        title: "Sign Up",
+                        color: Colors.transparent,
+                        textColor: Colors.red, // Text coext color set to black,
+                        onPress: () {
+                          Get.to(() => const SignupPage());
+                        }).box.width(context.screenWidth - 50).make(),
                     SizedBox(height: 10), // Add more space after text fields
                     SizedBox(height: 10), // Add more space after text fields
                   ],
