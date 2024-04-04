@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "947403145687",
-    "project_id": "store-mobile-e2ebc",
-    "storage_bucket": "store-mobile-e2ebc.appspot.com"
+    "project_number": "456664540795",
+    "project_id": "food-mobible-project",
+    "storage_bucket": "food-mobible-project.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:947403145687:android:39a5f3daa0f66fe4cf0b92",
+        "mobilesdk_app_id": "1:456664540795:android:3df416474df819c60ae4de",
         "android_client_info": {
           "package_name": "com.example.food_mobile_app"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBEQoFBKiq8O39B7aCG3878KaaIpLKXlAc"
+          "current_key": "AIzaSyB1kAqS0nkUMIGpDI_wO401W-cA089ICBA"
         }
       ],
       "services": {
