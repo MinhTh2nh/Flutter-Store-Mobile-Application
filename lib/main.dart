@@ -16,7 +16,7 @@ void main() async {
     options: const FirebaseOptions(
       apiKey: "AIzaSyB1kAqS0nkUMIGpDI_wO401W-cA089ICBA",
       appId: "1:456664540795:android:3df416474df819c60ae4de",
-      messagingSenderId: "456664540795",
+      messagingSenderId: "947403145687",
       projectId: "food-mobible-project",
     ),
   );

@@ -26,7 +26,7 @@ class ProductTile extends StatelessWidget {
         // crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(
+          Image.network(
             imagePath,
             height: 150,
             // fit: BoxFit.cover,
