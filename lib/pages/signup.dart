@@ -37,11 +37,11 @@ class _SignupPageState extends State<SignupPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(height: MediaQuery.of(context).size.height * 0.1),
-              Text(
+              const Text(
                 "Join to the $appName",
                 style: TextStyle(color: Colors.white, fontSize: 18),
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
@@ -52,28 +52,28 @@ class _SignupPageState extends State<SignupPage> {
                       controller: nameController,
                       isPass: false,
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     customeTextField(
                       hint: emailHint,
                       title: email,
                       controller: emailController,
                       isPass: false,
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     customeTextField(
                       hint: passwordHint,
                       title: password,
                       controller: passwordController,
                       isPass: true,
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     customeTextField(
                       hint: passwordConfirm,
                       title: password,
                       controller: passwordRetypeController,
                       isPass: true,
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Row(
                       children: [
                         Checkbox(
@@ -85,10 +85,10 @@ class _SignupPageState extends State<SignupPage> {
                             });
                           },
                         ),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         Expanded(
                           child: RichText(
-                            text: TextSpan(
+                            text: const TextSpan(
                               children: [
                                 TextSpan(
                                   text: "I agree to the ",
@@ -104,7 +104,7 @@ class _SignupPageState extends State<SignupPage> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     buttons(
                       color: isCheck ? Colors.red : Colors.grey,
                       title: "Sign Up",
@@ -141,7 +141,7 @@ class _SignupPageState extends State<SignupPage> {
                         }
                       },
                     ).box.width(context.screenWidth - 50).make(),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Align(
                       alignment: Alignment.center,
                       child: Column(
