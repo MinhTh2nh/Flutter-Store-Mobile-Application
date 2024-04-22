@@ -31,13 +31,13 @@ class LoginPage extends StatelessWidget {
                 // Add horizontal padding
                 child: Column(
                   children: [
-                    customeTextField(
+                    CustomTextField(
                       hint: emailHint,
                       title: email,
                       isPass: false,
                     ),
                     SizedBox(height: 10), // Add some space between text fields
-                    customeTextField(
+                    CustomTextField(
                       hint: passwordHint,
                       title: password,
                       isPass: true,
@@ -50,10 +50,10 @@ class LoginPage extends StatelessWidget {
                     ),
                     SizedBox(height: 10), // Add more space after text fields
                     buttons(
-                            title: "Login",
-                            color: Colors.red,
-                            textColor: Colors.white, // Text color set to black
-                            onPress: () {})
+                        title: "Login",
+                        color: Colors.red,
+                        textColor: Colors.white, // Text color set to black
+                        onPress: () {})
                         .box
                         .width(context.screenWidth - 50)
                         .make(),
