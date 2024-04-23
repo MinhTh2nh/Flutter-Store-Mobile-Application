@@ -11,38 +11,53 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AuthController extends GetxController {
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  User? currentUser = FirebaseAuth.instance.currentUser;
+
+  // Text controllers
+  var emailController = TextEditingController();
+  var passwordController = TextEditingController();
 
   // Function to hash the password using SHA-256
   String _hashPassword(String password) {
-    // Convert password string to bytes
     Uint8List bytes = utf8.encode(password);
-    // Hash bytes using SHA-256 algorithm
     Digest digest = sha256.convert(bytes);
-    // Convert digest to hexadecimal string
-    String hashedPassword = digest.toString();
-    return hashedPassword;
+    return digest.toString();
   }
 
-  Future<UserCredential?> loginMethod(
-      {String? email, String? password, BuildContext? context}) async {
-    UserCredential? userCredential;
+  // General function to show SnackBars for error messages
+  void _showErrorSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+// loginMethod accepting a named parameter `context`
+  Future<UserCredential?> loginMethod({required String email, required String password, BuildContext? context}) async {
+    String hashedPassword = _hashPassword(password);
+
     try {
-      userCredential = await auth.signInWithEmailAndPassword(
-        email: email!,
-        password: password!,
+      return FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: hashedPassword,
       );
     } on FirebaseAuthException catch (e) {
-      ScaffoldMessenger.of(context!).showSnackBar(
-        SnackBar(
-          content: Text(e.message!),
-        ),
-      );
+      if (context != null) {
+        String errorMessage = "Login failed!";
+        if (e.code == 'user-not-found') {
+          errorMessage = "No user found for that email.";
+        } else if (e.code == 'wrong-password') {
+          errorMessage = "Wrong password provided.";
+        }
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(errorMessage)));
+      }
+      return null;
     }
-    return userCredential;
   }
 
-  Future<void> storeUserData(
+    Future<void> storeUserData(
       {String? name, String? email, String? password}) async {
     if (name != null && email != null && password != null) {
       DocumentReference store = firestore.collection(usersCollection).doc();
@@ -55,7 +70,8 @@ class AuthController extends GetxController {
   }
 
   Future<UserCredential?> signupMethod(
-      {String? email,
+      {
+        String? email,
         String? password,
         String? name,
         BuildContext? context}) async {
@@ -78,29 +94,9 @@ class AuthController extends GetxController {
         );
       }
     } on FirebaseAuthException catch (e) {
-      // Handle FirebaseAuthException
-      if (e.code == 'email-already-in-use') {
-        // Inform the user that the email address is already in use
-        ScaffoldMessenger.of(context!).showSnackBar(
-          const SnackBar(
-            content: Text('Email address is already in use. Please use a different email address.'),
-            behavior: SnackBarBehavior.floating, // Set behavior to floating
-          ),
-        );
-      } else {
-        // Handle other FirebaseAuthException errors
-        ScaffoldMessenger.of(context!).showSnackBar(
-          SnackBar(
-            content: Text(e.message!),
-            behavior: SnackBarBehavior.floating, // Set behavior to floating
-          ),
-        );
-      }
-    } catch (e) {
-      // Handle other exceptions
-      print("Error during signup: $e");
+      _showErrorSnackBar(context!, e.message ?? "Signup failed!");
+      return null;
     }
-
     return userCredential;
   }
 

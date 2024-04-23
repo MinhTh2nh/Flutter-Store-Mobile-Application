@@ -46,28 +46,28 @@ class _SignupPageState extends State<SignupPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   children: [
-                    customeTextField(
+                    CustomTextField(
                       hint: nameHint,
                       title: name,
                       controller: nameController,
                       isPass: false,
                     ),
                     SizedBox(height: 20),
-                    customeTextField(
+                    CustomTextField(
                       hint: emailHint,
                       title: email,
                       controller: emailController,
                       isPass: false,
                     ),
                     SizedBox(height: 10),
-                    customeTextField(
+                    CustomTextField(
                       hint: passwordHint,
                       title: password,
                       controller: passwordController,
                       isPass: true,
                     ),
                     SizedBox(height: 10),
-                    customeTextField(
+                    CustomTextField(
                       hint: passwordConfirm,
                       title: password,
                       controller: passwordRetypeController,
