@@ -2,12 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CartModel extends ChangeNotifier {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   List _shopItems = [];
   List _cartItems = [];
 
   CartModel() {
-    fetchShopItems();
+    _shopItems = [
+      {
+        "name": "Item 1",
+        "itemPrice": "10.00",
+        "imagePath": "https://gamek.mediacdn.vn/133514250583805952/2021/5/1/photo-1-16198832601821648986883.jpg" // Example path to image asset
+      },
+      {
+        "name": "Item 2",
+        "itemPrice": "15.00",
+        "imagePath": "https://gamek.mediacdn.vn/133514250583805952/2021/5/1/photo-1-16198832601821648986883.jpg" // Example path to image asset
+      },
+      // Add more static test data as needed
+    ];
   }
 
   List get cartItems => _cartItems;
@@ -16,19 +27,6 @@ class CartModel extends ChangeNotifier {
   int get itemsCount => _cartItems.length;
 
   // Fetch shop items from Firestore
-  void fetchShopItems() async {
-    try {
-      var querySnapshot = await _firestore.collection('products').get();
-      _shopItems = querySnapshot.docs.map((doc) => {
-        "name": doc['name'],
-        "itemPrice": doc['price'].toString(),
-        "imagePath": doc['imageUrl']
-      }).toList();
-      notifyListeners();
-    } catch (e) {
-      print("Error fetching data: $e");
-    }
-  }
 
   void addItemToCart(int index) {
     _cartItems.add(_shopItems[index]);

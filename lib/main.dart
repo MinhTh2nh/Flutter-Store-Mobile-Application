@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: appName,
-        initialRoute: '/sign_in', // Set the initial route to '/sign_in'
+        initialRoute: '/home', // Set the initial route to '/sign_in'
         routes: {
           '/sign_in': (context) => SignInScreen(), // Route for sign in
           '/home': (context) => HomePage(), // Route for home page
@@ -43,6 +43,7 @@ class MyApp extends StatelessWidget {
 // This class represents the main screen of the app after the user has signed in.
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
+  static String routeName = "/home";
 
   @override
   State<HomePage> createState() => _MyHomePageState();
