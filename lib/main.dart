@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
 
         title: appName,
-        initialRoute: '/sign_in', // Set the initial route to '/sign_in'
+        initialRoute: '/home', // Set the initial route to '/sign_in'
         routes: {
           '/sign_in': (context) => const SignInScreen(), // Route for sign in
           '/home': (context) => const HomePage(), // Route for home page
@@ -44,6 +44,7 @@ class MyApp extends StatelessWidget {
 class HomePage extends StatefulWidget {
   // ignore: use_super_parameters
   const HomePage({Key? key}) : super(key: key);
+  static String routeName = "/home";
 
   @override
   State<HomePage> createState() => _MyHomePageState();
