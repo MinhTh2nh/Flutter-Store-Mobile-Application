@@ -30,35 +30,36 @@ class Home extends StatelessWidget {
               child: Divider(),
             ),
             Consumer<CartModel>(
-              builder: (context, value, child) {
+              builder: (context, cartModel, child) {
+                if (cartModel.shopItems.isEmpty) {
+                  // Display loading indicator until products are fetched
+                  return const Center(child: CircularProgressIndicator());
+                }
                 return GridView.builder(
-                  padding: const EdgeInsets.only(
-                      right: 14, left: 14, top: 14, bottom: 50),
-                  shrinkWrap: true, // Add this line
+                  shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: value.shopItems.length,
+                  itemCount: cartModel.shopItems.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     childAspectRatio: 1 / 1.2,
                   ),
                   itemBuilder: (context, index) {
+                    var product = cartModel.shopItems[index];
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                ProductDetailPage(index: index),
+                            builder: (context) => ProductDetailPage(index: index),
                           ),
                         );
                       },
                       child: ProductTile(
-                        itemName: value.shopItems[index][0],
-                        itemPrice: value.shopItems[index][1],
-                        imagePath: value.shopItems[index][2],
-                        onPressed: () =>
-                            Provider.of<CartModel>(context, listen: false)
-                                .addItemToCart(index),
+                        itemName: product['name'],
+                        itemPrice: product['itemPrice'],
+                        imagePath: product['imagePath'],
+                        onPressed: () => Provider.of<CartModel>(context, listen: false)
+                            .addItemToCart(index),
                       ),
                     );
                   },

@@ -1,23 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CartModel extends ChangeNotifier {
-  final List _shopItems = const [
-    ["Enjoy the New Year", "12.00", "lib/images/shirt1.jpg"],
-    ["Have a Nice Daisy", "11.00", "lib/images/shirt2.jpg"],
-    ["Year Of The Dragon", "11.00", "lib/images/shirt3.jpg"],
-    ["72 My Hometown", "11.00", "lib/images/shirt4.jpg"],
-    ["72 Mix Tee", "12.00", "lib/images/shirt5.jpg"],
-    ["Bread", "7.00", "lib/images/shirt6.jpg"],
-    ["DBaku [UT]SS1/20224", "11.00", "lib/images/shirt7.jpg"],
-    ["DBaku [WT]SS1/20224", "13.00", "lib/images/shirt8.jpg"],
-  ];
-
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  List _shopItems = [];
   List _cartItems = [];
 
-  get cartItems => _cartItems;
-  get shopItems => _shopItems;
+  CartModel() {
+    fetchShopItems();
+  }
+
+  List get cartItems => _cartItems;
+  List get shopItems => _shopItems;
 
   int get itemsCount => _cartItems.length;
+
+  // Fetch shop items from Firestore
+  void fetchShopItems() async {
+    try {
+      var querySnapshot = await _firestore.collection('products').get();
+      _shopItems = querySnapshot.docs.map((doc) => {
+        "name": doc['name'],
+        "itemPrice": doc['price'].toString(),
+        "imagePath": doc['imageUrl']
+      }).toList();
+      notifyListeners();
+    } catch (e) {
+      print("Error fetching data: $e");
+    }
+  }
 
   void addItemToCart(int index) {
     _cartItems.add(_shopItems[index]);
@@ -30,9 +41,9 @@ class CartModel extends ChangeNotifier {
   }
 
   String calculateTotal() {
-    double totalPrice = 0;
-    for (int i = 0; i < cartItems.length; i++) {
-      totalPrice += double.parse(cartItems[i][1]);
+    double totalPrice = 0.0;
+    for (var item in _cartItems) {
+      totalPrice += double.parse(item['price']);
     }
     return totalPrice.toStringAsFixed(2);
   }
