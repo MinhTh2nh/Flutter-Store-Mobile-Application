@@ -6,6 +6,7 @@ import '../pages/product_detail_page.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
+  static String routeName = "/home";
 
   @override
   Widget build(BuildContext context) {
