@@ -1,45 +1,40 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../components/product_tile.dart';
-import '../model/cart_model.dart';
+import '../../components/product_tile.dart';
+import '../../model/cart_model.dart';
 import 'package:provider/provider.dart';
-import '../pages/product_detail_page.dart';
+import '../../pages/product_detail_page.dart';
+import 'small_components/categories.dart';
+import 'small_components/discount_banner.dart';
+import 'small_components/special_offers.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
+
+  static String routeName = "/home";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(vertical: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(
-              height: 12,
-            ),
             Image.asset('lib/images/main_image.png'),
-            const Padding(
-              padding: EdgeInsets.all(10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Popular Product",
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    "See more ",
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.w300),
-                  ),
-                ],
-              ),
-            )
-            ,
+            Column( // Wrap DiscountBanner and Categories in a Column
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                DiscountBanner(),
+                Categories(),
+              ],
+            ),
+            SpecialOffers(),
             const Padding(
               padding: EdgeInsets.all(10.0),
               child: Text(
                 "New Arrivals",
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
             const Padding(
@@ -67,7 +62,8 @@ class Home extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ProductDetailPage(index: index),
+                            builder: (context) =>
+                                ProductDetailPage(index: index),
                           ),
                         );
                       },
@@ -75,8 +71,9 @@ class Home extends StatelessWidget {
                         itemName: product['name'],
                         itemPrice: product['itemPrice'],
                         imagePath: product['imagePath'],
-                        onPressed: () => Provider.of<CartModel>(context, listen: false)
-                            .addItemToCart(index),
+                        onPressed: () =>
+                            Provider.of<CartModel>(context, listen: false)
+                                .addItemToCart(index),
                       ),
                     );
                   },

@@ -94,7 +94,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             padding: const EdgeInsets.all(16),
             child: ElevatedButton(
               onPressed: () {
-                cartModel.addItemToCart(widget.index);
+                cartModel.addItemToCartWithQuantity(widget.index , quantity);
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Product added to cart'),

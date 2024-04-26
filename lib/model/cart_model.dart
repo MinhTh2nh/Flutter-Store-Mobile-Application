@@ -31,7 +31,13 @@ class CartModel extends ChangeNotifier {
     _cartItems.add(_shopItems[index]);
     notifyListeners();
   }
-
+  void addItemToCartWithQuantity(int index , int quantity) {
+    // Create a copy of the item with the added quantity
+    Map newItem = Map.from(_shopItems[index]);
+    newItem['quantity'] = quantity;
+    _cartItems.add(newItem);
+    notifyListeners();
+  }
   void removeItemFromCart(int index) {
     _cartItems.removeAt(index);
     notifyListeners();
@@ -40,7 +46,7 @@ class CartModel extends ChangeNotifier {
   String calculateTotal() {
     double totalPrice = 0.0;
     for (var item in _cartItems) {
-      totalPrice += double.parse(item['itemPrice']); // Change 'price' to 'itemPrice'
+      totalPrice += double.parse(item['itemPrice']) * item['quantity'];
     }
     return totalPrice.toStringAsFixed(2);
   }
