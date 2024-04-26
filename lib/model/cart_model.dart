@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CartModel extends ChangeNotifier {
   List _shopItems = [];
@@ -10,12 +9,14 @@ class CartModel extends ChangeNotifier {
       {
         "name": "Item 1",
         "itemPrice": "10.00",
-        "imagePath": "https://gamek.mediacdn.vn/133514250583805952/2021/5/1/photo-1-16198832601821648986883.jpg" // Example path to image asset
+        "imagePath": "https://gamek.mediacdn.vn/133514250583805952/2021/5/1/photo-1-16198832601821648986883.jpg",
+        "in-stock": 4 ,
       },
       {
         "name": "Item 2",
         "itemPrice": "15.00",
-        "imagePath": "https://gamek.mediacdn.vn/133514250583805952/2021/5/1/photo-1-16198832601821648986883.jpg" // Example path to image asset
+        "imagePath": "https://gamek.mediacdn.vn/133514250583805952/2021/5/1/photo-1-16198832601821648986883.jpg" ,
+        "in-stock": 5 ,
       },
       // Add more static test data as needed
     ];
@@ -25,8 +26,6 @@ class CartModel extends ChangeNotifier {
   List get shopItems => _shopItems;
 
   int get itemsCount => _cartItems.length;
-
-  // Fetch shop items from Firestore
 
   void addItemToCart(int index) {
     _cartItems.add(_shopItems[index]);
@@ -41,7 +40,7 @@ class CartModel extends ChangeNotifier {
   String calculateTotal() {
     double totalPrice = 0.0;
     for (var item in _cartItems) {
-      totalPrice += double.parse(item['price']);
+      totalPrice += double.parse(item['itemPrice']); // Change 'price' to 'itemPrice'
     }
     return totalPrice.toStringAsFixed(2);
   }
