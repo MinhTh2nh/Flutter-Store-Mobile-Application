@@ -30,62 +30,32 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         children: [
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.only(
-                  top: 16.0, right: 32, left: 32, bottom: 16),
+              padding: const EdgeInsets.all(32),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Center(
                     child: Container(
                       height: 300,
-                      child: Image.asset(
-                        product[2],
+                      child: Image.network(
+                        product['imagePath'],
                         fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
                       ),
                     ),
                   ),
                   const SizedBox(height: 32),
                   Text(
-                    product[0],
+                    product['name'],
                     style: const TextStyle(
                         fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Price: \$${product[1]}',
+                    'Price: \$${product['itemPrice']}',
                     style: const TextStyle(fontSize: 18),
                   ),
-                  const SizedBox(height: 18),
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Size:",
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      SizedBox(width: 8),
-                      Text(
-                        'XL', // Product Size
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Color:",
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      const SizedBox(width: 8),
-                      Container(
-                        width: 24,
-                        height: 24,
-                        color: Colors.red, // Product Color
-                      ),
-                    ],
-                  ),
+                  // Additional product details like size and color could be added here if they are included in your Firestore database
                   const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -122,10 +92,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(16),
-            color: Colors.white,
             child: ElevatedButton(
               onPressed: () {
-                cartModel.addItemToCart(widget.index);
+                cartModel.addItemToCartWithQuantity(widget.index , quantity);
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Product added to cart'),
@@ -133,8 +102,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 );
               },
               style: ButtonStyle(
-                backgroundColor:
-                    MaterialStateProperty.all<Color>(Colors.teal.shade200),
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.teal.shade200),
               ),
               child: const Text(
                 'Add to Cart',

@@ -7,49 +7,56 @@ import '../components/slider_buttons.dart';
 
 class Products extends StatelessWidget {
   const Products({Key? key});
+  static String routeName = "/products";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'All Products',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ),
       body: SingleChildScrollView(
-        // Wrap your Column with SingleChildScrollView
         child: Container(
           padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              // const SliderButtons(),
+              // Optional: SliderButtons(), if used elsewhere.
               const SizedBox(height: 16),
               Consumer<CartModel>(
-                builder: (context, value, child) {
+                builder: (context, cartModel, child) {
+                  if (cartModel.shopItems.isEmpty) {
+                    // Display loading indicator until products are fetched
+                    return Center(child: CircularProgressIndicator());
+                  }
                   return GridView.builder(
-                    // padding: const EdgeInsets.all(16),
-                    shrinkWrap: true, // Add this line
+                    shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: value.shopItems.length,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
+                    itemCount: cartModel.shopItems.length,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       childAspectRatio: 1 / 1.2,
                     ),
                     itemBuilder: (context, index) {
+                      var product = cartModel.shopItems[index];
                       return GestureDetector(
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  ProductDetailPage(index: index),
+                              builder: (context) => ProductDetailPage(index: index),
                             ),
                           );
                         },
                         child: ProductTile(
-                          itemName: value.shopItems[index][0],
-                          itemPrice: value.shopItems[index][1],
-                          imagePath: value.shopItems[index][2],
-                          onPressed: () =>
-                              Provider.of<CartModel>(context, listen: false)
-                                  .addItemToCart(index),
+                          itemName: product['name'],
+                          itemPrice: product['itemPrice'],
+                          imagePath: product['imagePath'],
+                          onPressed: () => Provider.of<CartModel>(context, listen: false)
+                              .addItemToCart(index),
                         ),
                       );
                     },
