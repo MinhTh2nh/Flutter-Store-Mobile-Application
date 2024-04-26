@@ -51,9 +51,18 @@ class CartPage extends StatelessWidget {
                                 cartItem['name'],
                                 style: const TextStyle(fontSize: 18),
                               ),
-                              subtitle: Text(
-                                '\$' + cartItem['itemPrice'],
-                                style: const TextStyle(fontSize: 12),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '\$${cartItem['itemPrice']}',
+                                    style: const TextStyle(fontSize: 12),
+                                  ),
+                                  Text(
+                                    'Quantity: ${cartItem['quantity']}',
+                                    style: const TextStyle(fontSize: 12),
+                                  ),
+                                ],
                               ),
                               trailing: IconButton(
                                 icon: const Icon(Icons.cancel),

@@ -7,10 +7,17 @@ import '../components/slider_buttons.dart';
 
 class Products extends StatelessWidget {
   const Products({Key? key});
+  static String routeName = "/products";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'All Products',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.all(16),

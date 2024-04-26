@@ -1,11 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:food_mobile_app/pages/forgot_password/forgot_password.dart';
-import 'package:food_mobile_app/pages/home.dart';
+import 'package:food_mobile_app/pages/home/home.dart';
 import 'package:food_mobile_app/pages/sign_in/sign_in.dart';
 import 'package:food_mobile_app/pages/sign_up/sign_up.dart';
 import 'package:food_mobile_app/pages/products.dart';
-import 'package:food_mobile_app/pages/settings.dart';
+import 'package:food_mobile_app/pages/settings/settings.dart';
 import 'package:food_mobile_app/pages/cart_page.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -30,6 +30,8 @@ class MyApp extends StatelessWidget {
         title: appName,
         initialRoute: '/home', // Set the initial route to '/sign_in'
         routes: {
+          '/products': (context) => Products(), // Route for home page
+          '/settings': (context) => Settings(), // Route for home page
           '/sign_in': (context) => SignInScreen(), // Route for sign in
           '/home': (context) => HomePage(), // Route for home page
           '/sign_up': (context) => SignUpScreen(), // Route for sign in
@@ -59,9 +61,17 @@ class _MyHomePageState extends State<HomePage> {
   ];
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    switch (index) {
+      case 0:
+        Navigator.pushNamed(context, '/home');
+        break;
+      case 1:
+        Navigator.pushNamed(context, '/products');
+        break;
+      case 2:
+        Navigator.pushNamed(context, '/settings');
+        break;
+    }
   }
 
   @override
@@ -150,7 +160,7 @@ class _MyHomePageState extends State<HomePage> {
             icon: Icon(Icons.shopping_bag),
           ),
           BottomNavigationBarItem(
-            label: 'Setting',
+            label: 'Settings',
             icon: Icon(Icons.settings),
           ),
         ],
