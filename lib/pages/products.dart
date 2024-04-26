@@ -6,6 +6,7 @@ import '../pages/product_detail_page.dart';
 import '../components/slider_buttons.dart';
 
 class Products extends StatelessWidget {
+  // ignore: use_key_in_widget_constructors
   const Products({Key? key});
 
   @override
@@ -17,8 +18,8 @@ class Products extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              // Optional: SliderButtons(), if used elsewhere.
-              const SizedBox(height: 16),
+              SliderButtons(),
+              // const SizedBox(height: 12),
               Consumer<CartModel>(
                 builder: (context, cartModel, child) {
                   if (cartModel.shopItems.isEmpty) {
