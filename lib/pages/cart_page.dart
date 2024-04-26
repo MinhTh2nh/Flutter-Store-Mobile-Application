@@ -34,6 +34,8 @@ class CartPage extends StatelessWidget {
                       padding: const EdgeInsets.all(12),
                       itemCount: value.cartItems.length,
                       itemBuilder: (context, index) {
+                        var cartItem = value.cartItems[index];
+
                         return Padding(
                           padding: const EdgeInsets.all(12),
                           child: Container(
@@ -41,16 +43,16 @@ class CartPage extends StatelessWidget {
                                 color: Colors.grey[200],
                                 borderRadius: BorderRadius.circular(8)),
                             child: ListTile(
-                              leading: Image.asset(
-                                value.cartItems[index][2],
+                              leading: Image.network(
+                                cartItem['imagePath'],
                                 height: 36,
                               ),
                               title: Text(
-                                value.cartItems[index][0],
+                                cartItem['name'],
                                 style: const TextStyle(fontSize: 18),
                               ),
                               subtitle: Text(
-                                '\$' + value.cartItems[index][1],
+                                '\$' + cartItem['itemPrice'],
                                 style: const TextStyle(fontSize: 12),
                               ),
                               trailing: IconButton(
