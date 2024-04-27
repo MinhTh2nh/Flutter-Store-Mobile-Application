@@ -50,7 +50,7 @@ class Home extends StatelessWidget {
               builder: (context, cartModel, child) {
                 if (cartModel.shopItems.isEmpty) {
                   // Display loading indicator until products are fetched
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
                 return GridView.builder(
                   shrinkWrap: true,

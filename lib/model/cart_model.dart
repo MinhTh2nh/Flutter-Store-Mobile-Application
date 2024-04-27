@@ -9,14 +9,16 @@ class CartModel extends ChangeNotifier {
       {
         "name": "Item 1",
         "itemPrice": "10.00",
-        "imagePath": "https://gamek.mediacdn.vn/133514250583805952/2021/5/1/photo-1-16198832601821648986883.jpg",
-        "in-stock": 4 ,
+        "imagePath":
+            "https://gamek.mediacdn.vn/133514250583805952/2021/5/1/photo-1-16198832601821648986883.jpg",
+        "in-stock": 4,
       },
       {
         "name": "Item 2",
         "itemPrice": "15.00",
-        "imagePath": "https://gamek.mediacdn.vn/133514250583805952/2021/5/1/photo-1-16198832601821648986883.jpg" ,
-        "in-stock": 5 ,
+        "imagePath":
+            "https://gamek.mediacdn.vn/133514250583805952/2021/5/1/photo-1-16198832601821648986883.jpg",
+        "in-stock": 5,
       },
       // Add more static test data as needed
     ];
@@ -31,13 +33,15 @@ class CartModel extends ChangeNotifier {
     _cartItems.add(_shopItems[index]);
     notifyListeners();
   }
-  void addItemToCartWithQuantity(int index , int quantity) {
+
+  void addItemToCartWithQuantity(int index, int quantity) {
     // Create a copy of the item with the added quantity
     Map newItem = Map.from(_shopItems[index]);
     newItem['quantity'] = quantity;
     _cartItems.add(newItem);
     notifyListeners();
   }
+
   void removeItemFromCart(int index) {
     _cartItems.removeAt(index);
     notifyListeners();
