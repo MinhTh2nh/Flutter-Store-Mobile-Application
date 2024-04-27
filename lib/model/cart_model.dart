@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CartModel extends ChangeNotifier {
   List _shopItems = [];
@@ -41,7 +40,7 @@ class CartModel extends ChangeNotifier {
   String calculateTotal() {
     double totalPrice = 0.0;
     for (var item in _cartItems) {
-      totalPrice += double.parse(item['price']);
+      var d = totalPrice += double.parse(item['itemPrice']);
     }
     return totalPrice.toStringAsFixed(2);
   }
