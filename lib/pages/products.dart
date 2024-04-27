@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../components/custome_app_bar/custom_app_bar.dart';
 import '../components/product_tile.dart';
 import '../model/cart_model.dart';
 import 'package:provider/provider.dart';
@@ -13,15 +14,10 @@ class Products extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'All Products',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-      ),
+      appBar: CustomAppBar(),
       body: SingleChildScrollView(
         child: Container(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(30),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -54,13 +50,16 @@ class Products extends StatelessWidget {
                             ),
                           );
                         },
-                        child: ProductTile(
-                          itemName: product['name'],
-                          itemPrice: product['itemPrice'],
-                          imagePath: product['imagePath'],
-                          onPressed: () =>
-                              Provider.of<CartModel>(context, listen: false)
-                                  .addItemToCart(index),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: ProductTile(
+                            itemName: product['name'],
+                            itemPrice: product['itemPrice'],
+                            imagePath: product['imagePath'],
+                            onPressed: () =>
+                                Provider.of<CartModel>(context, listen: false)
+                                    .addItemToCart(index),
+                          ),
                         ),
                       );
                     },

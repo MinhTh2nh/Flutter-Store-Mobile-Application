@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_mobile_app/main.dart';
-import '../home.dart';
+import '../home/home.dart';
 
 class LoginSuccessScreen extends StatelessWidget {
   static String routeName = "/login_success";

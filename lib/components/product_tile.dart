@@ -18,9 +18,19 @@ class ProductTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
+        color: Color(0xFFFFFFFF),
+        borderRadius: BorderRadius.all(
+          Radius.circular(10.0),
+        ),
+        boxShadow: [
+          BoxShadow(
+              color: Color.fromRGBO(0, 0, 0, 0.03),
+              offset: Offset(0, 10),
+              blurRadius: 10,
+              spreadRadius: 0),
+        ],
       ),
       child: Column(
         // crossAxisAlignment: CrossAxisAlignment.start,
