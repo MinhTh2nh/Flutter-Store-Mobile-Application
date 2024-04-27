@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:food_mobile_app/pages/forgot_password/forgot_password.dart';
-import 'package:food_mobile_app/pages/home.dart';
+// import 'package:food_mobile_app/pages/home.dart';
+import 'package:food_mobile_app/pages/home/home.dart';
 import 'package:food_mobile_app/pages/sign_in/sign_in.dart';
 import 'package:food_mobile_app/pages/sign_up/sign_up.dart';
 import 'package:food_mobile_app/pages/products.dart';
-import 'package:food_mobile_app/pages/settings.dart';
+import 'package:food_mobile_app/pages/settings/settings.dart';
 import 'package:food_mobile_app/pages/cart_page.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:food_mobile_app/model/cart_model.dart';
-import 'backend/controllers/auth_controller.dart';
+// import 'backend/controllers/auth_controller.dart';
 import 'consts/consts.dart';
+
 void main() async {
   runApp(const MyApp());
 }

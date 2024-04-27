@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:food_mobile_app/model/cart_model.dart';
 import 'package:provider/provider.dart';
+import 'package:food_mobile_app/components/address_management.dart';
 
 class OrderPage extends StatefulWidget {
   static String routeName = "/order-page";
@@ -14,8 +15,13 @@ class OrderPage extends StatefulWidget {
 }
 
 class _OrderPageState extends State<OrderPage> {
-  List<String> deliveryAddresses = ['Address 1', 'Address 2', 'Address 3'];
   String? selectedAddress;
+
+  void onAddressSelected(String address) {
+    setState(() {
+      selectedAddress = address;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,21 +42,36 @@ class _OrderPageState extends State<OrderPage> {
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                child: DropdownButton<String>(
-                  value: selectedAddress,
-                  hint: const Text('Select Address'),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedAddress = newValue;
-                    });
-                  },
-                  items: deliveryAddresses
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Delivery Address',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(selectedAddress != null
+                            ? '${selectedAddress!.address}'
+                            : 'No address selected'),
+                        IconButton(
+                          icon: const Icon(Icons.arrow_right),
+                          onPressed: () {
+                            showModalBottomSheet(
+                              context: context,
+                              builder: (context) {
+                                return AddressManagement(
+                                    onAddressSelected: onAddressSelected);
+                              },
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
               const Divider(),
@@ -61,6 +82,8 @@ class _OrderPageState extends State<OrderPage> {
                       padding: const EdgeInsets.all(12),
                       itemCount: value.cartItems.length,
                       itemBuilder: (context, index) {
+                        var cartItem = value.cartItems[index];
+
                         return Padding(
                           padding: const EdgeInsets.all(12),
                           child: Container(
@@ -68,17 +91,26 @@ class _OrderPageState extends State<OrderPage> {
                                 color: Colors.grey[200],
                                 borderRadius: BorderRadius.circular(8)),
                             child: ListTile(
-                              leading: Image.asset(
-                                value.cartItems[index][2],
+                              leading: Image.network(
+                                cartItem['imagePath'],
                                 height: 36,
                               ),
                               title: Text(
-                                value.cartItems[index][0],
+                                cartItem['name'],
                                 style: const TextStyle(fontSize: 18),
                               ),
-                              subtitle: Text(
-                                '\$' + value.cartItems[index][1],
-                                style: const TextStyle(fontSize: 12),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '\$${cartItem['itemPrice']}',
+                                    style: const TextStyle(fontSize: 12),
+                                  ),
+                                  Text(
+                                    'Quantity: ${cartItem['quantity']}',
+                                    style: const TextStyle(fontSize: 12),
+                                  ),
+                                ],
                               ),
                               trailing: IconButton(
                                 icon: const Icon(Icons.cancel),
@@ -101,13 +133,14 @@ class _OrderPageState extends State<OrderPage> {
                   ),
                   ListTile(
                     title: const Text('Delivery Fee'),
-                    trailing: Text('\$${deliveryFee.toString()}'),
+                    trailing: Text('\$${deliveryFee.toStringAsFixed(2)}'),
                   ),
                   ListTile(
                     title: const Text('Total'),
                     trailing: Text(
-                        '\$${(value.calculateTotal() + deliveryFee.toString()).toString()}'),
-                  ),
+                      '\$${((double.parse(value.calculateTotal()).toInt()) + deliveryFee).toStringAsFixed(2)}',
+                    ),
+                  )
                 ],
               )
             ],
@@ -121,7 +154,11 @@ class _OrderPageState extends State<OrderPage> {
             backgroundColor:
                 MaterialStateProperty.all<Color>(Colors.teal.shade200),
           ),
-          child: const Text('Order', style: TextStyle(color: Colors.white)),
+          child: const Text('Order',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold)),
           onPressed: () {
             // TODO: Implement order functionality
           },

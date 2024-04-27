@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:food_mobile_app/pages/sign_up/order.dart';
+import 'package:food_mobile_app/pages/order.dart';
 import 'package:provider/provider.dart';
 import '../model/cart_model.dart';
 
@@ -35,6 +35,8 @@ class CartPage extends StatelessWidget {
                       padding: const EdgeInsets.all(12),
                       itemCount: value.cartItems.length,
                       itemBuilder: (context, index) {
+                        var cartItem = value.cartItems[index];
+
                         return Padding(
                           padding: const EdgeInsets.all(12),
                           child: Container(
@@ -42,17 +44,26 @@ class CartPage extends StatelessWidget {
                                 color: Colors.grey[200],
                                 borderRadius: BorderRadius.circular(8)),
                             child: ListTile(
-                              leading: Image.asset(
-                                value.cartItems[index][2],
+                              leading: Image.network(
+                                cartItem['imagePath'],
                                 height: 36,
                               ),
                               title: Text(
-                                value.cartItems[index][0],
+                                cartItem['name'],
                                 style: const TextStyle(fontSize: 18),
                               ),
-                              subtitle: Text(
-                                '\$' + value.cartItems[index][1],
-                                style: const TextStyle(fontSize: 12),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '\$${cartItem['itemPrice']}',
+                                    style: const TextStyle(fontSize: 12),
+                                  ),
+                                  Text(
+                                    'Quantity: ${cartItem['quantity']}',
+                                    style: const TextStyle(fontSize: 12),
+                                  ),
+                                ],
                               ),
                               trailing: IconButton(
                                 icon: const Icon(Icons.cancel),
