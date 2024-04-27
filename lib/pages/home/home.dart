@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../../components/custome_app_bar/custom_app_bar.dart';
 import '../../components/product_tile.dart';
 import '../../model/cart_model.dart';
 import 'package:provider/provider.dart';
@@ -8,14 +9,14 @@ import 'small_components/categories.dart';
 import 'small_components/discount_banner.dart';
 import 'small_components/special_offers.dart';
 
-class Home extends StatelessWidget {
-  const Home({super.key});
-
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
   static String routeName = "/home";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomAppBar(),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(vertical: 16),
         child: Column(
@@ -67,13 +68,16 @@ class Home extends StatelessWidget {
                           ),
                         );
                       },
-                      child: ProductTile(
-                        itemName: product['name'],
-                        itemPrice: product['itemPrice'],
-                        imagePath: product['imagePath'],
-                        onPressed: () =>
-                            Provider.of<CartModel>(context, listen: false)
-                                .addItemToCart(index),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: ProductTile(
+                          itemName: product['name'],
+                          itemPrice: product['itemPrice'],
+                          imagePath: product['imagePath'],
+                          onPressed: () =>
+                              Provider.of<CartModel>(context, listen: false)
+                                  .addItemToCart(index),
+                        ),
                       ),
                     );
                   },

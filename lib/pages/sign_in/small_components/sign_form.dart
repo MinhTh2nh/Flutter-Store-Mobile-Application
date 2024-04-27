@@ -5,6 +5,7 @@ import '../../../components/custom_surfix_icon.dart';
 import '../../../components/form_error.dart';
 import '../../../consts/consts.dart';
 import '../../forgot_password/forgot_password.dart';
+import '../../home/home.dart';
 import '../../login_success/login_success.dart';
 import '../../../components/custom_textfield.dart';
 
@@ -94,9 +95,10 @@ class _SignFormState extends State<SignForm> {
           buttons(
               title: "Login",
               color: Colors.red,
-              textColor: Colors.white, // Text color set to black
-              onPress: () {})
-              .box
+              textColor: Colors.white, // Text color set to white
+              onPress: () {
+                Navigator.pushNamed(context, HomePage.routeName);
+              }).box
               .width(context.screenWidth - 50)
               .make(),
           SizedBox(height: 10), // Add more s
