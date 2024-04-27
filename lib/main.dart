@@ -1,6 +1,6 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:food_mobile_app/pages/forgot_password/forgot_password.dart';
+// import 'package:food_mobile_app/pages/home.dart';
 import 'package:food_mobile_app/pages/home/home.dart';
 import 'package:food_mobile_app/pages/sign_in/sign_in.dart';
 import 'package:food_mobile_app/pages/sign_up/sign_up.dart';
@@ -10,8 +10,9 @@ import 'package:food_mobile_app/pages/cart_page.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:food_mobile_app/model/cart_model.dart';
-import 'backend/controllers/auth_controller.dart';
+// import 'backend/controllers/auth_controller.dart';
 import 'consts/consts.dart';
+
 void main() async {
   runApp(const MyApp());
 }
@@ -27,15 +28,14 @@ class MyApp extends StatelessWidget {
       create: (context) => CartModel(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
+
         title: appName,
         initialRoute: '/home', // Set the initial route to '/sign_in'
         routes: {
-          '/products': (context) => Products(), // Route for home page
-          '/settings': (context) => Settings(), // Route for home page
-          '/sign_in': (context) => SignInScreen(), // Route for sign in
-          '/home': (context) => HomePage(), // Route for home page
-          '/sign_up': (context) => SignUpScreen(), // Route for sign in
-          '/forgot_password': (context) => ForgotPasswordScreen(), // Route for sign in
+          '/sign_in': (context) => const SignInScreen(), // Route for sign in
+          '/home': (context) => const HomePage(), // Route for home page
+          '/sign_up': (context) => const SignUpScreen(), // Route for sign in
+          '/forgot_password': (context) => const ForgotPasswordScreen(),
         },
       ),
     );
@@ -44,6 +44,7 @@ class MyApp extends StatelessWidget {
 
 // This class represents the main screen of the app after the user has signed in.
 class HomePage extends StatefulWidget {
+  // ignore: use_super_parameters
   const HomePage({Key? key}) : super(key: key);
   static String routeName = "/home";
 
@@ -61,17 +62,9 @@ class _MyHomePageState extends State<HomePage> {
   ];
 
   void _onItemTapped(int index) {
-    switch (index) {
-      case 0:
-        Navigator.pushNamed(context, '/home');
-        break;
-      case 1:
-        Navigator.pushNamed(context, '/products');
-        break;
-      case 2:
-        Navigator.pushNamed(context, '/settings');
-        break;
-    }
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
   @override
@@ -160,7 +153,7 @@ class _MyHomePageState extends State<HomePage> {
             icon: Icon(Icons.shopping_bag),
           ),
           BottomNavigationBarItem(
-            label: 'Settings',
+            label: 'Setting',
             icon: Icon(Icons.settings),
           ),
         ],
