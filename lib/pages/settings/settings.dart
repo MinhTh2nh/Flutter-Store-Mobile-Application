@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../components/custome_app_bar/custom_app_bar.dart';
 import '../settings/small_components/profile_menu.dart';
 import '../settings/small_components/profile_pic.dart';
 
@@ -10,12 +11,7 @@ class Settings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Profile',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-      ),
+      appBar: CustomAppBar(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(vertical: 20),
         child: Column(

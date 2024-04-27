@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../components/star_rating.dart';
 import '../model/cart_model.dart';
 import 'package:provider/provider.dart';
 
@@ -40,7 +41,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       child: Image.network(
                         product['imagePath'],
                         fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
+                        errorBuilder: (context, error, stackTrace) =>
+                            const Icon(Icons.error),
                       ),
                     ),
                   ),
@@ -57,34 +59,99 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   ),
                   // Additional product details like size and color could be added here if they are included in your Firestore database
                   const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.remove),
-                        onPressed: () {
-                          if (quantity > 1) {
-                            setState(() {
-                              quantity--;
-                            });
-                          }
-                        },
+                  Builder(builder: (context) {
+                    return Container(
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Container(
+                              child: IconTheme(
+                                data: IconThemeData(
+                                  color: Colors.amberAccent,
+                                  size: 18,
+                                ),
+                                child: StarDisplay(value: 4),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            height: 45.0,
+                            padding: const EdgeInsets.all(5.0),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.0),
+                              color: Color(0xFFD0D0D0),
+                            ),
+                            child: Row(children: [
+                              Container(
+                                width: 35.0,
+                                child: RawMaterialButton(
+                                  onPressed: () {
+                                    if (quantity > 1) {
+                                      setState(() {
+                                        quantity--;
+                                      });
+                                    }
+                                  },
+                                  child: Icon(
+                                    Icons.remove,
+                                    size: 30.0,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.only(
+                                  right: 5.0,
+                                  left: 5.0,
+                                ),
+                                child: Text(
+                                  quantity.toString(),
+                                  style: const TextStyle(fontSize: 18),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 2.0,
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                width: 35.0,
+                                child: RawMaterialButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      quantity++;
+                                    });
+                                  },
+                                  child: Icon(
+                                    Icons.add,
+                                    size: 30.0,
+                                  ),
+                                ),
+                              ),
+                            ]),
+                          ),
+                        ],
                       ),
-                      Text(
-                        '$quantity',
-                        style: const TextStyle(fontSize: 18),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.add),
-                        onPressed: () {
-                          setState(() {
-                            quantity++;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
+                    );
+                  }),
                   const SizedBox(height: 16),
+                  Container(
+                    padding: const EdgeInsets.only(bottom: 6.0),
+                    child: Text(
+                      "About this product",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold, // Set the fontWeight to bold
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.only(bottom: 6.0),
+                    child: Text(
+                      product['description'],
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -94,7 +161,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             padding: const EdgeInsets.all(16),
             child: ElevatedButton(
               onPressed: () {
-                cartModel.addItemToCartWithQuantity(widget.index , quantity);
+                cartModel.addItemToCartWithQuantity(widget.index, quantity);
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Product added to cart'),
@@ -102,7 +169,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 );
               },
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.teal.shade200),
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(Colors.teal.shade200),
               ),
               child: const Text(
                 'Add to Cart',

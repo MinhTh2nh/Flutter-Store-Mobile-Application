@@ -16,10 +16,12 @@ class OrderPage extends StatefulWidget {
 
 class _OrderPageState extends State<OrderPage> {
   String? selectedAddress;
+  String? selectedPhoneNumber;
 
-  void onAddressSelected(String address) {
+  void onAddressSelected(String address, String phone ) {
     setState(() {
       selectedAddress = address;
+      selectedPhoneNumber = phone;
     });
   }
 
@@ -55,7 +57,7 @@ class _OrderPageState extends State<OrderPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(selectedAddress != null
-                            ? '${selectedAddress!.address}'
+                            ? '$selectedAddress ||  ${selectedPhoneNumber ?? ''}' // Add fallback value for selectedPhoneNumber
                             : 'No address selected'),
                         IconButton(
                           icon: const Icon(Icons.arrow_right),
@@ -63,8 +65,7 @@ class _OrderPageState extends State<OrderPage> {
                             showModalBottomSheet(
                               context: context,
                               builder: (context) {
-                                return AddressManagement(
-                                    onAddressSelected: onAddressSelected);
+                                return AddressManagement(onAddressSelected: onAddressSelected);
                               },
                             );
                           },
