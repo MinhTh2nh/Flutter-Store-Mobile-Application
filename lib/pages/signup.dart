@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:food_mobile_app/backend/controllers/auth_controller.dart';
 import 'package:food_mobile_app/components/buttons.dart';
@@ -10,7 +9,7 @@ import 'package:food_mobile_app/pages/login.dart';
 import 'package:get/get.dart';
 
 class SignupPage extends StatefulWidget {
-  const SignupPage({Key? key}) : super(key: key);
+  const SignupPage({super.key});
 
   @override
   State<SignupPage> createState() => _SignupPageState();
@@ -37,11 +36,11 @@ class _SignupPageState extends State<SignupPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(height: MediaQuery.of(context).size.height * 0.1),
-              Text(
+              const Text(
                 "Join to the $appName",
                 style: TextStyle(color: Colors.white, fontSize: 18),
               ),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
@@ -52,28 +51,28 @@ class _SignupPageState extends State<SignupPage> {
                       controller: nameController,
                       isPass: false,
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     CustomTextField(
                       hint: emailHint,
                       title: email,
                       controller: emailController,
                       isPass: false,
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     CustomTextField(
                       hint: passwordHint,
                       title: password,
                       controller: passwordController,
                       isPass: true,
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     CustomTextField(
                       hint: passwordConfirm,
                       title: password,
                       controller: passwordRetypeController,
                       isPass: true,
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Row(
                       children: [
                         Checkbox(
@@ -85,10 +84,10 @@ class _SignupPageState extends State<SignupPage> {
                             });
                           },
                         ),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         Expanded(
                           child: RichText(
-                            text: TextSpan(
+                            text: const TextSpan(
                               children: [
                                 TextSpan(
                                   text: "I agree to the ",
@@ -104,7 +103,7 @@ class _SignupPageState extends State<SignupPage> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     buttons(
                       color: isCheck ? Colors.red : Colors.grey,
                       title: "Sign Up",
@@ -114,24 +113,30 @@ class _SignupPageState extends State<SignupPage> {
                             emailController.text.isEmpty ||
                             passwordController.text.isEmpty ||
                             passwordRetypeController.text.isEmpty) {
-                          VxToast.show(context, msg: "Please fill in all fields.");
+                          VxToast.show(context,
+                              msg: "Please fill in all fields.");
                           return;
                         }
-                        if (passwordController.text != passwordRetypeController.text) {
+                        if (passwordController.text !=
+                            passwordRetypeController.text) {
                           VxToast.show(context, msg: "Passwords do not match.");
                           return;
                         }
                         if (!isCheck) {
-                          VxToast.show(context, msg: "Please agree to the Terms and Conditions.");
+                          VxToast.show(context,
+                              msg: "Please agree to the Terms and Conditions.");
                           return;
                         }
                         try {
-                          await controller.signupMethod(
+                          await controller
+                              .signupMethod(
                             context: context,
                             email: emailController.text,
                             password: passwordController.text,
-                            name: nameController.text, // Pass the name field here
-                          ).then((value) {
+                            name:
+                                nameController.text, // Pass the name field here
+                          )
+                              .then((value) {
                             // Get.offAll(() => HomePage());
                           });
                         } catch (e) {
@@ -141,7 +146,7 @@ class _SignupPageState extends State<SignupPage> {
                         }
                       },
                     ).box.width(context.screenWidth - 50).make(),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Align(
                       alignment: Alignment.center,
                       child: Column(

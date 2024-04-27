@@ -6,6 +6,7 @@ import '../pages/product_detail_page.dart';
 import '../components/slider_buttons.dart';
 
 class Products extends StatelessWidget {
+  // ignore: use_key_in_widget_constructors
   const Products({Key? key});
   static String routeName = "/products";
 
@@ -24,19 +25,20 @@ class Products extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              // Optional: SliderButtons(), if used elsewhere.
-              const SizedBox(height: 16),
+              SliderButtons(),
+              // const SizedBox(height: 12),
               Consumer<CartModel>(
                 builder: (context, cartModel, child) {
                   if (cartModel.shopItems.isEmpty) {
                     // Display loading indicator until products are fetched
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   }
                   return GridView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: cartModel.shopItems.length,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       childAspectRatio: 1 / 1.2,
                     ),
@@ -47,7 +49,8 @@ class Products extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ProductDetailPage(index: index),
+                              builder: (context) =>
+                                  ProductDetailPage(index: index),
                             ),
                           );
                         },
@@ -55,8 +58,9 @@ class Products extends StatelessWidget {
                           itemName: product['name'],
                           itemPrice: product['itemPrice'],
                           imagePath: product['imagePath'],
-                          onPressed: () => Provider.of<CartModel>(context, listen: false)
-                              .addItemToCart(index),
+                          onPressed: () =>
+                              Provider.of<CartModel>(context, listen: false)
+                                  .addItemToCart(index),
                         ),
                       );
                     },
