@@ -14,10 +14,10 @@ class Products extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar: const CustomAppBar(),
       body: SingleChildScrollView(
         child: Container(
-          padding: const EdgeInsets.all(30),
+          padding: const EdgeInsets.all(8),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [

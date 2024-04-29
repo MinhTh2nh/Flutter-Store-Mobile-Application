@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
 class AddressManagement extends StatefulWidget {
-  final void Function(String address, String phoneNumber) onAddressSelected;
+  final void Function(String address, String phoneNumber)? onAddressSelected;
 
-  const AddressManagement({super.key, required this.onAddressSelected});
-
+const AddressManagement({super.key, this.onAddressSelected});
   @override
   // ignore: library_private_types_in_public_api
   _AddressManagementState createState() => _AddressManagementState();
@@ -54,7 +53,7 @@ class _AddressManagementState extends State<AddressManagement> {
                   },
                 ),
                 onTap: () {
-                  widget.onAddressSelected(deliveryAddresses[index].address , deliveryAddresses[index].phoneNumber);
+                  widget.onAddressSelected!(deliveryAddresses[index].address , deliveryAddresses[index].phoneNumber);
                   Navigator.pop(context);
                 },
               );
