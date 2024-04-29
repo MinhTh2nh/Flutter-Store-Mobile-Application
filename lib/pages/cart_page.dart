@@ -30,9 +30,8 @@ class CartPage extends StatelessWidget {
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.only(top: 12, bottom: 12),
                   child: ListView.builder(
-                      padding: const EdgeInsets.all(12),
                       itemCount: value.cartItems.length,
                       itemBuilder: (context, index) {
                         var cartItem = value.cartItems[index];

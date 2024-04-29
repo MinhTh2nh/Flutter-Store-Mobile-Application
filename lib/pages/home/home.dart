@@ -16,21 +16,21 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar: const CustomAppBar(),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(vertical: 16),
+        padding: const EdgeInsets.symmetric(vertical: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Image.asset('lib/images/main_image.png'),
-            Column( // Wrap DiscountBanner and Categories in a Column
+            const Column( // Wrap DiscountBanner and Categories in a Column
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 DiscountBanner(),
                 Categories(),
               ],
             ),
-            SpecialOffers(),
+            const SpecialOffers(),
             const Padding(
               padding: EdgeInsets.all(10.0),
               child: Text(
@@ -46,7 +46,7 @@ class HomePage extends StatelessWidget {
               builder: (context, cartModel, child) {
                 if (cartModel.shopItems.isEmpty) {
                   // Display loading indicator until products are fetched
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
                 return GridView.builder(
                   shrinkWrap: true,

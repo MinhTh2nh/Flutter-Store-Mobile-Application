@@ -5,8 +5,8 @@ import 'section_title.dart';
 
 class SpecialOffers extends StatelessWidget {
   const SpecialOffers({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +51,7 @@ class SpecialOffers extends StatelessWidget {
                   Navigator.pushNamed(context, Products.routeName);
                 },
               ),
-              SizedBox(width: 24), // Add additional space at the end
+              const SizedBox(width: 24), // Add additional space at the end
             ],
           ),
         ),
@@ -62,12 +62,12 @@ class SpecialOffers extends StatelessWidget {
 
 class SpecialOfferCard extends StatelessWidget {
   const SpecialOfferCard({
-    Key? key,
+    super.key,
     required this.category,
     required this.image,
     required this.numOfBrands,
     required this.press,
-  }) : super(key: key);
+  });
 
   final String category, image;
   final int numOfBrands;

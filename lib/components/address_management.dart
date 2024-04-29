@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class AddressManagement extends StatefulWidget {
-  final void Function(String address, String phoneNumber) onAddressSelected;
+  final void Function(String address, String phoneNumber)? onAddressSelected;
 
-  const AddressManagement({super.key, required this.onAddressSelected});
+  const AddressManagement({super.key, this.onAddressSelected});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -12,6 +12,11 @@ class AddressManagement extends StatefulWidget {
 
 class _AddressManagementState extends State<AddressManagement> {
   final _formKey = GlobalKey<FormState>();
+  String _country = '';
+  String _city = '';
+  String _street = '';
+  String _phoneNumber = '';
+
   List<Address> deliveryAddresses = [
     Address(
       address: '123 Main St, New York, NY',
@@ -22,9 +27,10 @@ class _AddressManagementState extends State<AddressManagement> {
       phoneNumber: '123-456-7890',
     ),
   ];
-  void addAddress(String address) {
+
+  void addAddress(Address address) {
     setState(() {
-      deliveryAddresses.add(address as Address);
+      deliveryAddresses.add(address);
     });
   }
 
@@ -36,98 +42,102 @@ class _AddressManagementState extends State<AddressManagement> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: deliveryAddresses.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(deliveryAddresses[index].address),
-                subtitle: Text(deliveryAddresses[index].phoneNumber),
-                trailing: IconButton(
-                  icon: const Icon(Icons.delete),
-                  onPressed: () {
-                    removeAddress(index);
+    return Scaffold(
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            child: ListView.builder(
+              itemCount: deliveryAddresses.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(deliveryAddresses[index].address),
+                  subtitle: Text(deliveryAddresses[index].phoneNumber),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () {
+                      removeAddress(index);
+                    },
+                  ),
+                  onTap: () {
+                    widget.onAddressSelected!(deliveryAddresses[index].address,
+                        deliveryAddresses[index].phoneNumber);
+                    Navigator.pop(context);
                   },
-                ),
-                onTap: () {
-                  widget.onAddressSelected(deliveryAddresses[index].address , deliveryAddresses[index].phoneNumber);
-                  Navigator.pop(context);
+                );
+              },
+            ),
+          ),
+          ElevatedButton(
+            child: const Text('Add Address'),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text('Add Address'),
+                    content: Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          TextFormField(
+                            decoration:
+                                const InputDecoration(labelText: 'Country'),
+                            onSaved: (value) {
+                              _country = value ?? '';
+                            },
+                          ),
+                          TextFormField(
+                            decoration:
+                                const InputDecoration(labelText: 'City'),
+                            onSaved: (value) {
+                              _city = value ?? '';
+                            },
+                          ),
+                          TextFormField(
+                            decoration:
+                                const InputDecoration(labelText: 'Street'),
+                            onSaved: (value) {
+                              _street = value ?? '';
+                            },
+                          ),
+                          TextFormField(
+                            decoration: const InputDecoration(
+                                labelText: 'Phone Number'),
+                            onSaved: (value) {
+                              _phoneNumber = value ?? '';
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                        child: const Text('Cancel'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      TextButton(
+                        child: const Text('Add'),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
+                            addAddress(Address(
+                                address: '$_street, $_city, $_country',
+                                phoneNumber: _phoneNumber));
+                            Navigator.of(context).pop();
+                          }
+                        },
+                      ),
+                    ],
+                  );
                 },
               );
             },
           ),
-        ),
-        ElevatedButton(
-          child: const Text('Add Address'),
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: const Text('Add Address'),
-                  content: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        TextFormField(
-                          decoration:
-                              const InputDecoration(labelText: 'Country'),
-                          onSaved: (value) {
-                            // Save country
-                          },
-                        ),
-                        TextFormField(
-                          decoration: const InputDecoration(labelText: 'City'),
-                          onSaved: (value) {
-                            // Save city
-                          },
-                        ),
-                        TextFormField(
-                          decoration:
-                              const InputDecoration(labelText: 'Street'),
-                          onSaved: (value) {
-                            // Save street
-                          },
-                        ),
-                        TextFormField(
-                          decoration:
-                              const InputDecoration(labelText: 'Phone Number'),
-                          onSaved: (value) {
-                            // Save phone
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  actions: <Widget>[
-                    TextButton(
-                      child: const Text('Cancel'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                    TextButton(
-                      child: const Text('Add'),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          _formKey.currentState!.save();
-                          // Add address to the list
-                          Navigator.of(context).pop();
-                        }
-                      },
-                    ),
-                  ],
-                );
-              },
-            );
-          },
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
