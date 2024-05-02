@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_mobile_app/components/address_management.dart';
 
 import '../../components/custome_app_bar/custom_app_bar.dart';
 import '../settings/small_components/profile_menu.dart';
@@ -11,7 +12,7 @@ class Settings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar: const CustomAppBar(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(vertical: 20),
         child: Column(
@@ -21,6 +22,16 @@ class Settings extends StatelessWidget {
             ProfileMenu(
               text: "My Account",
               icon: "lib/images/User Icon.svg",
+              press: () => {
+                print("ProfileMenu pressed"),
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const AddressManagement(),
+                ))
+              },
+            ),
+            ProfileMenu(
+              text: "Address Management",
+              icon: "lib/images/address.svg",
               press: () => {},
             ),
             ProfileMenu(

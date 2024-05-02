@@ -18,7 +18,7 @@ class _OrderPageState extends State<OrderPage> {
   String? selectedAddress;
   String? selectedPhoneNumber;
 
-  void onAddressSelected(String address, String phone ) {
+  void onAddressSelected(String address, String phone) {
     setState(() {
       selectedAddress = address;
       selectedPhoneNumber = phone;
@@ -56,16 +56,25 @@ class _OrderPageState extends State<OrderPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(selectedAddress != null
-                            ? '$selectedAddress ||  ${selectedPhoneNumber ?? ''}' // Add fallback value for selectedPhoneNumber
-                            : 'No address selected'),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(selectedAddress != null
+                                ? '$selectedAddress'
+                                : 'No address selected'),
+                            if (selectedAddress != null &&
+                                selectedPhoneNumber != null)
+                              Text('$selectedPhoneNumber'),
+                          ],
+                        ),
                         IconButton(
                           icon: const Icon(Icons.arrow_right),
                           onPressed: () {
                             showModalBottomSheet(
                               context: context,
                               builder: (context) {
-                                return AddressManagement(onAddressSelected: onAddressSelected);
+                                return AddressManagement(
+                                    onAddressSelected: onAddressSelected);
                               },
                             );
                           },
@@ -78,9 +87,8 @@ class _OrderPageState extends State<OrderPage> {
               const Divider(),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.only(top: 8, bottom: 8),
                   child: ListView.builder(
-                      padding: const EdgeInsets.all(12),
                       itemCount: value.cartItems.length,
                       itemBuilder: (context, index) {
                         var cartItem = value.cartItems[index];

@@ -8,18 +8,18 @@ class ProductTile extends StatelessWidget {
   final void Function()? onPressed;
 
   const ProductTile({
-    Key? key,
+    super.key,
     required this.itemName,
     required this.itemPrice,
     required this.imagePath,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(
+      padding: const EdgeInsets.all(8),
+      decoration: const BoxDecoration(
         color: Color(0xFFFFFFFF),
         borderRadius: BorderRadius.all(
           Radius.circular(10.0),
@@ -33,27 +33,31 @@ class ProductTile extends StatelessWidget {
         ],
       ),
       child: Column(
-        // crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Image.network(
             imagePath,
-            height: 150,
+            height: 100,
             // fit: BoxFit.cover,
           ),
           const SizedBox(height: 12),
-          Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-            Text(
-              itemName,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ]),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+          Column(
             children: [
-              Text(
-                '\$$itemPrice',
-                style: const TextStyle(fontWeight: FontWeight.bold),
+              Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                Text(
+                  itemName,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ]),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    '\$$itemPrice',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ],
               ),
             ],
           ),
