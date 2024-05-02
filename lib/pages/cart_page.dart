@@ -37,12 +37,7 @@ class CartPage extends StatelessWidget {
                       var cartItem = value.cartItems[index];
                       // Check if the cartItem contains the 'item_id' field
                       if (cartItem.containsKey('item_id') && cartItem['item_id'] != null) {
-                        var itemId = cartItem['item_id'] as int;
                         // Find the product item corresponding to the cart item
-                        var productItem = value.productItems.firstWhere(
-                              (item) => item['item_id'] == itemId,
-                          orElse: () => null,
-                        );
                         return Padding(
                           padding: const EdgeInsets.all(12),
                           child: Container(

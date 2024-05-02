@@ -1,8 +1,5 @@
 import 'package:flutter/widgets.dart';
 import 'package:food_mobile_app/pages/cart_page.dart';
-import 'package:food_mobile_app/pages/home/home.dart';
-import 'package:food_mobile_app/pages/products.dart';
-import 'package:food_mobile_app/pages/settings/settings.dart';
 import 'package:food_mobile_app/pages/sign_in/sign_in.dart';
 import 'package:food_mobile_app/routes/products_route.dart';
 import 'package:food_mobile_app/routes/settings_route.dart';

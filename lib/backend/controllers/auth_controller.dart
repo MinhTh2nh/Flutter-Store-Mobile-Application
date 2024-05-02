@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:velocity_x/velocity_x.dart';
 import 'package:food_mobile_app/consts/consts.dart';
 import 'dart:convert';
 import 'dart:typed_data';
@@ -83,17 +82,15 @@ class AuthController extends GetxController {
         password: password!,
       );
       // If signup successful, store user data in Firestore
-      if (userCredential != null) {
-        // Hash the password using SHA-256
-        String hashedPassword = _hashPassword(password!);
-        // Store user data in Firestore with hashed password
-        await storeUserData(
-          name: name,
-          email: email,
-          password: hashedPassword,
-        );
-      }
-    } on FirebaseAuthException catch (e) {
+      // Hash the password using SHA-256
+      String hashedPassword = _hashPassword(password);
+      // Store user data in Firestore with hashed password
+      await storeUserData(
+        name: name,
+        email: email,
+        password: hashedPassword,
+      );
+        } on FirebaseAuthException catch (e) {
       _showErrorSnackBar(context!, e.message ?? "Signup failed!");
       return null;
     }

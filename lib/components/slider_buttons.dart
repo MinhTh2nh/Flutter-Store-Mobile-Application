@@ -61,7 +61,7 @@ class _SliderButtonsState extends State<SliderButtons> {
                       ? Colors.teal // Highlight selected size
                       : Colors.grey,
                 ),
-                borderRadius: BorderRadius.circular(5.0),
+                borderRadius: BorderRadius.circular(3.0),
                 color: selectedIndex == index
                     ? Colors.teal.shade200 // Background color for selected size
                     : null, // No background color for unselected size

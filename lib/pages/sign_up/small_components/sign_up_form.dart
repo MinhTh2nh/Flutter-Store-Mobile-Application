@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:food_mobile_app/pages/sign_in/sign_in.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:velocity_x/velocity_x.dart';
-
 import '../../../components/buttons.dart';
 import '../../../components/custom_surfix_icon.dart';
 import '../../../components/custom_textfield.dart';
 import '../../../components/form_error.dart';
 import '../../../consts/consts.dart';
-import '../../complete_profile/complete_profile_screen.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({super.key});

@@ -272,7 +272,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       },
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                         padding: EdgeInsets.zero,
                         backgroundColor: Colors.teal.shade200,
@@ -298,7 +298,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       style: ElevatedButton.styleFrom(
                         minimumSize: const Size(double.infinity, 48),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                         backgroundColor: Colors.teal.shade200,
                       ),

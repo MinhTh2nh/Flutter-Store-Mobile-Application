@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart'; // Import ChangeNotifierProvider
 import '../../pages/home/home.dart';
 import '../../pages/products.dart';
 import '../../pages/settings/settings.dart';
@@ -8,7 +7,7 @@ class BottomNavigationBarWrapper extends StatelessWidget {
   final int selectedIndex;
   final void Function(int) onItemTapped; // Explicitly specify the type
 
-  const BottomNavigationBarWrapper({
+  const BottomNavigationBarWrapper({super.key,
     required this.selectedIndex,
     required this.onItemTapped,
   });
