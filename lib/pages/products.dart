@@ -35,8 +35,8 @@ class Products extends StatelessWidget {
                     itemCount: cartModel.shopItems.length,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 1 / 1.2,
+                          crossAxisCount: 2,
+                          childAspectRatio: 1 / 1.1,
                     ),
                     itemBuilder: (context, index) {
                       var product = cartModel.shopItems[index];
@@ -56,10 +56,11 @@ class Products extends StatelessWidget {
                             itemName: product['name'],
                             itemPrice: product['itemPrice'],
                             imagePath: product['imagePath'],
+                            totalStock: product['totalStock'],
                             onPressed: () =>
-                                Provider.of<CartModel>(context, listen: false)
-                                    .addItemToCart(index),
-                          ),
+                            {
+                            }
+                            ),
                         ),
                       );
                     },

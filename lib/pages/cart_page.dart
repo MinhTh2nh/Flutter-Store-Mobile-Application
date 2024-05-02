@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import '../model/cart_model.dart';
 
 class CartPage extends StatelessWidget {
-  const CartPage({super.key});
+  const CartPage({Key? key});
   static String routeName = "/cart-page";
 
   @override
@@ -32,16 +32,24 @@ class CartPage extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 12, bottom: 12),
                   child: ListView.builder(
-                      itemCount: value.cartItems.length,
-                      itemBuilder: (context, index) {
-                        var cartItem = value.cartItems[index];
-
+                    itemCount: value.cartItems.length,
+                    itemBuilder: (context, index) {
+                      var cartItem = value.cartItems[index];
+                      // Check if the cartItem contains the 'item_id' field
+                      if (cartItem.containsKey('item_id') && cartItem['item_id'] != null) {
+                        var itemId = cartItem['item_id'] as int;
+                        // Find the product item corresponding to the cart item
+                        var productItem = value.productItems.firstWhere(
+                              (item) => item['item_id'] == itemId,
+                          orElse: () => null,
+                        );
                         return Padding(
                           padding: const EdgeInsets.all(12),
                           child: Container(
                             decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                                borderRadius: BorderRadius.circular(8)),
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                             child: ListTile(
                               leading: Image.network(
                                 cartItem['imagePath'],
@@ -67,15 +75,21 @@ class CartPage extends StatelessWidget {
                               trailing: IconButton(
                                 icon: const Icon(Icons.cancel),
                                 onPressed: () => Provider.of<CartModel>(context,
-                                        listen: false)
+                                    listen: false)
                                     .removeItemFromCart(index),
                               ),
                             ),
                           ),
                         );
-                      }),
+                      } else {
+                        // Return a fallback widget if 'item_id' field is null or not present
+                        return SizedBox.shrink();
+                      }
+                    },
+                  )
                 ),
               ),
+
               Padding(
                 padding: const EdgeInsets.all(36),
                 child: Container(
