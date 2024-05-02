@@ -183,6 +183,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                   : Colors.grey,
                             ),
                             borderRadius: BorderRadius.circular(5.0),
+                            color: selectedSize == item['size']
+                                ? Colors.teal.shade200 // Background color for selected size
+                                : null, // No background color for unselected size
                           ),
                           child: Text(
                             item['size'],
@@ -193,6 +196,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             ),
                           ),
                         ),
+
                       );
                     }).toList(),
                   ),
