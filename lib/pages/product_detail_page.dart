@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import '../components/star_rating.dart';
 import '../model/cart_model.dart';
 import 'package:provider/provider.dart';
+import 'cart_page.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final int index;
@@ -28,10 +29,38 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Product Details',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
+        actions: [
+          Consumer<CartModel>( // Use Consumer to listen to changes in CartModel
+            builder: (context, cart, child) {
+              return Stack(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, CartPage.routeName);
+                    },
+                    icon: const Icon(Icons.shopping_basket),
+                  ),
+                  if (cart.cartItems.isNotEmpty) // Conditionally show the notification badge
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: Container(
+                        padding: EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                            borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          cart.itemsCount.toString(),
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                ],
+              );
+            },
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -41,14 +70,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Center(
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5), // Add padding
                     child: SizedBox(
-                      height: 200,
+                      height: 0.5 * (MediaQuery.of(context).size.width), // Set height to 30% of the width of the screen
                       child: Image.network(
                         product['imagePath'],
-                        fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) =>
-                        const Icon(Icons.error),
+                        width: double.infinity, // Take whole width
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
@@ -60,8 +89,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Price: \$${product['itemPrice']}',
-                    style: const TextStyle(fontSize: 18),
+                    '\$${product['itemPrice']}',
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)
                   ),
                   const SizedBox(height: 16),
                   Builder(builder: (context) {
@@ -157,48 +186,49 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     ),
                   ),
                   // Display selection options based on product_items
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: productItems
-                        .map<Widget>((item) {
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            selectedSize = item['size'];
-                            selectedItemID = item['item_id'];
-                            // Reset quantity to 1 when size is changed
-                            quantity = 1;
-                          });
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.all(8.0),
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 8.0,
-                            horizontal: 12.0,
-                          ),
-                          decoration: BoxDecoration(
-                            border: Border.all(
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: productItems.map<Widget>((item) {
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selectedSize = item['size'];
+                              selectedItemID = item['item_id'];
+                              // Reset quantity to 1 when size is changed
+                              quantity = 1;
+                            });
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 8.0,
+                              horizontal: 12.0,
+                            ),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: selectedSize == item['size']
+                                    ? Colors.teal // Highlight selected size
+                                    : Colors.grey,
+                              ),
+                              borderRadius: BorderRadius.circular(5.0),
                               color: selectedSize == item['size']
-                                  ? Colors.teal // Highlight selected size
-                                  : Colors.grey,
+                                  ? Colors.teal.shade200 // Background color for selected size
+                                  : null, // No background color for unselected size
                             ),
-                            borderRadius: BorderRadius.circular(5.0),
-                            color: selectedSize == item['size']
-                                ? Colors.teal.shade200 // Background color for selected size
-                                : null, // No background color for unselected size
-                          ),
-                          child: Text(
-                            item['size'],
-                            style: TextStyle(
-                              fontWeight: selectedSize == item['size']
-                                  ? FontWeight.bold // Highlight selected size
-                                  : FontWeight.normal,
+                            child: Text(
+                              item['size'],
+                              style: TextStyle(
+                                fontWeight: selectedSize == item['size']
+                                    ? FontWeight.bold // Highlight selected size
+                                    : FontWeight.normal,
+                              ),
                             ),
                           ),
-                        ),
-
-                      );
-                    }).toList(),
+                        );
+                      }).toList(),
+                    ),
                   ),
                   const SizedBox(height: 16),
                   Container(
@@ -307,6 +337,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
+                          fontSize: 25
                         ),
                       ),
                     ),

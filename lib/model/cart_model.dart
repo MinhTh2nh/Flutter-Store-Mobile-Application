@@ -121,6 +121,12 @@ class CartModel extends ChangeNotifier {
         "stock" : 5 ,
         "size" : "XXL-XXXL"
       },
+      {
+        "item_id" : 4 ,
+        "product_id" : 1 ,
+        "stock" : 5 ,
+        "size" : "XXS-S"
+      },
     ];
 
   }
