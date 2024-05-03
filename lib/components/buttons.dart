@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:food_mobile_app/consts/consts.dart'; // Assuming red is defined here
-import 'package:velocity_x/velocity_x.dart';
-
-import 'package:flutter/material.dart';
 
 Widget buttons({
   required String title,

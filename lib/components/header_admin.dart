@@ -1,4 +1,3 @@
-import 'package:food_mobile_app/consts/consts.dart';
 import 'package:food_mobile_app/util/responsive.dart';
 import 'package:flutter/material.dart';
 

@@ -3,7 +3,6 @@ import 'package:food_mobile_app/pages/sign_in/sign_in.dart';
 import 'package:food_mobile_app/routes/routes.dart';
 import 'package:provider/provider.dart';
 import 'package:food_mobile_app/model/cart_model.dart';
-import 'components/bottom_navigation_bar/bottom_navigation_bar_wrapper.dart';
 import 'consts/consts.dart';
 
 void main() async {

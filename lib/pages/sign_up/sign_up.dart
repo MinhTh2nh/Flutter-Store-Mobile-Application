@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../components/socal_card.dart';
-import '../../consts/consts.dart';
 import 'small_components/sign_up_form.dart';
 
 class SignUpScreen extends StatelessWidget {

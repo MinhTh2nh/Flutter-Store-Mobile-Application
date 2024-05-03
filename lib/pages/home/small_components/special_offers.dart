@@ -13,7 +13,7 @@ class SpecialOffers extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 5 ),
           child: SectionTitle(
             title: "Special for you",
             press: () {},
@@ -51,6 +51,22 @@ class SpecialOffers extends StatelessWidget {
                   Navigator.pushNamed(context, Products.routeName);
                 },
               ),
+              SpecialOfferCard(
+                image: "lib/images/Image Banner 1.png",
+                category: "Minimalist Style",
+                numOfBrands: 24,
+                press: () {
+                  Navigator.pushNamed(context, Products.routeName);
+                },
+              ),
+              SpecialOfferCard(
+                image: "lib/images/Image Banner 1.png",
+                category: "Minimalist Style",
+                numOfBrands: 24,
+                press: () {
+                  Navigator.pushNamed(context, Products.routeName);
+                },
+              ),
               const SizedBox(width: 24), // Add additional space at the end
             ],
           ),
@@ -59,15 +75,14 @@ class SpecialOffers extends StatelessWidget {
     );
   }
 }
-
 class SpecialOfferCard extends StatelessWidget {
   const SpecialOfferCard({
-    super.key,
+    Key? key,
     required this.category,
     required this.image,
     required this.numOfBrands,
     required this.press,
-  });
+  }) : super(key: key);
 
   final String category, image;
   final int numOfBrands;
@@ -76,14 +91,14 @@ class SpecialOfferCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 20),
+      padding: const EdgeInsets.only(left: 5),
       child: GestureDetector(
         onTap: press,
         child: Container(
           width: 242, // Set the width
           height: 100, // Set the height
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(5),
             image: DecorationImage(
               image: AssetImage(image),
               fit: BoxFit.cover,
@@ -92,30 +107,38 @@ class SpecialOfferCard extends StatelessWidget {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Colors.black54,
+                Colors.black87,
                 Colors.black38,
                 Colors.black26,
                 Colors.transparent,
               ],
             ),
           ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 15,
-              vertical: 10,
-            ),
-            child: Text.rich(
-              TextSpan(
-                style: const TextStyle(color: Colors.white),
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 15,
+                vertical: 10,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TextSpan(
-                    text: "$category\n",
+                  Text(
+                    category,
                     style: const TextStyle(
+                      color: Colors.white,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  TextSpan(text: "$numOfBrands Items")
+                  const SizedBox(height: 4),
+                  Text(
+                    '$numOfBrands Items',
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -125,3 +148,4 @@ class SpecialOfferCard extends StatelessWidget {
     );
   }
 }
+

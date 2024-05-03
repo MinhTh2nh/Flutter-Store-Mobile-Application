@@ -16,76 +16,80 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Image.asset('lib/images/main_image.png'),
-            const Column( // Wrap DiscountBanner and Categories in a Column
+      appBar: CustomAppBar(),
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(vertical: 0),
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                DiscountBanner(),
-                Categories(),
-              ],
-            ),
-            const SpecialOffers(),
-            const Padding(
-              padding: EdgeInsets.all(10.0),
-              child: Text(
-                "New Arrivals",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24.0),
-              child: Divider(),
-            ),
-            Consumer<CartModel>(
-              builder: (context, cartModel, child) {
-                if (cartModel.shopItems.isEmpty) {
-                  // Display loading indicator until products are fetched
-                  return const Center(child: CircularProgressIndicator());
-                }
-                return GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: cartModel.shopItems.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 1 / 1.2,
+                Image.asset('lib/images/main_image.png'),
+                const Column( // Wrap DiscountBanner and Categories in a Column
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // DiscountBanner(),
+                    Categories(),
+                  ],
+                ),
+                const SpecialOffers(),
+                const Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Text(
+                    "New Arrivals",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  itemBuilder: (context, index) {
-                    var product = cartModel.shopItems[index];
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                ProductDetailPage(index: index),
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24.0),
+                  child: Divider(),
+                ),
+                Consumer<CartModel>(
+                  builder: (context, cartModel, child) {
+                    if (cartModel.shopItems.isEmpty) {
+                      // Display loading indicator until products are fetched
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    return GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: cartModel.shopItems.length,
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 1 / 1,
+                      ),
+                      itemBuilder: (context, index) {
+                        var product = cartModel.shopItems[index];
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ProductDetailPage(index: index),
+                              ),
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: ProductTile(
+                              itemName: product['name'],
+                              itemPrice: product['itemPrice'],
+                              imagePath: product['imagePath'],
+                              totalStock: product['totalStock'],
+                              // Inside the GridView.builder itemBuilder
+                              onPressed: () {},
+                            ),
                           ),
                         );
                       },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: ProductTile(
-                          itemName: product['name'],
-                          itemPrice: product['itemPrice'],
-                          imagePath: product['imagePath'],
-                          onPressed: () =>
-                              Provider.of<CartModel>(context, listen: false)
-                                  .addItemToCart(index),
-                        ),
-                      ),
                     );
                   },
-                );
-              },
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

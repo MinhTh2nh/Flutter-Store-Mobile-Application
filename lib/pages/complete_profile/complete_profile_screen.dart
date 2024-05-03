@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../consts/consts.dart';
 import 'small_components/complete_profile_form.dart';
 
 class CompleteProfileScreen extends StatelessWidget {

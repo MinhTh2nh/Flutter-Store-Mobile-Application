@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart'; // Import ChangeNotifierProvider
 import '../../pages/home/home.dart';
 import '../../pages/products.dart';
 import '../../pages/settings/settings.dart';
@@ -9,6 +8,7 @@ class BottomNavigationBarWrapper extends StatelessWidget {
   final void Function(int) onItemTapped; // Explicitly specify the type
 
   const BottomNavigationBarWrapper({
+    super.key,
     required this.selectedIndex,
     required this.onItemTapped,
   });
@@ -48,7 +48,7 @@ class BottomNavigationBarWrapper extends StatelessWidget {
       case 2:
         return const Settings();
       default:
-        return Container(); // Placeholder, you can return any default widget here
+        return Container();
     }
   }
 }

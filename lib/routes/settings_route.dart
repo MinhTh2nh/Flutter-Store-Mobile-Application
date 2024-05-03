@@ -1,7 +1,4 @@
 import 'package:flutter/widgets.dart';
-import 'package:food_mobile_app/pages/home/home.dart';
-import 'package:food_mobile_app/pages/products.dart';
-import 'package:food_mobile_app/pages/settings/settings.dart';
 import '../components/bottom_navigation_bar/bottom_navigation_bar_wrapper.dart';
 
 final Map<String, WidgetBuilder> settingsRoutes = {
