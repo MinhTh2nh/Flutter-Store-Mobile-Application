@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../components/custome_app_bar/custom_app_bar.dart';
-import '../../components/product_tile.dart';
+import '../../components/product_tile.dart'; // Add this line
 import '../../model/cart_model.dart';
 import 'package:provider/provider.dart';
 import '../../pages/product_detail_page.dart';
@@ -15,15 +14,26 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scrollController = ScrollController(); // Add this line
+
+    scrollController.addListener(() {
+      // Add this block
+      if (scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent) {
+        Provider.of<CartModel>(context, listen: false).fetchProducts();
+      }
+    });
     return Scaffold(
       appBar: const CustomAppBar(),
       body: SingleChildScrollView(
+        controller: scrollController,
         padding: const EdgeInsets.symmetric(vertical: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Image.asset('lib/images/main_image.png'),
-            const Column( // Wrap DiscountBanner and Categories in a Column
+            const Column(
+              // Wrap DiscountBanner and Categories in a Column
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 DiscountBanner(),
@@ -71,15 +81,12 @@ class HomePage extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: ProductTile(
-                          itemName: product['name'],
-                          itemPrice: product['itemPrice'],
-                          imagePath: product['imagePath'],
-                          totalStock: product['totalStock'],
+                          product_name: product['product_name'],
+                          product_price: product["product_price"].toString(),
+                          product_thumbnail: product['product_thumbnail'],
+                          total_stock: product['total_stock'],
                           // Inside the GridView.builder itemBuilder
-                          onPressed: () =>
-                          {
-
-                          },
+                          onPressed: () => {},
                         ),
                       ),
                     );
@@ -87,6 +94,8 @@ class HomePage extends StatelessWidget {
                 );
               },
             ),
+            if (Provider.of<CartModel>(context).isLoading) // Add this block
+              const Center(child: CircularProgressIndicator()),
           ],
         ),
       ),

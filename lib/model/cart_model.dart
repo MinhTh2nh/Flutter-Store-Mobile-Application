@@ -1,128 +1,26 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 class CartModel extends ChangeNotifier {
   List _shopItems = [];
   List _cartItems = [];
   List _productItems = [];
+  int _page = 1;
+  bool _isLoading = false;
+
+  bool get isLoading => _isLoading;
 
   CartModel() {
-    _shopItems = [
-      {
-        "product_id" : 1 ,
-        "name": "Product 1",
-        "itemPrice": "10.00",
-        "imagePath":
-            "https://gamek.mediacdn.vn/133514250583805952/2021/5/1/photo-1-16198832601821648986883.jpg",
-        "totalStock": 4,
-        "description":
-            "orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages"
-                ", and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-      },
-      {
-        "product_id" : 2,
-        "name": "Product 2",
-        "itemPrice": "15.00",
-        "imagePath":
-            "https://gamek.mediacdn.vn/133514250583805952/2021/5/1/photo-1-16198832601821648986883.jpg",
-        "totalStock": 4,
-        "description":
-            "orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages"
-                ", and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-      },
-      {
-        "product_id" : 3,
-        "name": "Product 3",
-        "itemPrice": "10.00",
-        "imagePath":
-            "https://gamek.mediacdn.vn/133514250583805952/2021/5/1/photo-1-16198832601821648986883.jpg",
-        "totalStock": 4,
-        "description":
-            "orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages"
-                ", and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-      },
-      {
-        "product_id" : 4,
-        "name": "Product 4",
-        "itemPrice": "15.00",
-        "imagePath":
-            "https://gamek.mediacdn.vn/133514250583805952/2021/5/1/photo-1-16198832601821648986883.jpg",
-        "totalStock": 4,
-        "description":
-            "orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages"
-                ", and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-      },
-      {
-        "product_id" : 5,
-        "name": "Product 5",
-        "itemPrice": "10.00",
-        "imagePath":
-        "https://gamek.mediacdn.vn/133514250583805952/2021/5/1/photo-1-16198832601821648986883.jpg",
-        "totalStock": 4,
-        "description":
-        "orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages"
-            ", and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-      },
-      {
-        "product_id" : 6,
-        "name": "Product 6",
-        "itemPrice": "15.00",
-        "imagePath":
-        "https://gamek.mediacdn.vn/133514250583805952/2021/5/1/photo-1-16198832601821648986883.jpg",
-        "totalStock": 4,
-        "description":
-        "orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages"
-            ", and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-      },
-      {
-        "product_id" : 7,
-        "name": "Product 7",
-        "itemPrice": "10.00",
-        "imagePath":
-        "https://gamek.mediacdn.vn/133514250583805952/2021/5/1/photo-1-16198832601821648986883.jpg",
-        "totalStock": 4,
-        "description":
-        "orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages"
-            ", and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-      },
-      {
-        "product_id" : 8,
-        "name": "Product 8",
-        "itemPrice": "15.00",
-        "imagePath":
-        "https://gamek.mediacdn.vn/133514250583805952/2021/5/1/photo-1-16198832601821648986883.jpg",
-        "totalStock": 4,
-        "description":
-        "orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages"
-            ", and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-      },
-    ];
+    _shopItems = [];
     _productItems = [
-      {
-        "item_id" : 0 ,
-        "product_id" : 1 ,
-        "stock" : 5 ,
-        "size" : "XS-MS"
-      },
-      {
-        "item_id" : 1 ,
-        "product_id" : 1 ,
-        "stock" : 5 ,
-        "size" : "M-XM"
-      },
-      {
-        "item_id" : 2 ,
-        "product_id" : 1 ,
-        "stock" : 5 ,
-        "size" : "L-XL"
-      },
-      {
-        "item_id" : 3 ,
-        "product_id" : 1 ,
-        "stock" : 5 ,
-        "size" : "XXL-XXXL"
-      },
+      {"item_id": 0, "product_id": 1, "stock": 5, "size": "XS-MS"},
+      {"item_id": 1, "product_id": 1, "stock": 5, "size": "M-XM"},
+      {"item_id": 2, "product_id": 1, "stock": 5, "size": "L-XL"},
+      {"item_id": 3, "product_id": 1, "stock": 5, "size": "XXL-XXXL"},
     ];
 
+    fetchProducts();
   }
 
   List get cartItems => _cartItems;
@@ -131,15 +29,55 @@ class CartModel extends ChangeNotifier {
 
   int get itemsCount => _cartItems.length;
 
+  void fetchProducts() async {
+    if (_isLoading) return; // If a request is already in progress, do nothing
 
-  void addItemToCartWithQuantity(int item_id, int quantity, String selectedSize, int product_id) {
+    _isLoading = true; // Set loading state to true
+    try {
+      // Make HTTP GET request to fetch products from API
+      final response = await http
+          .get(Uri.parse('http://192.168.1.12:8081/products/getAllProducts'));
+
+      // Check if request is successful
+      if (response.statusCode == 200) {
+        // Decode JSON response body
+        final List<dynamic> products = json.decode(response.body)['data'];
+
+        // Update _shopItems with fetched products
+        _shopItems = products;
+
+        // Print fetched products
+        // print('Fetched products: $_shopItems');
+
+        // Notify listeners of the change
+        notifyListeners();
+
+        _page++; // Increment the page number for the next request
+      } else {
+        // Handle error response
+        print('Failed to fetch products: ${response.statusCode}');
+      }
+    } catch (error) {
+      // Handle network errors
+      print('Network error: $error');
+    } finally {
+      _isLoading = false; // Set loading state to false
+    }
+  }
+
+  void addItemToCartWithQuantity(
+      int item_id, int quantity, String selectedSize, int product_id) {
     // Find the product with the matching item_id
-    var item = _productItems.firstWhere((element) => element['item_id'] == item_id, orElse: () => null);
+    var item = _productItems.firstWhere(
+        (element) => element['item_id'] == item_id,
+        orElse: () => null);
 
     // Check if item is null (no matching element found)
     if (item != null) {
       // Find the product details based on the provided product_id
-      var product = _shopItems.firstWhere((element) => element['product_id'] == product_id, orElse: () => null);
+      var product = _shopItems.firstWhere(
+          (element) => element['product_id'] == product_id,
+          orElse: () => null);
 
       // Check if product is null (no matching element found)
       if (product != null) {
@@ -147,9 +85,9 @@ class CartModel extends ChangeNotifier {
         Map newItem = {
           'item_id': item_id,
           'product_id': product['product_id'],
-          'name': product['name'],
-          'itemPrice': product['itemPrice'],
-          'imagePath': product['imagePath'],
+          'product_name': product['product_name'],
+          'product_price': product['product_price'],
+          'product_thumbnail': product['product_thumbnail'],
           'quantity': quantity,
           'selectedSize': item["size"],
         };
@@ -165,7 +103,6 @@ class CartModel extends ChangeNotifier {
     }
   }
 
-
   void removeItemFromCart(int index) {
     _cartItems.removeAt(index);
     notifyListeners();
@@ -174,7 +111,8 @@ class CartModel extends ChangeNotifier {
   String calculateTotal() {
     double totalPrice = 0.0;
     for (var item in _cartItems) {
-      totalPrice += double.parse(item['itemPrice']) * item['quantity'];
+      totalPrice +=
+          double.parse(item['product_price'].toString()) * item['quantity'];
     }
     return totalPrice.toStringAsFixed(2);
   }

@@ -22,17 +22,16 @@ class Settings extends StatelessWidget {
             ProfileMenu(
               text: "My Account",
               icon: "lib/images/User Icon.svg",
-              press: () => {
-                print("ProfileMenu pressed"),
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const AddressManagement(),
-                ))
-              },
+              press: () => {},
             ),
             ProfileMenu(
               text: "Address Management",
               icon: "lib/images/address.svg",
-              press: () => {},
+              press: () => {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const AddressManagement(),
+                ))
+              },
             ),
             ProfileMenu(
               text: "Notifications",

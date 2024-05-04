@@ -45,7 +45,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     child: SizedBox(
                       height: 200,
                       child: Image.network(
-                        product['imagePath'],
+                        product['product_thumbnail'],
                         fit: BoxFit.contain,
                         errorBuilder: (context, error, stackTrace) =>
                         const Icon(Icons.error),
@@ -54,13 +54,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   ),
                   const SizedBox(height: 32),
                   Text(
-                    product['name'],
+                    product['product_name'],
                     style: const TextStyle(
                         fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Price: \$${product['itemPrice']}',
+                    'Price: \$${product['product_price'].toString()}',
                     style: const TextStyle(fontSize: 18),
                   ),
                   const SizedBox(height: 16),
@@ -214,7 +214,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   Container(
                     padding: const EdgeInsets.only(bottom: 6.0),
                     child: Text(
-                      product['description'],
+                      product['product_description'],
                       style: const TextStyle(fontSize: 14),
                     ),
                   ),
@@ -304,7 +304,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       ),
                       child: Text(
                         "Buy Now".toUpperCase(),
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),

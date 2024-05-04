@@ -1,25 +1,28 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 
 class ProductTile extends StatelessWidget {
-  final String itemName;
-  final String itemPrice;
-  final String imagePath;
-  final int totalStock;
+  // ignore: non_constant_identifier_names
+  final String product_name;
+  final String product_price;
+  final String product_thumbnail;
+  final int total_stock;
   final void Function()? onPressed;
 
   const ProductTile({
-    Key? key,
-    required this.itemName,
-    required this.itemPrice,
-    required this.imagePath,
-    required this.totalStock,
+    super.key,
+    required this.product_name,
+    required this.product_price,
+    required this.product_thumbnail,
+    required this.total_stock,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 10), // Add margin bottom
+      margin: const EdgeInsets.only(bottom: 10), // Add margin bottom
       child: Material(
         elevation: 3, // Add elevation for shadow effect
         child: Container(
@@ -32,7 +35,7 @@ class ProductTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Image.network(
-                imagePath,
+                product_thumbnail,
                 width: double.infinity, // Take whole width
                 height: 150,
                 // fit: BoxFit.cover,
@@ -41,7 +44,8 @@ class ProductTile extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8), // Add padding
                 child: Text(
-                  itemName,
+                  product_name,
+                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
@@ -51,11 +55,11 @@ class ProductTile extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '\$$itemPrice',
+                      '\$$product_price',
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      'Available: $totalStock',
+                      'Available: $total_stock',
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ],

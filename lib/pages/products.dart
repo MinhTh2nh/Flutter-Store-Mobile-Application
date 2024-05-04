@@ -13,9 +13,19 @@ class Products extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scrollController = ScrollController(); // Add this line
+
+    scrollController.addListener(() {
+      // Add this block
+      if (scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent) {
+        Provider.of<CartModel>(context, listen: false).fetchProducts();
+      }
+    });
     return Scaffold(
       appBar: const CustomAppBar(),
       body: SingleChildScrollView(
+        controller: scrollController,
         child: Container(
           padding: const EdgeInsets.all(8),
           child: Column(
@@ -35,8 +45,8 @@ class Products extends StatelessWidget {
                     itemCount: cartModel.shopItems.length,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 1 / 1.1,
+                      crossAxisCount: 2,
+                      childAspectRatio: 1 / 1.1,
                     ),
                     itemBuilder: (context, index) {
                       var product = cartModel.shopItems[index];
@@ -53,20 +63,20 @@ class Products extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: ProductTile(
-                            itemName: product['name'],
-                            itemPrice: product['itemPrice'],
-                            imagePath: product['imagePath'],
-                            totalStock: product['totalStock'],
-                            onPressed: () =>
-                            {
-                            }
-                            ),
+                              product_name: product['product_name'],
+                              product_price:
+                                  product['product_price'].toString(),
+                              product_thumbnail: product['product_thumbnail'],
+                              total_stock: product['total_stock'],
+                              onPressed: () => {}),
                         ),
                       );
                     },
                   );
                 },
               ),
+              if (Provider.of<CartModel>(context).isLoading) // Add this block
+                const Center(child: CircularProgressIndicator()),
             ],
           ),
         ),
