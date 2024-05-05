@@ -7,7 +7,8 @@ class BottomNavigationBarWrapper extends StatelessWidget {
   final int selectedIndex;
   final void Function(int) onItemTapped; // Explicitly specify the type
 
-  const BottomNavigationBarWrapper({super.key,
+  const BottomNavigationBarWrapper({
+    super.key,
     required this.selectedIndex,
     required this.onItemTapped,
   });
@@ -47,7 +48,7 @@ class BottomNavigationBarWrapper extends StatelessWidget {
       case 2:
         return const Settings();
       default:
-        return Container(); // Placeholder, you can return any default widget here
+        return Container();
     }
   }
 }
