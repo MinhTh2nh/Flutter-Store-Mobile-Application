@@ -49,7 +49,7 @@ class HomePage extends StatelessWidget {
               ),
             ),
             const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24.0),
+              padding: EdgeInsets.symmetric(horizontal: 20.0),
               child: Divider(),
             ),
             Consumer<CartModel>(
@@ -80,13 +80,19 @@ class HomePage extends StatelessWidget {
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: ProductTile(
-                          product_name: product['product_name'],
-                          product_price: product["product_price"].toString(),
-                          product_thumbnail: product['product_thumbnail'],
-                          total_stock: product['total_stock'],
-                          // Inside the GridView.builder itemBuilder
-                          onPressed: () => {},
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: ProductTile(
+                            product_name: product['product_name'],
+                            product_price: product["product_price"].toString(),
+                            product_thumbnail: "lib/images/Image Banner 2.png",
+                            total_stock: product['total_stock'],
+                            // Inside the GridView.builder itemBuilder
+                            onPressed: () => {},
+                          ),
                         ),
                       ),
                     );
