@@ -111,7 +111,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                     top: 0,
                     right: 0,
                     child: Container(
-                      padding: EdgeInsets.all(4),
+                      padding: EdgeInsets.all(2),
                       decoration: BoxDecoration(
                         color: Colors.red,
                         borderRadius: BorderRadius.circular(10),

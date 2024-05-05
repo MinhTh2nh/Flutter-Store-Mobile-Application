@@ -26,19 +26,14 @@ class ProductTile extends StatelessWidget {
       child: Material(
         elevation: 3, // Add elevation for shadow effect
         child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 5), // Adjust padding
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Image.network(
                 product_thumbnail,
                 width: double.infinity, // Take whole width
-                height: 150,
-                // fit: BoxFit.cover,
+                height: MediaQuery.of(context).size.height * 0.15,
+                fit: BoxFit.cover,
               ),
               const SizedBox(height: 12),
               Padding(
