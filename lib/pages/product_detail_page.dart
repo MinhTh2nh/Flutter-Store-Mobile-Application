@@ -24,9 +24,23 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   Widget build(BuildContext context) {
     final cartModel = Provider.of<CartModel>(context);
     final product = cartModel.shopItems[widget.index];
+    // Fetch product items when building the widget
+    Future<void> _fetchProductItems(int productId) async {
+      await cartModel.fetchProductItems(productId);
+    }
+    // Call _fetchProductItems when the widget initializes
+    _fetchProductItems(cartModel.shopItems[widget.index]['product_id']);
+
     final productItems = cartModel.productItems
-        .where((item) => item['product_id'] == product['product_id'])
+        .where((item) =>
+    item['product_id'] ==
+        cartModel.shopItems[widget.index]['product_id'])
         .toList();
+
+
+    // final productItems = cartModel.productItems
+    //     .where((item) => item['product_id'] == product['product_id'])
+    //     .toList();
 
     //sample review data
     final reviews = [

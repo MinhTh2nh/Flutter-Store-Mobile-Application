@@ -41,7 +41,6 @@ class CartModel extends ChangeNotifier {
 
         // Update _shopItems with fetched products
         _shopItems = products;
-
         // Print fetched products
         // print('Fetched products: $_shopItems');
 
@@ -74,12 +73,8 @@ class CartModel extends ChangeNotifier {
       if (response.statusCode == 200) {
         // Decode JSON response body
         final List<dynamic> productItems = json.decode(response.body)['data'];
-
         // Update _productItems with fetched product items
         _productItems = productItems;
-
-        // Print fetched products
-        print('Fetched items: $_productItems');
 
         // Notify listeners of the change
         notifyListeners();
@@ -119,7 +114,7 @@ class CartModel extends ChangeNotifier {
           'product_price': product['product_price'],
           'product_thumbnail': product['product_thumbnail'],
           'quantity': quantity,
-          'selectedSize': item["size"],
+          'selectedSize': item["size_name"],
         };
 
         // Add the new item to cart
