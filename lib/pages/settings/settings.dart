@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_mobile_app/components/address_management.dart';
-
+import 'package:food_mobile_app/pages/order_management.dart';
 import '../../components/custome_app_bar/custom_app_bar.dart';
 import '../settings/small_components/profile_menu.dart';
 import '../settings/small_components/profile_pic.dart';
@@ -31,6 +31,17 @@ class Settings extends StatelessWidget {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => const AddressManagement(),
                 ))
+              },
+            ),
+            ProfileMenu(
+              text: "My Orders",
+              icon:
+                  "lib/images/order.svg", // Replace with your actual orders icon path
+              press: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) =>
+                      OrdersScreen(), // Replace with your actual OrdersScreen widget
+                ));
               },
             ),
             ProfileMenu(

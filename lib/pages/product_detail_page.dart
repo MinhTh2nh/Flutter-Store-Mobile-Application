@@ -3,13 +3,15 @@ import 'package:flutter_svg/svg.dart';
 import '../components/star_rating.dart';
 import '../model/cart_model.dart';
 import 'package:provider/provider.dart';
+import '../components/review_field.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final int index;
 
-  const ProductDetailPage({Key? key, required this.index}) : super(key: key);
+  const ProductDetailPage({super.key, required this.index});
 
   @override
+  // ignore: library_private_types_in_public_api
   _ProductDetailPageState createState() => _ProductDetailPageState();
 }
 
@@ -26,13 +28,37 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         .where((item) => item['product_id'] == product['product_id'])
         .toList();
 
+    //sample review data
+    final reviews = [
+      {
+        'username': 'John Doe',
+        'reviewText': 'This product is really awesome!',
+        'rating': 4,
+      },
+      {
+        'username': 'Jane Doe',
+        'reviewText': 'I love this product!',
+        'rating': 5,
+      },
+      {
+        'username': 'Bob Smith',
+        'reviewText': 'This product is okay.',
+        'rating': 3,
+      },
+      {
+        'username': 'Alice Johnson',
+        'reviewText': 'Not what I expected.',
+        'rating': 2,
+      },
+    ];
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Product Details',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-      ),
+          // title: const Text(
+          //   'Product Details',
+          //   style: TextStyle(fontWeight: FontWeight.bold),
+          // ),
+          ),
       body: Column(
         children: [
           Expanded(
@@ -48,7 +74,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         product['product_thumbnail'],
                         fit: BoxFit.contain,
                         errorBuilder: (context, error, stackTrace) =>
-                        const Icon(Icons.error),
+                            const Icon(Icons.error),
                       ),
                     ),
                   ),
@@ -70,9 +96,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         const Expanded(
                           child: IconTheme(
                             data: IconThemeData(
-                              color: Colors.amberAccent,
-                              size: 18,
-                            ),
+                                // color: Colors.amberAccent,
+                                // size: 18,
+                                ),
                             child: StarDisplay(value: 4),
                           ),
                         ),
@@ -123,9 +149,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                   onPressed: () {
                                     if (quantity <
                                         (selectedItemID != -1
-                                            ? productItems.firstWhere(
-                                                (item) =>
-                                            item['item_id'] ==
+                                            ? productItems.firstWhere((item) =>
+                                                item['item_id'] ==
                                                 selectedItemID)['stock']
                                             : 1)) {
                                       setState(() {
@@ -159,12 +184,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   // Display selection options based on product_items
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: productItems
-                        .map<Widget>((item) {
+                    children: productItems.map<Widget>((item) {
                       return GestureDetector(
                         onTap: () {
                           setState(() {
-                            selectedSize = item['size'];
+                            selectedSize = item['size_name'];
                             selectedItemID = item['item_id'];
                             // Reset quantity to 1 when size is changed
                             quantity = 1;
@@ -178,25 +202,28 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           ),
                           decoration: BoxDecoration(
                             border: Border.all(
-                              color: selectedSize == item['size']
+                              color: selectedSize == item['size_name']
                                   ? Colors.teal // Highlight selected size
                                   : Colors.grey,
                             ),
                             borderRadius: BorderRadius.circular(5.0),
-                            color: selectedSize == item['size']
-                                ? Colors.teal.shade200 // Background color for selected size
+                            color: selectedSize == item['size_name']
+                                ? Colors.teal
+                                    .shade200 // Background color for selected size
                                 : null, // No background color for unselected size
                           ),
                           child: Text(
-                            item['size'],
+                            item['size_name'],
                             style: TextStyle(
-                              fontWeight: selectedSize == item['size']
+                              color: selectedSize == item['size_name']
+                                  ? Colors.white // Highlight selected size
+                                  : Colors.black,
+                              fontWeight: selectedSize == item['size_name']
                                   ? FontWeight.bold // Highlight selected size
                                   : FontWeight.normal,
                             ),
                           ),
                         ),
-
                       );
                     }).toList(),
                   ),
@@ -218,6 +245,18 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       style: const TextStyle(fontSize: 14),
                     ),
                   ),
+                  const SizedBox(height: 16),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Reviews',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      ProductReview(reviews: reviews),
+                    ],
+                  )
                 ],
               ),
             ),
@@ -239,7 +278,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       onPressed: () {
                         if (selectedItemID != -1) {
                           final selectedProductItem = productItems.firstWhere(
-                                (item) => item['item_id'] == selectedItemID,
+                            (item) => item['item_id'] == selectedItemID,
                             orElse: () => null,
                           );
                           if (selectedProductItem != null &&
@@ -278,7 +317,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         backgroundColor: Colors.teal.shade200,
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.all(10), // Adjust padding as needed
+                        padding: const EdgeInsets.all(
+                            10), // Adjust padding as needed
                         child: SvgPicture.asset(
                           "lib/images/shopping-cart-icon.svg",
                           color: Colors.white,

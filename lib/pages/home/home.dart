@@ -94,8 +94,6 @@ class HomePage extends StatelessWidget {
                 );
               },
             ),
-            if (Provider.of<CartModel>(context).isLoading) // Add this block
-              const Center(child: CircularProgressIndicator()),
           ],
         ),
       ),

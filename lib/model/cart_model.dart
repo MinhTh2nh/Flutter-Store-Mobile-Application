@@ -1,10 +1,12 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 class CartModel extends ChangeNotifier {
   List _shopItems = [];
-  List _cartItems = [];
+  final List _cartItems = [];
   List _productItems = [];
   int _page = 1;
   bool _isLoading = false;
@@ -13,12 +15,6 @@ class CartModel extends ChangeNotifier {
 
   CartModel() {
     _shopItems = [];
-    _productItems = [
-      {"item_id": 0, "product_id": 1, "stock": 5, "size": "XS-MS"},
-      {"item_id": 1, "product_id": 1, "stock": 5, "size": "M-XM"},
-      {"item_id": 2, "product_id": 1, "stock": 5, "size": "L-XL"},
-      {"item_id": 3, "product_id": 1, "stock": 5, "size": "XXL-XXXL"},
-    ];
 
     fetchProducts();
   }
@@ -35,8 +31,8 @@ class CartModel extends ChangeNotifier {
     _isLoading = true; // Set loading state to true
     try {
       // Make HTTP GET request to fetch products from API
-      final response = await http
-          .get(Uri.parse('http://192.168.1.12:8081/products/getAllProducts'));
+      final response = await http.get(Uri.parse(
+          'https://flutter-store-mobile-application-backend.onrender.com/products/get'));
 
       // Check if request is successful
       if (response.statusCode == 200) {
@@ -65,25 +61,59 @@ class CartModel extends ChangeNotifier {
     }
   }
 
+  Future<void> fetchProductItems(int productId) async {
+    if (_isLoading) return; // If a request is already in progress, do nothing
+
+    _isLoading = true; // Set loading state to true
+    try {
+      // Make HTTP GET request to fetch product items from API
+      final response = await http.get(Uri.parse(
+          'https://flutter-store-mobile-application-backend.onrender.com/products/get/itemList/$productId'));
+
+      // Check if request is successful
+      if (response.statusCode == 200) {
+        // Decode JSON response body
+        final List<dynamic> productItems = json.decode(response.body)['data'];
+
+        // Update _productItems with fetched product items
+        _productItems = productItems;
+
+        // Print fetched products
+        print('Fetched items: $_productItems');
+
+        // Notify listeners of the change
+        notifyListeners();
+      } else {
+        // Handle error response
+        print('Failed to fetch product items: ${response.statusCode}');
+      }
+    } catch (error) {
+      // Handle network errors
+      print('Network error: $error');
+    } finally {
+      _isLoading = false; // Set loading state to false
+    }
+  }
+
   void addItemToCartWithQuantity(
-      int item_id, int quantity, String selectedSize, int product_id) {
+      int itemId, int quantity, String selectedSize, int productId) {
     // Find the product with the matching item_id
     var item = _productItems.firstWhere(
-        (element) => element['item_id'] == item_id,
+        (element) => element['item_id'] == itemId,
         orElse: () => null);
 
     // Check if item is null (no matching element found)
     if (item != null) {
       // Find the product details based on the provided product_id
       var product = _shopItems.firstWhere(
-          (element) => element['product_id'] == product_id,
+          (element) => element['product_id'] == productId,
           orElse: () => null);
 
       // Check if product is null (no matching element found)
       if (product != null) {
         // Create a copy of the product with the added details
         Map newItem = {
-          'item_id': item_id,
+          'item_id': itemId,
           'product_id': product['product_id'],
           'product_name': product['product_name'],
           'product_price': product['product_price'],
@@ -96,10 +126,10 @@ class CartModel extends ChangeNotifier {
         _cartItems.add(newItem);
         notifyListeners();
       } else {
-        print('No product found with product_id: $product_id');
+        print('No product found with product_id: $productId');
       }
     } else {
-      print('No item found with item_id: $item_id');
+      print('No item found with item_id: $itemId');
     }
   }
 

@@ -32,7 +32,7 @@ class Products extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               SliderButtons(),
-              // const SizedBox(height: 12),
+              const SizedBox(height: 12),
               Consumer<CartModel>(
                 builder: (context, cartModel, child) {
                   if (cartModel.shopItems.isEmpty) {
@@ -63,20 +63,19 @@ class Products extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: ProductTile(
-                              product_name: product['product_name'],
-                              product_price:
-                                  product['product_price'].toString(),
-                              product_thumbnail: product['product_thumbnail'],
-                              total_stock: product['total_stock'],
-                              onPressed: () => {}),
+                            product_name: product['product_name'],
+                            product_price: product["product_price"].toString(),
+                            product_thumbnail: product['product_thumbnail'],
+                            total_stock: product['total_stock'],
+                            // Inside the GridView.builder itemBuilder
+                            onPressed: () => {},
+                          ),
                         ),
                       );
                     },
                   );
                 },
               ),
-              if (Provider.of<CartModel>(context).isLoading) // Add this block
-                const Center(child: CircularProgressIndicator()),
             ],
           ),
         ),
