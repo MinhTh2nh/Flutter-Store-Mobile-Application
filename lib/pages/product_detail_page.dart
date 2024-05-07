@@ -81,7 +81,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     child: SizedBox(
                       // Remove the Padding widget
                       child: Image.asset(
-                        "lib/images/Image Banner 2.png",
+                        product['product_thumbnail'],
                         width: double.infinity, // Take whole width
                         height: MediaQuery.of(context).size.height * 0.3,
                         fit: BoxFit.cover,

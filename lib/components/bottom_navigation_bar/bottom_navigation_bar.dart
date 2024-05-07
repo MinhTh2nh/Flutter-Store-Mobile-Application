@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class BottomNavigationBarWrapper extends StatelessWidget {
-  final void Function(int) onItemTapped; // Function to handle item tap
+  final void Function(int)? onItemTapped; // Make it nullable by adding '?'
 
   const BottomNavigationBarWrapper({
     Key? key,
-    required this.onItemTapped,
+    this.onItemTapped, // Update here as well
   }) : super(key: key);
 
   @override
