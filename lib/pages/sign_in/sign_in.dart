@@ -7,13 +7,13 @@ import '../sign_in/small_components/sign_form.dart';
 class SignInScreen extends StatelessWidget {
   static String routeName = "/sign_in";
 
-  const SignInScreen({Key? key}) : super(key: key);
+  const SignInScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage("lib/images/backgroud.png"), // Replace with your image path
             fit: BoxFit.cover,
@@ -75,7 +75,7 @@ class SignInScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 20),
                             const NoAccountText(),
-                            SizedBox(height: 20), // Add more s
+                            const SizedBox(height: 20), // Add more s
                           ],
                         ),
                       ),

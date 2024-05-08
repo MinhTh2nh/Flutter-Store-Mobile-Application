@@ -27,18 +27,19 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     final cartModel = Provider.of<CartModel>(context);
     final product = cartModel.shopItems[widget.index];
     // Fetch product items when building the widget
+    // ignore: no_leading_underscores_for_local_identifiers
     Future<void> _fetchProductItems(int productId) async {
       await cartModel.fetchProductItems(productId);
     }
+
     // Call _fetchProductItems when the widget initializes
     _fetchProductItems(cartModel.shopItems[widget.index]['product_id']);
 
     final productItems = cartModel.productItems
         .where((item) =>
-    item['product_id'] ==
-        cartModel.shopItems[widget.index]['product_id'])
+            item['product_id'] ==
+            cartModel.shopItems[widget.index]['product_id'])
         .toList();
-
 
     // final productItems = cartModel.productItems
     //     .where((item) => item['product_id'] == product['product_id'])
@@ -80,18 +81,19 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   Center(
                     child: SizedBox(
                       // Remove the Padding widget
-                      child: Image.asset(
-                        "lib/images/Image Banner 2.png",
+                      child: Image.network(
+                        product['product_thumbnail'],
                         width: double.infinity, // Take whole width
                         height: MediaQuery.of(context).size.height * 0.3,
-                        fit: BoxFit.cover,
+                        fit: BoxFit.contain,
                         errorBuilder: (context, error, stackTrace) =>
-                        const Icon(Icons.error),
+                            const Icon(Icons.error),
                       ),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(12), // Adjust padding as needed
+                    padding:
+                        const EdgeInsets.all(12), // Adjust padding as needed
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -156,16 +158,19 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                     ),
                                     Container(
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10.0),
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
                                       ),
                                       width: 35.0,
                                       child: RawMaterialButton(
                                         onPressed: () {
                                           if (quantity <
                                               (selectedItemID != -1
-                                                  ? productItems.firstWhere((item) =>
-                                              item['item_id'] ==
-                                                  selectedItemID)['stock']
+                                                  ? productItems.firstWhere(
+                                                          (item) =>
+                                                              item['item_id'] ==
+                                                              selectedItemID)[
+                                                      'stock']
                                                   : 1)) {
                                             setState(() {
                                               quantity++;
@@ -223,18 +228,21 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                   borderRadius: BorderRadius.circular(5.0),
                                   color: selectedSize == item['size_name']
                                       ? Colors.teal
-                                      .shade200 // Background color for selected size
+                                          .shade200 // Background color for selected size
                                       : null, // No background color for unselected size
                                 ),
                                 child: Text(
                                   item['size_name'],
                                   style: TextStyle(
                                     color: selectedSize == item['size_name']
-                                        ? Colors.white // Highlight selected size
+                                        ? Colors
+                                            .white // Highlight selected size
                                         : Colors.black,
-                                    fontWeight: selectedSize == item['size_name']
-                                        ? FontWeight.bold // Highlight selected size
-                                        : FontWeight.normal,
+                                    fontWeight:
+                                        selectedSize == item['size_name']
+                                            ? FontWeight
+                                                .bold // Highlight selected size
+                                            : FontWeight.normal,
                                   ),
                                 ),
                               ),
@@ -274,7 +282,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       ],
                     ),
                   ),
-
                 ],
               ),
             ),
@@ -334,13 +341,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         padding: EdgeInsets.zero,
                         backgroundColor: Colors.teal.shade200,
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(
-                            10), // Adjust padding as needed
-                        child: SvgPicture.asset(
-                          "lib/images/shopping-cart-icon.svg",
+                      child: const Padding(
+                        padding: EdgeInsets.all(10), // Adjust padding as needed
+                        child: Icon(
+                          Icons.shopping_cart,
                           color: Colors.white,
-                          width: 40, // Adjust width of SVG
                         ),
                       ),
                     ),
