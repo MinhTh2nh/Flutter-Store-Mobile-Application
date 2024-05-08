@@ -7,6 +7,7 @@ import '../../pages/product_detail_page.dart';
 import 'small_components/categories.dart';
 import 'small_components/discount_banner.dart';
 import 'small_components/special_offers.dart';
+import 'package:food_mobile_app/components/slider_image.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -31,7 +32,7 @@ class HomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.asset('lib/images/main_image.png'),
+            const SliderImages(),
             const Column(
               // Wrap DiscountBanner and Categories in a Column
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,7 +89,7 @@ class HomePage extends StatelessWidget {
                           child: ProductTile(
                             product_name: product['product_name'],
                             product_price: product["product_price"].toString(),
-                            product_thumbnail: "lib/images/Image Banner 2.png",
+                            product_thumbnail: product["product_thumbnail"],
                             total_stock: product['total_stock'],
                             // Inside the GridView.builder itemBuilder
                             onPressed: () => {},

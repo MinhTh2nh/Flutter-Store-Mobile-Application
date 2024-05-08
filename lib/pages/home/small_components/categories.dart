@@ -1,29 +1,47 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
-class Categories extends StatelessWidget {
+class Categories extends StatefulWidget {
   const Categories({super.key});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _CategoriesState createState() => _CategoriesState();
+}
+
+class _CategoriesState extends State<Categories> {
+  int selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     List<Map<String, dynamic>> categories = [
-      {"icon": "lib/images/Bell.svg", "text": "Flash Deal"},
-      {"icon": "lib/images/shopping-cart-icon.svg", "text": "T-Shirt"},
-      {"icon": "lib/images/shopping-cart-icon.svg", "text": "Jeans"},
-      {"icon": "lib/images/Bell.svg", "text": "Bags"},
-      {"icon": "lib/images/Bell.svg", "text": "More"},
+      {"icon": Icons.shopping_bag, "text": "All"},
+      {"icon": Icons.boy, "text": "Clothing"},
+      {"icon": Icons.brush, "text": "Cosmetic"},
+      {"icon": Icons.healing, "text": "Health"},
+      {"icon": Icons.electrical_services, "text": "Electric Devices"},
+      {"icon": Icons.toys, "text": "Toys"},
+      {"icon": Icons.chair, "text": "Furniture"},
+      {"icon": Icons.watch, "text": "Watch"},
     ];
     return Padding(
       padding: const EdgeInsets.all(10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: List.generate(
-          categories.length,
-              (index) => CategoryCard(
-            icon: categories[index]["icon"],
-            text: categories[index]["text"],
-            press: () {},
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: List.generate(
+            categories.length,
+            (index) => CategoryCard(
+              icon: categories[index]["icon"],
+              text: categories[index]["text"],
+              press: () {
+                setState(() {
+                  selectedIndex = index;
+                });
+              },
+              isSelected: selectedIndex == index,
+            ),
           ),
         ),
       ),
@@ -33,34 +51,45 @@ class Categories extends StatelessWidget {
 
 class CategoryCard extends StatelessWidget {
   const CategoryCard({
-    Key? key,
+    super.key,
     required this.icon,
     required this.text,
     required this.press,
-  }) : super(key: key);
+    required this.isSelected,
+  });
 
-  final String icon, text;
+  final IconData icon;
+  final String text;
   final GestureTapCallback press;
+  final bool isSelected;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: press,
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            height: 56,
-            width: 56,
-            decoration: BoxDecoration(
-              color: const Color(0xFFFFECDF),
-              borderRadius: BorderRadius.circular(10),
+      child: SizedBox(
+        width: 70, // Set a fixed width for each card
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              height: 56,
+              width: 56,
+              decoration: BoxDecoration(
+                color: isSelected ? Colors.blue : const Color(0xFFFFECDF),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child:
+                  Icon(icon, color: isSelected ? Colors.white : Colors.black),
             ),
-            child: SvgPicture.asset(icon),
-          ),
-          const SizedBox(height: 4),
-          Text(text, textAlign: TextAlign.center)
-        ],
+            const SizedBox(height: 4),
+            Text(
+              text,
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis, // Add this
+            )
+          ],
+        ),
       ),
     );
   }
