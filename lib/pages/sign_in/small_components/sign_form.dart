@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_mobile_app/components/buttons.dart';
 import 'package:velocity_x/velocity_x.dart';
+import '../../../admin-pages/home/home.dart';
 import '../../../components/custom_surfix_icon.dart';
 import '../../../components/form_error.dart';
 import '../../../consts/consts.dart';
@@ -96,10 +97,16 @@ class _SignFormState extends State<SignForm> {
               color: Colors.red,
               textColor: Colors.white, // Text color set to white
               onPress: () {
-                Navigator.pushNamed(context, HomePage.routeName);
-              }).box
-              .width(context.screenWidth - 50)
-              .make(),
+                // Check if email and password match the admin credentials
+                if (emailController.text == "admin@gmail.com" &&
+                    passwordController.text == "testingdemo") {
+                  Navigator.pushNamed(context, AdminHomePage.routeName);
+                } else {
+                  // Navigate to regular home page if credentials don't match
+                  Navigator.pushNamed(context, HomePage.routeName);
+                }
+              }).box.width(context.screenWidth - 50).make(),
+
           SizedBox(height: 10), // Add more s
         ],
       ),
