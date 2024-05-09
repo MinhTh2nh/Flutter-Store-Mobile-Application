@@ -1,4 +1,7 @@
 import 'package:flutter/widgets.dart';
+import 'package:food_mobile_app/admin-pages/home/home.dart';
+import 'package:food_mobile_app/admin-pages/products/products.dart';
+import 'package:food_mobile_app/admin-pages/profile_admin/profile_admin.dart';
 import 'package:food_mobile_app/pages/cart_page.dart';
 import 'package:food_mobile_app/pages/sign_in/sign_in.dart';
 import '../pages/complete_profile/complete_profile_screen.dart';
@@ -20,4 +23,8 @@ final Map<String, WidgetBuilder> routes = {
   ForgotPasswordScreen.routeName: (context) =>   const ForgotPasswordScreen(),
   SignUpScreen.routeName: (context) => const SignUpScreen(),
   CompleteProfileScreen.routeName: (context) => const CompleteProfileScreen(),
+  AdminHomePage.routeName: (context) =>   const AdminHomePage(),
+  AdminProfilePage.routeName : (context) => const AdminProfilePage(),
+  AdminProductPage.routeName : (context) => const AdminProductPage(),
+
 };
