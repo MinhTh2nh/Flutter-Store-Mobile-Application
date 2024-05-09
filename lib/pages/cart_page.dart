@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:food_mobile_app/components/buttons.dart';
@@ -9,6 +8,7 @@ import '../model/cart_model.dart';
 import '../../components/custome_app_bar/custom_app_bar.dart';
 
 class CartPage extends StatelessWidget {
+  // ignore: use_key_in_widget_constructors
   const CartPage({Key? key});
 
   static String routeName = "/cart-page";

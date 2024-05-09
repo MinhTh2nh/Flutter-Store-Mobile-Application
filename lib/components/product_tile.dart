@@ -25,43 +25,49 @@ class ProductTile extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 10), // Add margin bottom
       child: Material(
         elevation: 3, // Add elevation for shadow effect
-        child: Container(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Image.network(
-                product_thumbnail,
-                width: double.infinity, // Take whole width
-                height: MediaQuery.of(context).size.height * 0.15,
-                fit: BoxFit.cover,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image.network(
+              product_thumbnail,
+              width: double.infinity, // Take whole width
+              height: MediaQuery.of(context).size.height * 0.15,
+              fit: BoxFit.contain,
+              errorBuilder: (BuildContext context, Object exception,
+                  StackTrace? stackTrace) {
+                // You can return an error image or a placeholder here
+                return Image.asset(
+                  'lib/images/blank.png',
+                  fit: BoxFit.contain,
+                );
+              },
+            ),
+            const SizedBox(height: 12),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8), // Add padding
+              child: Text(
+                product_name,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 12),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8), // Add padding
-                child: Text(
-                  product_name,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8), // Add padding
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '\$$product_price',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    'Available: $total_stock',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8), // Add padding
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '\$$product_price',
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      'Available: $total_stock',
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

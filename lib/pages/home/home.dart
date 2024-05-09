@@ -7,6 +7,7 @@ import '../../pages/product_detail_page.dart';
 import 'small_components/categories.dart';
 import 'small_components/discount_banner.dart';
 import 'small_components/special_offers.dart';
+import 'package:food_mobile_app/components/slider_image.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -31,7 +32,7 @@ class HomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.asset('lib/images/main_image.png'),
+            const SliderImages(),
             const Column(
               // Wrap DiscountBanner and Categories in a Column
               crossAxisAlignment: CrossAxisAlignment.start,
