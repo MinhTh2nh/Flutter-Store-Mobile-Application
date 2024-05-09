@@ -5,13 +5,14 @@ Widget buttons({
   required Color color,
   required Color textColor,
   required VoidCallback onPress,
-}) {
+})
+{
   return ElevatedButton(
     style: ElevatedButton.styleFrom(
       backgroundColor: color,
       padding: const EdgeInsets.all(12),
     ),
-    onPressed: onPress,
+    onPressed: onPress, // Use onPressed instead of onTap
     child: Text(
       title,
       style: TextStyle(color: textColor),
