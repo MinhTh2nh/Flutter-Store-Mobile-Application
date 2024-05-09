@@ -80,7 +80,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 children: [
                   Center(
                     child: SizedBox(
-                      // Remove the Padding widget
                       child: Image.network(
                         product['product_thumbnail'],
                         width: double.infinity, // Take whole width
