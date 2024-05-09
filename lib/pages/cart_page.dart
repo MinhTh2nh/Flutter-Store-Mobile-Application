@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
 import 'package:flutter/widgets.dart';
 import 'package:food_mobile_app/components/buttons.dart';
-=======
->>>>>>> 5dd657d2b43a98fb2ee12a24b3c53664a328c876
 import 'package:food_mobile_app/pages/order.dart';
 import 'package:provider/provider.dart';
 import '../components/bottom_navigation_bar/bottom_navigation_bar.dart';
