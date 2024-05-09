@@ -48,7 +48,8 @@ class CartPage extends StatelessWidget {
                               child: ListTile(
                                 leading: Image.network(
                                   cartItem['product_thumbnail'],
-                                  height: 36,
+                                  // height: 36,
+                                  fit: BoxFit.cover,
                                 ),
                                 title: Text(
                                   cartItem['product_name'],

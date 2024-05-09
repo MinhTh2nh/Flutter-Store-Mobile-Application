@@ -5,9 +5,10 @@ import '../../pages/cart_page.dart';
 
 class CustomAppBarForDetailPage extends StatefulWidget
     implements PreferredSizeWidget {
-  const CustomAppBarForDetailPage({Key? key}) : super(key: key);
+  const CustomAppBarForDetailPage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _CustomAppBarForDetailPageState createState() =>
       _CustomAppBarForDetailPageState();
 
@@ -42,7 +43,7 @@ class _CustomAppBarForDetailPageState extends State<CustomAppBarForDetailPage> {
       borderRadius: BorderRadius.circular(10),
     );
 
-    final sizeIcon = BoxConstraints.tightFor(
+    const sizeIcon = BoxConstraints.tightFor(
       width: 40,
       height: 40,
     );
@@ -61,16 +62,16 @@ class _CustomAppBarForDetailPageState extends State<CustomAppBarForDetailPage> {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
           ),
           // Expanded search field
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(left: 12),
+              padding: const EdgeInsets.only(left: 8),
               child: TextField(
                 focusNode: _searchFocusNode, // Assign the FocusNode
                 decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(4),
+                  contentPadding: const EdgeInsets.all(4),
                   focusedBorder: border,
                   enabledBorder: border,
                   isDense: true,
@@ -79,11 +80,11 @@ class _CustomAppBarForDetailPageState extends State<CustomAppBarForDetailPage> {
                     fontSize: 18,
                     color: Colors.teal.shade200,
                   ),
-                  prefixIcon: Icon(
+                  prefixIcon: const Icon(
                     Icons.search,
                   ),
                   prefixIconConstraints: sizeIcon,
-                  suffixIcon: Icon(
+                  suffixIcon: const Icon(
                     Icons.camera_alt_outlined,
                   ),
                   suffixIconConstraints: sizeIcon,
@@ -118,17 +119,17 @@ class _CustomAppBarForDetailPageState extends State<CustomAppBarForDetailPage> {
                 if (cart.cartItems
                     .isNotEmpty) // Conditionally show the notification badge
                   Positioned(
-                    top: 0,
-                    right: 0,
+                    top: 5,
+                    right: 5,
                     child: Container(
-                      padding: EdgeInsets.all(2),
+                      padding: const EdgeInsets.all(2),
                       decoration: BoxDecoration(
                         color: Colors.red,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
                         cart.itemsCount.toString(),
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                       ),
                     ),
                   ),

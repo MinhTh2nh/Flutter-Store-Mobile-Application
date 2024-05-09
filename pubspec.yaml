@@ -45,6 +45,7 @@ dependencies:
   go_router: ^5.2.0
   flutter_svg: ^0.22.0
   http: ^1.2.1
+  flutter_rating_bar: ^4.0.0
 
 dev_dependencies:
   flutter_test:
