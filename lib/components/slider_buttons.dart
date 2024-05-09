@@ -73,8 +73,8 @@ class _SliderButtonsState extends State<SliderButtons> {
                       ? FontWeight.bold // Highlight selected size
                       : FontWeight.normal,
                   color: selectedIndex == index
-                      ? Color(0xFF535353)
-                      : Color(0xFFACACAC),
+                      ? const Color(0xFF535353)
+                      : const Color(0xFFACACAC),
                 ),
               ),
             ),
