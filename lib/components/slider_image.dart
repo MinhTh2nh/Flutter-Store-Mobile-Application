@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
-class SliderButtons extends StatefulWidget {
-  const SliderButtons({super.key});
+class SliderImages extends StatefulWidget {
+  const SliderImages({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
-  _SliderButtonsState createState() => _SliderButtonsState();
+  _SliderImagesState createState() => _SliderImagesState();
 }
 
-class _SliderButtonsState extends State<SliderButtons> {
+class _SliderImagesState extends State<SliderImages> {
   int _currentIndex = 0;
   final CarouselController _controller = CarouselController();
 
-  final List<String> items = List<String>.generate(10, (i) => 'Item ${i + 1}');
-
+  final List<String> items = [
+    'lib/images/mainbanner.jpg',
+    'lib/images/clothingbanner.jpg',
+    'lib/images/cosmeticbanner.jpg',
+    'lib/images/electricbanner.jpg',
+    // Add more image URLs
+  ];
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -29,18 +34,16 @@ class _SliderButtonsState extends State<SliderButtons> {
                   decoration: const BoxDecoration(
                     color: Colors.grey,
                   ),
-                  child: Center(
-                    child: Text(
-                      item,
-                      style: const TextStyle(fontSize: 22.0),
-                    ),
+                  child: Image.asset(
+                    item,
+                    fit: BoxFit.cover,
                   ),
                 );
               },
             );
           }).toList(),
           options: CarouselOptions(
-            height: 400.0,
+            height: 150.0,
             autoPlay: true,
             enlargeCenterPage: true,
             onPageChanged: (index, reason) {
@@ -58,7 +61,8 @@ class _SliderButtonsState extends State<SliderButtons> {
             return Container(
               width: 8.0,
               height: 8.0,
-              margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+              margin:
+                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: _currentIndex == index

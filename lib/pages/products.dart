@@ -45,8 +45,8 @@ class Products extends StatelessWidget {
                     itemCount: cartModel.shopItems.length,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 1 / 1.1,
+                      crossAxisCount: 2,
+                      childAspectRatio: 1 / 1.1,
                     ),
                     itemBuilder: (context, index) {
                       var product = cartModel.shopItems[index];
