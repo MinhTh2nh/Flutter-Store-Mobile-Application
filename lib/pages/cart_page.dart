@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:food_mobile_app/components/buttons.dart';
 import 'package:food_mobile_app/pages/order.dart';
 import 'package:provider/provider.dart';
@@ -19,13 +18,13 @@ class CartPage extends StatelessWidget {
       appBar: const CustomAppBar(),
       body: Consumer<CartModel>(
         builder: (context, value, child) {
-          if (value.cartItems.length == 0) {
+          if (value.cartItems.isEmpty) {
             // Display empty cart image if cart is empty
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     "Oops, your cart is empty",
                     style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                   ),
@@ -108,7 +107,7 @@ class CartPage extends StatelessWidget {
                             ),
                           );
                         } else {
-                          return SizedBox.shrink();
+                          return const SizedBox.shrink();
                         }
                       },
                     ),

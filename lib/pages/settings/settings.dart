@@ -9,6 +9,41 @@ class Settings extends StatelessWidget {
   static String routeName = "/settings";
 
   const Settings({super.key});
+  Future<void> _showLogoutDialog(BuildContext context) async {
+    return showDialog<void>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Logout'),
+          content: const SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Are you sure you want to log out?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Stay'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Logout'),
+              onPressed: () {
+                // Perform logout actions here, like deleting tokens
+
+                // Navigate to sign-in page
+                Navigator.pushNamed(context, '/sign_in');
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +97,7 @@ class Settings extends StatelessWidget {
             ProfileMenu(
               text: "Log Out",
               icon: "lib/images/Log out.svg",
-              press: () {},
+              press: () => _showLogoutDialog(context),
             ),
           ],
         ),
