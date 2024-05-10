@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_mobile_app/admin-pages/profile_admin/profile_admin.dart';
 import 'package:provider/provider.dart'; // Import Provider package
 import '../../model/cart_model.dart';
 import '../../pages/cart_page.dart';
@@ -13,17 +14,17 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _CustomAppBarState extends State<CustomAppBar> {
-  late FocusNode _searchFocusNode; // Declare a FocusNode
+  late FocusNode _searchFocusNode;
 
   @override
   void initState() {
     super.initState();
-    _searchFocusNode = FocusNode(); // Initialize the FocusNode
+    _searchFocusNode = FocusNode();
   }
 
   @override
   void dispose() {
-    _searchFocusNode.dispose(); // Dispose the FocusNode
+    _searchFocusNode.dispose();
     super.dispose();
   }
 
@@ -41,9 +42,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
 
     return AppBar(
       surfaceTintColor: Colors.transparent,
-      automaticallyImplyLeading: false,
-      backgroundColor: Colors.white, // Change background color based on scroll
-      // Add the search field
+      backgroundColor: Colors.white,
       title: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -61,7 +60,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 12),
                 child: TextField(
-                  focusNode: _searchFocusNode, // Assign the FocusNode
+                  focusNode: _searchFocusNode,
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(4),
                     focusedBorder: border,
@@ -82,14 +81,11 @@ class _CustomAppBarState extends State<CustomAppBar> {
                     suffixIconConstraints: sizeIcon,
                     border: InputBorder.none,
                     filled: true,
-                    fillColor: _searchFocusNode.hasFocus
-                        ? Colors.white
-                        : Colors.transparent, // Change color based on focus
+                    fillColor:
+                    _searchFocusNode.hasFocus ? Colors.white : Colors.transparent,
                   ),
                   onChanged: (value) {
-                    setState(() {
-                      // No need to track background color anymore
-                    });
+                    setState(() {});
                   },
                 ),
               ),
@@ -97,38 +93,26 @@ class _CustomAppBarState extends State<CustomAppBar> {
           ],
         ),
       ),
+      leading: Builder(
+        builder: (context) => IconButton(
+          icon: const Icon(Icons.menu),
+          onPressed: () {
+            Scaffold.of(context).openDrawer();
+          },
+        ),
+      ),
       actions: [
         Consumer<CartModel>(
-          // Use Consumer to listen to changes in CartModel
           builder: (context, cart, child) {
             return Stack(
               children: [
                 IconButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, CartPage.routeName);
+                    Navigator.pushNamed(context, AdminProfilePage.routeName);
                   },
-                  icon: const Icon(Icons.shopping_basket),
+                  icon: const Icon(Icons.person),
+
                 ),
-                if (cart.cartItems
-                    .isNotEmpty) // Conditionally show the notification badge
-                  Positioned(
-                    top: 2,
-                    right: 5,
-                    child: Container(
-                      alignment: Alignment.center,
-                      width: 20,
-                      height: 20,
-                      // padding: const EdgeInsets.all(2),
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Text(
-                        cart.itemsCount.toString(),
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
               ],
             );
           },

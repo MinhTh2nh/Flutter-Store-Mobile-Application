@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 // ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart'; // Add this line
 
@@ -69,13 +70,16 @@ class OrdersScreen extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(5),
                       child: FittedBox(
-                        child: Text('#${orders[i].id}'),
+                        child: Text(
+                          '#${orders[i].id}',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   ),
                   title: Text(orders[i].title),
-                  subtitle:
-                      Text(DateFormat('dd/MM/yyyy').format(orders[i].date)),
+                  subtitle: Text(
+                      "Ordered at: ${DateFormat('dd/MM/yyyy').format(orders[i].date)}"),
                 ),
                 Container(
                   padding:
@@ -124,26 +128,51 @@ class OrdersScreen extends StatelessWidget {
                               context: context,
                               builder: (ctx) => AlertDialog(
                                 title: Text('Review for ${product.name}'),
-                                content: TextField(
-                                  decoration: const InputDecoration(
-                                    labelText: 'Write a review',
-                                    border: OutlineInputBorder(),
-                                  ),
-                                  onSubmitted: (value) {
-                                    // Handle review submission
-                                  },
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    TextField(
+                                      decoration: const InputDecoration(
+                                        labelText: 'Write a review',
+                                        border: OutlineInputBorder(),
+                                      ),
+                                      onSubmitted: (value) {
+                                        // Handle review submission
+                                      },
+                                    ),
+                                    const SizedBox(
+                                        height:
+                                            10), // Add some space between TextField and RatingBar
+                                    RatingBar.builder(
+                                      initialRating: 3,
+                                      minRating: 1,
+                                      direction: Axis.horizontal,
+                                      allowHalfRating: true,
+                                      itemCount: 5,
+                                      itemPadding: const EdgeInsets.symmetric(
+                                          horizontal: 4.0),
+                                      itemBuilder: (context, _) => const Icon(
+                                        Icons.star,
+                                        color: Colors.amber,
+                                      ),
+                                      onRatingUpdate: (rating) {
+                                        print(rating);
+                                        // Handle rating update
+                                      },
+                                    ),
+                                  ],
                                 ),
                                 actions: [
-                                  TextButton(
-                                    child: const Text('Submit'),
-                                    onPressed: () {
-                                      // Handle submit button press
-                                    },
-                                  ),
                                   TextButton(
                                     child: const Text('Cancel'),
                                     onPressed: () {
                                       Navigator.of(ctx).pop();
+                                    },
+                                  ),
+                                  TextButton(
+                                    child: const Text('Submit'),
+                                    onPressed: () {
+                                      // Handle submit button press
                                     },
                                   ),
                                 ],

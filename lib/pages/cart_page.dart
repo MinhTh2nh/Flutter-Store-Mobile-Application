@@ -15,7 +15,7 @@ class CartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(),
+      appBar: AppBar(),
       body: Consumer<CartModel>(
         builder: (context, value, child) {
           if (value.cartItems.isEmpty) {
@@ -73,7 +73,8 @@ class CartPage extends StatelessWidget {
                               child: ListTile(
                                 leading: Image.network(
                                   cartItem['product_thumbnail'],
-                                  height: 36,
+                                  // height: 36,
+                                  fit: BoxFit.cover,
                                 ),
                                 title: Text(
                                   cartItem['product_name'],
@@ -113,67 +114,67 @@ class CartPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(36),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: Colors.teal.shade200,
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.teal.shade200,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(21.0),
+                      topRight: Radius.circular(21.0),
                     ),
-                    padding: const EdgeInsets.all(24),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Total Price',
-                              style: TextStyle(color: Colors.white),
+                  ),
+                  padding: const EdgeInsets.all(24),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Total Price',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          Text(
+                            '\$${value.calculateTotal()}',
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
                             ),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Text(
-                              '\$${value.calculateTotal()}',
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
+                          )
+                        ],
+                      ),
+                      GestureDetector(
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) {
+                            return const OrderPage();
+                          }),
+                        ),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.tealAccent),
+                            borderRadius: BorderRadius.circular(28),
+                          ),
+                          padding: const EdgeInsets.all(12),
+                          child: const Row(
+                            children: [
+                              Text(
+                                'Pay Now',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              Icon(
+                                Icons.arrow_forward_ios,
+                                size: 16,
                                 color: Colors.white,
                               ),
-                            )
-                          ],
-                        ),
-                        GestureDetector(
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) {
-                              return const OrderPage();
-                            }),
-                          ),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.tealAccent),
-                              borderRadius: BorderRadius.circular(28),
-                            ),
-                            padding: const EdgeInsets.all(12),
-                            child: const Row(
-                              children: [
-                                Text(
-                                  'Pay Now',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                Icon(
-                                  Icons.arrow_forward_ios,
-                                  size: 16,
-                                  color: Colors.white,
-                                ),
-                              ],
-                            ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 )
               ],
@@ -181,21 +182,21 @@ class CartPage extends StatelessWidget {
           }
         },
       ),
-      bottomNavigationBar: BottomNavigationBarWrapper(
-        onItemTapped: (index) {
-          switch (index) {
-            case 0:
-              Navigator.pushNamed(context, '/home');
-              break;
-            case 1:
-              Navigator.pushNamed(context, '/products');
-              break;
-            case 2:
-              Navigator.pushNamed(context, '/settings');
-              break;
-          }
-        },
-      ),
+      // bottomNavigationBar: BottomNavigationBarWrapper(
+      //   onItemTapped: (index) {
+      //     switch (index) {
+      //       case 0:
+      //         Navigator.pushNamed(context, '/home');
+      //         break;
+      //       case 1:
+      //         Navigator.pushNamed(context, '/products');
+      //         break;
+      //       case 2:
+      //         Navigator.pushNamed(context, '/settings');
+      //         break;
+      //     }
+      //   },
+      // ),
     );
   }
 }

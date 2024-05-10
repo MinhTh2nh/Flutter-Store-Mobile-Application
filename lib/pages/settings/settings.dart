@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_mobile_app/components/address_management.dart';
+import 'package:food_mobile_app/model/customer_model.dart';
 import 'package:food_mobile_app/pages/order_management.dart';
 import '../../components/custome_app_bar/custom_app_bar.dart';
 import '../settings/small_components/profile_menu.dart';
@@ -9,41 +10,6 @@ class Settings extends StatelessWidget {
   static String routeName = "/settings";
 
   const Settings({super.key});
-  Future<void> _showLogoutDialog(BuildContext context) async {
-    return showDialog<void>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Logout'),
-          content: const SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text('Are you sure you want to log out?'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Stay'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('Logout'),
-              onPressed: () {
-                // Perform logout actions here, like deleting tokens
-
-                // Navigate to sign-in page
-                Navigator.pushNamed(context, '/sign_in');
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,7 +37,7 @@ class Settings extends StatelessWidget {
             ProfileMenu(
               text: "My Orders",
               icon:
-                  "lib/images/order.svg", // Replace with your actual orders icon path
+              "lib/images/order.svg", // Replace with your actual orders icon path
               press: () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) =>
@@ -97,7 +63,12 @@ class Settings extends StatelessWidget {
             ProfileMenu(
               text: "Log Out",
               icon: "lib/images/Log out.svg",
-              press: () => _showLogoutDialog(context),
+              press: () async {
+                final customer = CustomerModel(email: '', password: '');
+                await customer.logoutUser();
+                // ignore: use_build_context_synchronously
+                Navigator.pushReplacementNamed(context, '/sign_in');
+              },
             ),
           ],
         ),
