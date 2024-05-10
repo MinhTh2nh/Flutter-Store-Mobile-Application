@@ -23,6 +23,7 @@ class CustomerModel {
       String token = data['token'];
 
       await storage.write(key: 'auth_token', value: token);
+      await storage.write(key: 'email', value: email);
 
       return token;
     } else {
@@ -31,7 +32,8 @@ class CustomerModel {
   }
 
   Future<void> logoutUser() async {
-    const storage = FlutterSecureStorage();
     await storage.delete(key: 'auth_token');
+    await storage.delete(key: 'email');
+    await storage.delete(key: 'password');
   }
 }
