@@ -13,12 +13,12 @@ class SignInScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("lib/images/backgroud.png"), // Replace with your image path
-            fit: BoxFit.cover,
-          ),
-        ),
+        // decoration: const BoxDecoration(
+        //   image: DecorationImage(
+        //     image: AssetImage("lib/images/backgroud.png"), // Replace with your image path
+        //     fit: BoxFit.cover,
+        //   ),
+        // ),
         child: SafeArea(
           child: Center(
             child: LayoutBuilder(
@@ -28,15 +28,18 @@ class SignInScreen extends StatelessWidget {
                 return SingleChildScrollView(
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.8), // Make the container slightly transparent
-                      borderRadius: BorderRadius.circular(10), // Apply border radius
+                      color: Colors.white.withOpacity(
+                          0.8), // Make the container slightly transparent
+                      borderRadius:
+                          BorderRadius.circular(10), // Apply border radius
                     ),
                     child: SizedBox(
                       width: screenWidth * 0.8, // 80% width on larger screens
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center, // Center vertically
+                          mainAxisAlignment:
+                              MainAxisAlignment.center, // Center vertically
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
                             const SizedBox(height: 16),

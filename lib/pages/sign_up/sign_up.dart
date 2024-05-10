@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../components/socal_card.dart';
 import 'small_components/sign_up_form.dart';
@@ -6,7 +5,7 @@ import 'small_components/sign_up_form.dart';
 class SignUpScreen extends StatelessWidget {
   static String routeName = "/sign_up";
 
-  const SignUpScreen({Key? key}) : super(key: key);
+  const SignUpScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +13,7 @@ class SignUpScreen extends StatelessWidget {
       body: Stack(
         children: [
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage("lib/images/backgroud.png"), // Replace with your image path
                 fit: BoxFit.cover,
@@ -43,7 +42,7 @@ class SignUpScreen extends StatelessWidget {
                                 Row(
                                   children: [
                                     IconButton(
-                                      icon: Icon(Icons.arrow_back_ios_new_rounded),
+                                      icon: const Icon(Icons.arrow_back_ios_new_rounded),
                                       onPressed: () {
                                         Navigator.of(context).pop(); // Navigate back to the previous screen
                                       },

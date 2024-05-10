@@ -101,18 +101,19 @@ class _OrderPageState extends State<OrderPage> {
                                 borderRadius: BorderRadius.circular(8)),
                             child: ListTile(
                               leading: Image.network(
-                                cartItem['imagePath'],
-                                height: 36,
+                                cartItem['product_thumbnail'],
+                                // height: 36,
+                                fit: BoxFit.cover,
                               ),
                               title: Text(
-                                cartItem['name'],
+                                cartItem['product_name'],
                                 style: const TextStyle(fontSize: 18),
                               ),
                               subtitle: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    '\$${cartItem['itemPrice']}',
+                                    '\$${cartItem['product_price']}',
                                     style: const TextStyle(fontSize: 12),
                                   ),
                                   Text(

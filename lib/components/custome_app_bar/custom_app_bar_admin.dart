@@ -5,8 +5,9 @@ import '../../model/cart_model.dart';
 import '../../pages/cart_page.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
-  const CustomAppBar({Key? key}) : super(key: key);
+  const CustomAppBar({super.key});
   @override
+  // ignore: library_private_types_in_public_api
   _CustomAppBarState createState() => _CustomAppBarState();
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -34,7 +35,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
       borderRadius: BorderRadius.circular(10),
     );
 
-    final sizeIcon = BoxConstraints.tightFor(
+    const sizeIcon = BoxConstraints.tightFor(
       width: 40,
       height: 40,
     );
@@ -61,7 +62,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 child: TextField(
                   focusNode: _searchFocusNode,
                   decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(4),
+                    contentPadding: const EdgeInsets.all(4),
                     focusedBorder: border,
                     enabledBorder: border,
                     isDense: true,
@@ -70,11 +71,11 @@ class _CustomAppBarState extends State<CustomAppBar> {
                       fontSize: 18,
                       color: Colors.teal.shade200,
                     ),
-                    prefixIcon: Icon(
+                    prefixIcon: const Icon(
                       Icons.search,
                     ),
                     prefixIconConstraints: sizeIcon,
-                    suffixIcon: Icon(
+                    suffixIcon: const Icon(
                       Icons.camera_alt_outlined,
                     ),
                     suffixIconConstraints: sizeIcon,
@@ -94,7 +95,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
       ),
       leading: Builder(
         builder: (context) => IconButton(
-          icon: Icon(Icons.menu),
+          icon: const Icon(Icons.menu),
           onPressed: () {
             Scaffold.of(context).openDrawer();
           },
