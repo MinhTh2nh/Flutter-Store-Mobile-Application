@@ -13,12 +13,6 @@ class SignInScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        // decoration: const BoxDecoration(
-        //   image: DecorationImage(
-        //     image: AssetImage("lib/images/backgroud.png"), // Replace with your image path
-        //     fit: BoxFit.cover,
-        //   ),
-        // ),
         child: SafeArea(
           child: Center(
             child: LayoutBuilder(

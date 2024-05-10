@@ -6,7 +6,6 @@ import '../../components/custome_app_bar/custom_app_bar_admin.dart';
 import '../../components/product_tile.dart';
 import '../../model/cart_model.dart';
 import 'package:provider/provider.dart';
-
 import '../products/product_detail_page.dart';
 
 class AdminProductPage extends StatelessWidget {
@@ -65,47 +64,46 @@ class AdminProductPage extends StatelessWidget {
             Consumer<CartModel>(
               builder: (context, cartModel, child) {
                 if (cartModel.shopItems.isEmpty) {
-                  // Display loading indicator until products are fetched
                   return Center(child: CircularProgressIndicator());
                 }
-                return GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: cartModel.shopItems.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 1 / 1.1,
-                  ),
-                  itemBuilder: (context, index) {
-                    var product = cartModel.shopItems[index];
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProductDetailPage(index: index),
-                          ),
-                        );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: ProductTile(
-                            product_name: product['product_name'], // Changed property name to camelCase
-                            product_price: product["product_price"].toString(), // Changed property name to camelCase
-                            product_thumbnail: product["product_thumbnail"], // Changed property name to camelCase
-                            total_stock: product['total_stock'], // Changed property name to camelCase
-                            onPressed: () {}, // Placeholder onPressed function
+                  return GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: cartModel.shopItems.length,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 1 / 1.1,
+                    ),
+                    itemBuilder: (context, index) {
+                      var product = cartModel.shopItems[index];
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductDetailPage(index: product['product_id']),
+                            ),
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: ProductTile(
+                              product_name: product['product_name'], // Changed property name to camelCase
+                              product_price: product["product_price"].toString(), // Changed property name to camelCase
+                              product_thumbnail: product["product_thumbnail"], // Changed property name to camelCase
+                              total_stock: product['total_stock'], // Convert integer to string
+                              onPressed: () {}, // Placeholder onPressed function
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
-                );
+                      );
+                    },
+                  );
               },
             ),
           ],
