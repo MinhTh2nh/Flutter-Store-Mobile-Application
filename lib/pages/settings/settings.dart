@@ -37,7 +37,7 @@ class Settings extends StatelessWidget {
             ProfileMenu(
               text: "My Orders",
               icon:
-                  "lib/images/order.svg", // Replace with your actual orders icon path
+              "lib/images/order.svg", // Replace with your actual orders icon path
               press: () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) =>
