@@ -3,8 +3,8 @@ import '../pages/sign_up/sign_up.dart';
 
 class NoAccountText extends StatelessWidget {
   const NoAccountText({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

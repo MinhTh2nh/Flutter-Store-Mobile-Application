@@ -4,8 +4,9 @@ import '../../model/cart_model.dart';
 import '../../pages/cart_page.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
-  const CustomAppBar({Key? key}) : super(key: key);
+  const CustomAppBar({super.key});
   @override
+  // ignore: library_private_types_in_public_api
   _CustomAppBarState createState() => _CustomAppBarState();
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -33,7 +34,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
       borderRadius: BorderRadius.circular(10),
     );
 
-    final sizeIcon = BoxConstraints.tightFor(
+    const sizeIcon = BoxConstraints.tightFor(
       width: 40,
       height: 40,
     );
@@ -62,7 +63,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 child: TextField(
                   focusNode: _searchFocusNode, // Assign the FocusNode
                   decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(4),
+                    contentPadding: const EdgeInsets.all(4),
                     focusedBorder: border,
                     enabledBorder: border,
                     isDense: true,
@@ -71,18 +72,19 @@ class _CustomAppBarState extends State<CustomAppBar> {
                       fontSize: 18,
                       color: Colors.teal.shade200,
                     ),
-                    prefixIcon: Icon(
+                    prefixIcon: const Icon(
                       Icons.search,
                     ),
                     prefixIconConstraints: sizeIcon,
-                    suffixIcon: Icon(
+                    suffixIcon: const Icon(
                       Icons.camera_alt_outlined,
                     ),
                     suffixIconConstraints: sizeIcon,
                     border: InputBorder.none,
                     filled: true,
-                    fillColor:
-                    _searchFocusNode.hasFocus ? Colors.white : Colors.transparent, // Change color based on focus
+                    fillColor: _searchFocusNode.hasFocus
+                        ? Colors.white
+                        : Colors.transparent, // Change color based on focus
                   ),
                   onChanged: (value) {
                     setState(() {
@@ -96,7 +98,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
         ),
       ),
       actions: [
-        Consumer<CartModel>( // Use Consumer to listen to changes in CartModel
+        Consumer<CartModel>(
+          // Use Consumer to listen to changes in CartModel
           builder: (context, cart, child) {
             return Stack(
               children: [
@@ -106,19 +109,23 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   },
                   icon: const Icon(Icons.shopping_basket),
                 ),
-                if (cart.cartItems.isNotEmpty) // Conditionally show the notification badge
+                if (cart.cartItems
+                    .isNotEmpty) // Conditionally show the notification badge
                   Positioned(
-                    top: 0,
-                    right: 0,
+                    top: 2,
+                    right: 5,
                     child: Container(
-                      padding: EdgeInsets.all(2),
+                      alignment: Alignment.center,
+                      width: 20,
+                      height: 20,
+                      // padding: const EdgeInsets.all(2),
                       decoration: BoxDecoration(
                         color: Colors.red,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
                         cart.itemsCount.toString(),
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                       ),
                     ),
                   ),
