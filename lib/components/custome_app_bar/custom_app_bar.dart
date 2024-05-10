@@ -82,8 +82,9 @@ class _CustomAppBarState extends State<CustomAppBar> {
                     suffixIconConstraints: sizeIcon,
                     border: InputBorder.none,
                     filled: true,
-                    fillColor:
-                    _searchFocusNode.hasFocus ? Colors.white : Colors.transparent, // Change color based on focus
+                    fillColor: _searchFocusNode.hasFocus
+                        ? Colors.white
+                        : Colors.transparent, // Change color based on focus
                   ),
                   onChanged: (value) {
                     setState(() {
@@ -97,7 +98,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
         ),
       ),
       actions: [
-        Consumer<CartModel>( // Use Consumer to listen to changes in CartModel
+        Consumer<CartModel>(
+          // Use Consumer to listen to changes in CartModel
           builder: (context, cart, child) {
             return Stack(
               children: [
@@ -107,12 +109,16 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   },
                   icon: const Icon(Icons.shopping_basket),
                 ),
-                if (cart.cartItems.isNotEmpty) // Conditionally show the notification badge
+                if (cart.cartItems
+                    .isNotEmpty) // Conditionally show the notification badge
                   Positioned(
-                    top: 0,
-                    right: 0,
+                    top: 2,
+                    right: 5,
                     child: Container(
-                      padding: const EdgeInsets.all(2),
+                      alignment: Alignment.center,
+                      width: 20,
+                      height: 20,
+                      // padding: const EdgeInsets.all(2),
                       decoration: BoxDecoration(
                         color: Colors.red,
                         borderRadius: BorderRadius.circular(10),

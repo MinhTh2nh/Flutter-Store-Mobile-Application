@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_mobile_app/components/address_management.dart';
+import 'package:food_mobile_app/model/customer_model.dart';
 import 'package:food_mobile_app/pages/order_management.dart';
 import '../../components/custome_app_bar/custom_app_bar.dart';
 import '../settings/small_components/profile_menu.dart';
@@ -62,7 +63,12 @@ class Settings extends StatelessWidget {
             ProfileMenu(
               text: "Log Out",
               icon: "lib/images/Log out.svg",
-              press: () {},
+              press: () async {
+                final customer = CustomerModel(email: '', password: '');
+                await customer.logoutUser();
+                // ignore: use_build_context_synchronously
+                Navigator.pushReplacementNamed(context, '/sign_in');
+              },
             ),
           ],
         ),

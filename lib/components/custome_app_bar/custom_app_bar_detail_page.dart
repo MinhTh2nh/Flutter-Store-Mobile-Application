@@ -119,10 +119,13 @@ class _CustomAppBarForDetailPageState extends State<CustomAppBarForDetailPage> {
                 if (cart.cartItems
                     .isNotEmpty) // Conditionally show the notification badge
                   Positioned(
-                    top: 5,
+                    top: 2,
                     right: 5,
                     child: Container(
-                      padding: const EdgeInsets.all(2),
+                      alignment: Alignment.center,
+                      width: 20,
+                      height: 20,
+                      // padding: const EdgeInsets.all(2),
                       decoration: BoxDecoration(
                         color: Colors.red,
                         borderRadius: BorderRadius.circular(10),
