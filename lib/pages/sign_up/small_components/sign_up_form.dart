@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:velocity_x/velocity_x.dart';
 import '../../../components/buttons.dart';
 import '../../../components/custom_surfix_icon.dart';
@@ -7,7 +11,7 @@ import '../../../components/form_error.dart';
 import '../../../consts/consts.dart';
 
 class SignUpForm extends StatefulWidget {
-  const SignUpForm({super.key});
+  const SignUpForm({Key? key}) : super(key: key);
 
   @override
   _SignUpFormState createState() => _SignUpFormState();
@@ -15,8 +19,10 @@ class SignUpForm extends StatefulWidget {
 
 class _SignUpFormState extends State<SignUpForm> {
   final _formKey = GlobalKey<FormState>();
+  bool isLoading = false;
 
   bool isCheck = false;
+  final storage = const FlutterSecureStorage();
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
   var passwordRetypeController = TextEditingController();
@@ -24,6 +30,48 @@ class _SignUpFormState extends State<SignUpForm> {
   bool remember = false;
   final List<String?> errors = [];
 
+  Future<void> registerUser() async {
+    setState(() {
+      isLoading = true; // Show loading indicator when registering
+    });
+
+    final String email = emailController.text;
+    final String password = passwordController.text;
+    try {
+      const String apiUrl =
+          'https://flutter-store-mobile-application-backend.onrender.com/users/register';
+      final response = await http.post(
+        Uri.parse(
+            '$apiUrl'), // Replace with your actual endpoint
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'email': email,
+          'password': password,
+        }),
+      );
+      if (response.statusCode == 200) {
+        Map<String, dynamic> data = json.decode(response.body);
+        String token = data['token'];
+
+        await storage.write(key: 'auth_token', value: token);
+        await storage.write(key: 'email', value: email);
+        Navigator.pushReplacementNamed(context, '/sign_in');
+        return ;
+      } else {
+        print('Error response body: ${response.body}');
+        print('Error response status code: ${response.statusCode}');
+        return null;
+      }
+    } catch (e) {
+      print('Error during registration: $e');
+    }
+
+    setState(() {
+      isLoading = false; // Hide loading indicator after registration attempt
+    });
+  }
 
   void addError({String? error}) {
     if (!errors.contains(error)) {
@@ -52,7 +100,7 @@ class _SignUpFormState extends State<SignUpForm> {
             hint: emailHint,
             title: email,
             controller: emailController,
-            isPass: true,
+            isPass: false,
             suffixIcon: CustomSurffixIcon(svgIcon: "/icons/Mail.svg"),
             floatingLabelBehavior: FloatingLabelBehavior.always,
           ),
@@ -112,8 +160,11 @@ class _SignUpFormState extends State<SignUpForm> {
             title: "Sign Up",
             textColor: Colors.white,
             onPress: () async {
-              if (
-                  emailController.text.isEmpty ||
+              if (!isCheck) {
+                VxToast.show(context, msg: "Please agree to the Terms and Conditions.");
+                return; // Prevent sign-up action if terms are not agreed
+              }
+              if (emailController.text.isEmpty ||
                   passwordController.text.isEmpty ||
                   passwordRetypeController.text.isEmpty) {
                 VxToast.show(context, msg: "Please fill in all fields.");
@@ -123,10 +174,8 @@ class _SignUpFormState extends State<SignUpForm> {
                 VxToast.show(context, msg: "Passwords do not match.");
                 return;
               }
-              if (!isCheck) {
-                VxToast.show(context, msg: "Please agree to the Terms and Conditions.");
-                return;
-              }
+              // Call registerUser function here
+              registerUser();
             },
           ).box.width(context.screenWidth - 50).make(),
         ],
