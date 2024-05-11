@@ -62,7 +62,7 @@ class _AdminProductPageState extends State<AdminProductPage> {
                         MaterialPageRoute(builder: (context) => ProductCreationForm(onUpdate: updateProductList)),
                       );
                     },
-                    title: "+",
+                    title: "NEW",
                     color: Colors.teal.shade200,
                     textColor: Colors.white,
                   )

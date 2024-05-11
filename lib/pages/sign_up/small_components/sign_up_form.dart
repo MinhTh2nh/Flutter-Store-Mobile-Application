@@ -23,6 +23,8 @@ class _SignUpFormState extends State<SignUpForm> {
 
   bool isCheck = false;
   final storage = const FlutterSecureStorage();
+
+  var nameController = TextEditingController();
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
   var passwordRetypeController = TextEditingController();
@@ -35,11 +37,6 @@ class _SignUpFormState extends State<SignUpForm> {
       isLoading = true; // Show loading indicator when registering
     });
 
-    final String email = emailController.text;
-    final String password = passwordController.text;
-    print('Email: $email'); // Add this print statement
-    print('Password: $password'); // Add th
-
     try {
       const String apiUrl =
           'https://flutter-store-mobile-application-backend.onrender.com/users/register';
@@ -49,12 +46,14 @@ class _SignUpFormState extends State<SignUpForm> {
         headers: {
           'Content-Type': 'application/json',
         },
+
         body: jsonEncode({
-          'email': email,
-          'password': password,
+          'name': nameController.text,
+          'email': emailController.text,
+          'password': passwordController.text,
         }),
       );
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         Map<String, dynamic> data = json.decode(response.body);
         String token = data['token'];
 
@@ -98,6 +97,14 @@ class _SignUpFormState extends State<SignUpForm> {
       key: _formKey,
       child: Column(
         children: [
+          CustomTextField(
+            hint: nameHint,
+            title: name,
+            controller: nameController,
+            isPass: false,
+            suffixIcon: CustomSurffixIcon(svgIcon: "/icons/Mail.svg"),
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+          ),
           SizedBox(height: 20),
           CustomTextField(
             hint: emailHint,
@@ -167,7 +174,7 @@ class _SignUpFormState extends State<SignUpForm> {
                 VxToast.show(context, msg: "Please agree to the Terms and Conditions.");
                 return; // Prevent sign-up action if terms are not agreed
               }
-              if (emailController.text.isEmpty ||
+              if (nameController.text.isEmpty || emailController.text.isEmpty ||
                   passwordController.text.isEmpty ||
                   passwordRetypeController.text.isEmpty) {
                 VxToast.show(context, msg: "Please fill in all fields.");
