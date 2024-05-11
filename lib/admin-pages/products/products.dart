@@ -8,24 +8,37 @@ import '../../model/cart_model.dart';
 import 'package:provider/provider.dart';
 import '../products/product_detail_page.dart';
 
-class AdminProductPage extends StatelessWidget {
+class AdminProductPage extends StatefulWidget {
   const AdminProductPage({Key? key}) : super(key: key);
 
   static String routeName = "/admin/products";
 
   @override
-  Widget build(BuildContext context) {
-    final scrollController = ScrollController();
+  _AdminProductPageState createState() => _AdminProductPageState();
+}
 
+class _AdminProductPageState extends State<AdminProductPage> {
+  // Define the callback function
+  void updateProductList() {
+    Provider.of<CartModel>(context, listen: false).fetchProducts();
+  }
+
+  final scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
     scrollController.addListener(() {
-      if (scrollController.position.pixels ==
-          scrollController.position.maxScrollExtent) {
+      if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
         Provider.of<CartModel>(context, listen: false).fetchProducts();
       }
     });
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(), // Corrected the app bar widget
+      appBar: CustomAppBar(),
       drawer: SideMenu(),
       body: SingleChildScrollView(
         controller: scrollController,
@@ -36,7 +49,6 @@ class AdminProductPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: Row(
-
                 children: [
                   Text(
                     "List Of Products",
@@ -44,10 +56,10 @@ class AdminProductPage extends StatelessWidget {
                   ),
                   Spacer(),
                   buttonAdmin(
-                    onTap: (){
+                    onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ProductCreationForm()),
+                        MaterialPageRoute(builder: (context) => ProductCreationForm(onUpdate: updateProductList)),
                       );
                     },
                     title: "+",
@@ -66,44 +78,62 @@ class AdminProductPage extends StatelessWidget {
                 if (cartModel.shopItems.isEmpty) {
                   return Center(child: CircularProgressIndicator());
                 }
-                  return GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: cartModel.shopItems.length,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 1 / 1.1,
-                    ),
-                    itemBuilder: (context, index) {
-                      var product = cartModel.shopItems[index];
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ProductDetailPage(index: product['product_id']),
+                return GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: cartModel.shopItems.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 1 / 1.1,
+                  ),
+                  itemBuilder: (context, index) {
+                    var product = cartModel.shopItems[index];
+                    bool isUnavailable = product['STATUS'] == "Unavailable";
+
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProductDetailPage(
+                              index: product['product_id'],
+                              // Pass the callback function to the ProductDetailPage
+                              onUpdate: updateProductList,
                             ),
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: ProductTile(
-                              product_name: product['product_name'], // Changed property name to camelCase
-                              product_price: product["product_price"].toString(), // Changed property name to camelCase
-                              product_thumbnail: product["product_thumbnail"], // Changed property name to camelCase
-                              total_stock: product['total_stock'], // Convert integer to string
-                              onPressed: () {}, // Placeholder onPressed function
+                          ),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                            child: Stack(
+                              children: [
+                                ProductTile(
+                                  product_name: product['product_name'],
+                                  product_price: product["product_price"].toString(),
+                                  product_thumbnail: product["product_thumbnail"],
+                                  total_stock: product['total_stock'], // Convert integer to string
+                                  onPressed: () {}, // Placeholder onPressed function
+                                ),
+                                if (isUnavailable)
+                                  Positioned.fill(
+                                    child: Container(
+                                      color: Colors.grey.withOpacity(0.5),
+                                    ),
+                                  ),
+                              ],
                             ),
                           ),
                         ),
-                      );
-                    },
-                  );
+                      ),
+                    );
+                  },
+                );
               },
             ),
           ],
