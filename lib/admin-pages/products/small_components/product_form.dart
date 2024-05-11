@@ -2,9 +2,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:velocity_x/velocity_x.dart';
+
 import '../../../components/buttons.dart';
 
 class ProductCreationForm extends StatefulWidget {
+  final void Function() onUpdate; // Declare the callback function
+  ProductCreationForm({required this.onUpdate});
+
   @override
   _ProductCreationFormState createState() => _ProductCreationFormState();
 }
@@ -30,6 +34,10 @@ class _ProductCreationFormState extends State<ProductCreationForm> {
   void initState() {
     super.initState();
     fetchCategories();
+  }
+
+  void _handleUpdate() {
+    widget.onUpdate();
   }
 
   Future<void> fetchCategories() async {
@@ -63,6 +71,26 @@ class _ProductCreationFormState extends State<ProductCreationForm> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(height: 10),
+                Text("Preview Product Thumbail"),
+                Center(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.6,
+                    height: MediaQuery.of(context).size.height * 0.4,
+                    child: Image.network(
+                      _productThumbnailController.text,
+                      fit: BoxFit.cover,
+                      errorBuilder: (BuildContext context, Object exception,
+                          StackTrace? stackTrace) {
+                        // You can return an error image or a placeholder here
+                        return Image.asset(
+                          'lib/images/blank.png',
+                          fit: BoxFit.cover,
+                        );
+                      },
+                    ),
+                  ),
+                ),
                 TextFormField(
                   controller: _productNameController,
                   decoration: InputDecoration(labelText: 'Product Name', border: OutlineInputBorder()),
@@ -180,7 +208,11 @@ class _ProductCreationFormState extends State<ProductCreationForm> {
                   color: Colors.red,
                   textColor: Colors.white,
                   onPress: () {
-                    // Implement create product functionality
+                    // Validate form
+                    if (_formKey.currentState!.validate()) {
+                      // If the form is valid, proceed with form submission
+                      submitFormData();
+                    }
                   },
                 ).box.width(context.screenWidth - 50).make(),
               ],
@@ -208,4 +240,45 @@ class _ProductCreationFormState extends State<ProductCreationForm> {
     }
   }
 
+  Future<void> submitFormData() async {
+    // Prepare form data
+    final formData = {
+      "product_name": _productNameController.text,
+      "product_price": _productPriceController.text,
+      "product_thumbnail": _productThumbnailController.text,
+      "product_description": _productDescriptionController.text,
+      "category_id": _selectedCategory!['category_id'],
+      "sub_id": _selectedSubCategory!['sub_id'],
+      "total_stock": _totalStockController.text,
+      "status": "Available",
+    };
+
+    // Send HTTP POST request
+    final response = await http.post(
+      Uri.parse("https://flutter-store-mobile-application-backend.onrender.com/products/create"),
+      body: jsonEncode(formData),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    // Check response status
+    if (response.statusCode == 200) {
+      // Handle successful response
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Product created successfully!'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      Navigator.of(context).pushNamed("/admin/products");
+      _handleUpdate();
+    } else {
+      // Handle error response
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to create product!'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
+  }
 }

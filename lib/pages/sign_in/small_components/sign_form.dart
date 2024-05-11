@@ -46,7 +46,7 @@ class _SignFormState extends State<SignForm> {
       });
       // If remember me is checked, attempt to auto-login
       if (remember!) {
-        // await loginUser();
+        await loginUser();
       }
     }
   }

@@ -37,12 +37,15 @@ class _SignUpFormState extends State<SignUpForm> {
 
     final String email = emailController.text;
     final String password = passwordController.text;
+    print('Email: $email'); // Add this print statement
+    print('Password: $password'); // Add th
+
     try {
       const String apiUrl =
           'https://flutter-store-mobile-application-backend.onrender.com/users/register';
       final response = await http.post(
         Uri.parse(
-            '$apiUrl'), // Replace with your actual endpoint
+            '$apiUrl'),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -51,23 +54,23 @@ class _SignUpFormState extends State<SignUpForm> {
           'password': password,
         }),
       );
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         Map<String, dynamic> data = json.decode(response.body);
         String token = data['token'];
 
         await storage.write(key: 'auth_token', value: token);
         await storage.write(key: 'email', value: email);
+        await storage.write(key: 'password', value: password);
         Navigator.pushReplacementNamed(context, '/sign_in');
-        return ;
       } else {
         print('Error response body: ${response.body}');
         print('Error response status code: ${response.statusCode}');
-        return null;
+        throw Exception('Failed to register: ${response.statusCode}');
       }
     } catch (e) {
       print('Error during registration: $e');
+      throw Exception('Failed to register: $e');
     }
-
     setState(() {
       isLoading = false; // Hide loading indicator after registration attempt
     });

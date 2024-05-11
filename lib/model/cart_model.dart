@@ -8,6 +8,8 @@ class CartModel extends ChangeNotifier {
   List _shopItems = [];
   final List _cartItems = [];
   List _productItems = [];
+  List _categories = [];
+  List _subCategories = [];
   int _page = 1;
   bool _isLoading = false;
 
@@ -15,12 +17,13 @@ class CartModel extends ChangeNotifier {
 
   CartModel() {
     _shopItems = [];
-
+    fetchCategories();
     fetchProducts();
   }
 
   List get cartItems => _cartItems;
   List get shopItems => _shopItems;
+  List get categories => _categories;
   List get productItems => _productItems;
 
   int get itemsCount => _cartItems.length;
@@ -57,6 +60,20 @@ class CartModel extends ChangeNotifier {
       print('Network error: $error');
     } finally {
       _isLoading = false; // Set loading state to false
+    }
+  }
+  Future<void> fetchCategories() async {
+    final url = Uri.parse('https://flutter-store-mobile-application-backend.onrender.com/products/get/category/categoryList');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final List<dynamic> categories = json.decode(response.body)['data'];
+        _categories = categories;
+      } else {
+        throw Exception('Failed to fetch categories: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error fetching categories: $error');
     }
   }
 

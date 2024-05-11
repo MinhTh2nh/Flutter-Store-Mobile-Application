@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_mobile_app/admin-pages/home/home.dart';
 import 'package:food_mobile_app/admin-pages/products/products.dart';
 
 class SideMenu extends StatelessWidget {
@@ -25,7 +26,7 @@ class SideMenu extends StatelessWidget {
             title: "DASHBOARD",
             leading: Icons.home,
             onPressed: () {
-              Navigator.pushNamed(context, AdminProductPage.routeName);
+              Navigator.pushNamed(context, AdminHomePage.routeName);
             },
           ),
           DrawerListTile(
