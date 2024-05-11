@@ -24,6 +24,7 @@ Widget buttonAdmin({
       padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
       child: Text(
         title,
+        textAlign: TextAlign.center,
         style: TextStyle(color: textColor, fontSize: 20),
       ),
     ),
