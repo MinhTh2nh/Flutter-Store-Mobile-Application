@@ -37,7 +37,7 @@ class ProductTile extends StatelessWidget {
                 // You can return an error image or a placeholder here
                 return Image.asset(
                   'lib/images/blank.png',
-                  fit: BoxFit.cover,
+                  fit: BoxFit.contain,
                 );
               },
             ),

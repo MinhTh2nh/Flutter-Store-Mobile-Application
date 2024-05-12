@@ -11,9 +11,10 @@ import '../../../components/form_error.dart';
 import '../../../consts/consts.dart';
 
 class SignUpForm extends StatefulWidget {
-  const SignUpForm({Key? key}) : super(key: key);
+  const SignUpForm({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _SignUpFormState createState() => _SignUpFormState();
 }
 
@@ -41,12 +42,10 @@ class _SignUpFormState extends State<SignUpForm> {
       const String apiUrl =
           'https://flutter-store-mobile-application-backend.onrender.com/users/register';
       final response = await http.post(
-        Uri.parse(
-            '$apiUrl'),
+        Uri.parse('$apiUrl'),
         headers: {
           'Content-Type': 'application/json',
         },
-
         body: jsonEncode({
           'name': nameController.text,
           'email': emailController.text,
@@ -60,6 +59,7 @@ class _SignUpFormState extends State<SignUpForm> {
         await storage.write(key: 'auth_token', value: token);
         await storage.write(key: 'email', value: email);
         await storage.write(key: 'password', value: password);
+        // ignore: use_build_context_synchronously
         Navigator.pushReplacementNamed(context, '/sign_in');
       } else {
         print('Error response body: ${response.body}');
@@ -102,37 +102,37 @@ class _SignUpFormState extends State<SignUpForm> {
             title: name,
             controller: nameController,
             isPass: false,
-            suffixIcon: CustomSurffixIcon(svgIcon: "/icons/Mail.svg"),
+            suffixIcon: const CustomSurffixIcon(svgIcon: "/icons/Mail.svg"),
             floatingLabelBehavior: FloatingLabelBehavior.always,
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           CustomTextField(
             hint: emailHint,
             title: email,
             controller: emailController,
             isPass: false,
-            suffixIcon: CustomSurffixIcon(svgIcon: "/icons/Mail.svg"),
+            suffixIcon: const CustomSurffixIcon(svgIcon: "/icons/Mail.svg"),
             floatingLabelBehavior: FloatingLabelBehavior.always,
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           CustomTextField(
             hint: passwordHint,
             title: password,
             controller: passwordController,
             isPass: true,
-            suffixIcon: CustomSurffixIcon(svgIcon: "/icons/Lock.svg"),
+            suffixIcon: const CustomSurffixIcon(svgIcon: "/icons/Lock.svg"),
             floatingLabelBehavior: FloatingLabelBehavior.always,
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           CustomTextField(
             hint: passwordHint,
             title: passwordConfirm,
             controller: passwordRetypeController,
             isPass: true,
-            suffixIcon: CustomSurffixIcon(svgIcon: "/icons/Lock.svg"),
+            suffixIcon: const CustomSurffixIcon(svgIcon: "/icons/Lock.svg"),
             floatingLabelBehavior: FloatingLabelBehavior.always,
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Row(
             children: [
               Checkbox(
@@ -144,10 +144,10 @@ class _SignUpFormState extends State<SignUpForm> {
                   });
                 },
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               Expanded(
                 child: RichText(
-                  text: TextSpan(
+                  text: const TextSpan(
                     children: [
                       TextSpan(
                         text: "I agree to the ",
@@ -171,10 +171,12 @@ class _SignUpFormState extends State<SignUpForm> {
             textColor: Colors.white,
             onPress: () async {
               if (!isCheck) {
-                VxToast.show(context, msg: "Please agree to the Terms and Conditions.");
+                VxToast.show(context,
+                    msg: "Please agree to the Terms and Conditions.");
                 return; // Prevent sign-up action if terms are not agreed
               }
-              if (nameController.text.isEmpty || emailController.text.isEmpty ||
+              if (nameController.text.isEmpty ||
+                  emailController.text.isEmpty ||
                   passwordController.text.isEmpty ||
                   passwordRetypeController.text.isEmpty) {
                 VxToast.show(context, msg: "Please fill in all fields.");

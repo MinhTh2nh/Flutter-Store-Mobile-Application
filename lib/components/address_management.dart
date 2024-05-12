@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../constants.dart';
+import '../model/customer_detail.dart';
 
 class AddressManagement extends StatefulWidget {
   final void Function(String address, String phoneNumber)? onAddressSelected;
@@ -17,21 +19,59 @@ class _AddressManagementState extends State<AddressManagement> {
   String _street = '';
   String _phoneNumber = '';
 
-  List<Address> deliveryAddresses = [
-    Address(
-      address: '123 Main St, New York, NY',
-      phoneNumber: '123-456-7890',
-    ),
-    Address(
-      address: '456 Elm St, New York, NY',
-      phoneNumber: '123-456-7890',
-    ),
-  ];
+  List<Address> deliveryAddresses = [];
+  bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchAddress();
+  }
+
+  Future<void> _fetchAddress() async {
+    try {
+      List<CustomerDetail> addresses =
+          await CustomerDetail.fetchAddress(globalCustomerId!);
+      setState(() {
+        deliveryAddresses = addresses
+            .map((detail) =>
+                Address(address: detail.address, phoneNumber: detail.phone))
+            .toList();
+      });
+    } catch (e) {
+      print('Failed to load address: $e');
+      // Handle error: Show a snackbar or display an error message
+    }
+  }
 
   void addAddress(Address address) {
     setState(() {
       deliveryAddresses.add(address);
     });
+  }
+
+  Future<void> _submitForm() async {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      setState(() {
+        _isLoading = true;
+      });
+      try {
+        await CustomerDetail.createAddress(
+            _phoneNumber, '$_street, $_city, $_country', globalCustomerId!);
+
+        await _fetchAddress();
+        // ignore: use_build_context_synchronously
+        Navigator.of(context).pop();
+      } catch (e) {
+        print('Failed to create address: $e');
+        // Handle error: Show a snackbar or display an error message
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
 
   void removeAddress(int index) {
@@ -120,16 +160,10 @@ class _AddressManagementState extends State<AddressManagement> {
                             },
                           ),
                           TextButton(
-                            child: const Text('Add'),
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                _formKey.currentState!.save();
-                                addAddress(Address(
-                                    address: '$_street, $_city, $_country',
-                                    phoneNumber: _phoneNumber));
-                                Navigator.of(context).pop();
-                              }
-                            },
+                            onPressed: _isLoading ? null : _submitForm,
+                            child: _isLoading
+                                ? const CircularProgressIndicator()
+                                : const Text('Add'),
                           ),
                         ],
                       );

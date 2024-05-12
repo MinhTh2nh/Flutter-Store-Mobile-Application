@@ -9,7 +9,7 @@ import '../settings/small_components/profile_pic.dart';
 class Settings extends StatelessWidget {
   static String routeName = "/settings";
 
-  const Settings({Key? key});
+  const Settings({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +18,7 @@ class Settings extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 20),
         child: Column(
           children: [
-            ProfileInformation(),
+            const ProfileInformation(),
             ProfileMenu(
               text: "My Account",
               icon: "lib/images/User Icon.svg",
@@ -69,8 +69,8 @@ class Settings extends StatelessWidget {
                   builder: (BuildContext context) {
                     return AlertDialog(
                       contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 0.0), // Adjust content padding
-                      title: Center(
-                        child: const Text('Log Out'), // Center the title
+                      title: const Center(
+                        child: Text('Log Out'), // Center the title
                       ),
                       content: Container(
                         margin: const EdgeInsets.only(bottom: 10.0), // Add margin at the bottom
@@ -102,6 +102,7 @@ class Settings extends StatelessWidget {
                                   // Perform logout action
                                   final customer = CustomerModel(email: '', password: '');
                                   await customer.logoutUser();
+                                  // ignore: use_build_context_synchronously
                                   Navigator.pushReplacementNamed(context, '/sign_in');
                                 },
                                 style: TextButton.styleFrom(

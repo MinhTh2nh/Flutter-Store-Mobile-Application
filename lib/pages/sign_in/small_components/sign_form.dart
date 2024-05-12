@@ -11,9 +11,10 @@ import '../../forgot_password/forgot_password.dart';
 import '../../../components/custom_textfield.dart';
 
 class SignForm extends StatefulWidget {
-  const SignForm({Key? key}) : super(key: key);
+  const SignForm({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _SignFormState createState() => _SignFormState();
 }
 
@@ -86,14 +87,22 @@ class _SignFormState extends State<SignForm> {
 
     final token = await customer.loginUser();
     if (token != null) {
+      print('Token: $token');
+      final userData = await customer.getUserData();
+      if (userData != null) {
+        print('User Data: $userData');
+      }
+      // ignore: use_build_context_synchronously
       Navigator.pushReplacementNamed(context, '/home');
     } else {
       showDialog(
+        // ignore: use_build_context_synchronously
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text('Login Failed'),
-            content: const Text('Incorrect email or password. Please try again.'),
+            content:
+                const Text('Incorrect email or password. Please try again.'),
             actions: <Widget>[
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
@@ -148,7 +157,8 @@ class _SignFormState extends State<SignForm> {
               const Text("Remember me"),
               const Spacer(),
               GestureDetector(
-                onTap: () => Navigator.pushNamed(context, ForgotPasswordScreen.routeName),
+                onTap: () => Navigator.pushNamed(
+                    context, ForgotPasswordScreen.routeName),
                 child: const Text(
                   "Forgot Password",
                   style: TextStyle(decoration: TextDecoration.underline),
@@ -159,20 +169,21 @@ class _SignFormState extends State<SignForm> {
           FormError(errors: errors),
           const SizedBox(height: 16),
           isLoading
-              ? CircularProgressIndicator() // Show loading indicator while logging in
+              ? const CircularProgressIndicator() // Show loading indicator while logging in
               : buttons(
-            title: "Login",
-            color: Colors.red,
-            textColor: Colors.white,
-            onPress: () async {
-              await _saveCredentials();
-              if (emailController.text == "admin@gmail.com" && passwordController.text == "testingdemo") {
-                Navigator.pushNamed(context, AdminHomePage.routeName);
-              } else if (_formKey.currentState!.validate()) {
-                await loginUser();
-              }
-            },
-          ).box.width(context.screenWidth - 50).make(),
+                  title: "Login",
+                  color: Colors.red,
+                  textColor: Colors.white,
+                  onPress: () async {
+                    await _saveCredentials();
+                    if (emailController.text == "admin@gmail.com" &&
+                        passwordController.text == "testingdemo") {
+                      Navigator.pushNamed(context, AdminHomePage.routeName);
+                    } else if (_formKey.currentState!.validate()) {
+                      await loginUser();
+                    }
+                  },
+                ).box.width(context.screenWidth - 50).make(),
           const SizedBox(height: 10),
         ],
       ),
