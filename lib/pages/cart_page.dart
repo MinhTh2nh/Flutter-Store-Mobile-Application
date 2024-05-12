@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:food_mobile_app/components/buttons.dart';
 import 'package:food_mobile_app/pages/order.dart';
 import 'package:provider/provider.dart';
-import '../components/bottom_navigation_bar/bottom_navigation_bar.dart';
 import '../model/cart_model.dart';
-import '../../components/custome_app_bar/custom_app_bar.dart';
 
 class CartPage extends StatelessWidget {
-  // ignore: use_key_in_widget_constructors
-  const CartPage({Key? key});
+  const CartPage({super.key});
 
   static String routeName = "/cart-page";
 
@@ -19,7 +16,6 @@ class CartPage extends StatelessWidget {
       body: Consumer<CartModel>(
         builder: (context, value, child) {
           if (value.cartItems.isEmpty) {
-            // Display empty cart image if cart is empty
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -30,7 +26,7 @@ class CartPage extends StatelessWidget {
                   ),
                   Image.asset(
                     'lib/images/empty_shopping_cart_image.png',
-                    width: double.infinity, // Take whole width
+                    width: double.infinity,
                     height: MediaQuery.of(context).size.height * 0.3,
                   ),
                   buttons(
@@ -65,44 +61,95 @@ class CartPage extends StatelessWidget {
                             cartItem['item_id'] != null) {
                           return Padding(
                             padding: const EdgeInsets.all(12),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: ListTile(
-                                leading: Image.network(
-                                  cartItem['product_thumbnail'],
-                                  // height: 36,
-                                  fit: BoxFit.cover,
+                            child: SizedBox(
+                              child: Dismissible(
+                                key: Key(cartItem['item_id'].toString()),
+                                direction: DismissDirection.endToStart,
+                                background: Container(
+                                  color: Colors.red,
+                                  // alignment: Alignment.centerRight,
+                                  // child: const Padding(
+                                  //   padding: EdgeInsets.all(10),
+                                  //   child: Icon(
+                                  //     Icons.delete,
+                                  //     color: Colors.white,
+                                  //   ),
+                                  // ),
                                 ),
-                                title: Text(
-                                  cartItem['product_name'],
-                                  style: const TextStyle(fontSize: 18),
-                                ),
-                                subtitle: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '\$${cartItem['product_price']}',
-                                      style: const TextStyle(fontSize: 12),
+                                // secondaryBackground: Container(
+                                //   color: Colors.red,
+                                //   alignment: Alignment.centerLeft,
+                                //   child: const Padding(
+                                //     padding: EdgeInsets.all(10),
+                                //     child: Icon(
+                                //       Icons.delete,
+                                //       color: Colors.white,
+                                //     ),
+                                //   ),
+                                // ),
+                                confirmDismiss: (direction) async {
+                                  return await showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: const Text("Confirm"),
+                                        content: const Text(
+                                          "Are you sure you want to delete this item from cart?",
+                                        ),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.of(context)
+                                                    .pop(false),
+                                            child: const Text("CANCEL"),
+                                          ),
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.of(context).pop(true),
+                                            child: const Text("DELETE"),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                                onDismissed: (direction) {
+                                  Provider.of<CartModel>(context, listen: false)
+                                      .removeItemFromCart(index);
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[200],
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: ListTile(
+                                    leading: Image.network(
+                                      cartItem['product_thumbnail'],
+                                      fit: BoxFit.cover,
                                     ),
-                                    Text(
-                                      'Quantity: ${cartItem['quantity']}',
-                                      style: const TextStyle(fontSize: 12),
+                                    title: Text(
+                                      cartItem['product_name'],
+                                      style: const TextStyle(fontSize: 18),
                                     ),
-                                    Text(
-                                      'Size: ${cartItem['selectedSize']}',
-                                      style: const TextStyle(fontSize: 12),
+                                    subtitle: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '\$${cartItem['product_price']}',
+                                          style: const TextStyle(fontSize: 12),
+                                        ),
+                                        Text(
+                                          'Quantity: ${cartItem['quantity']}',
+                                          style: const TextStyle(fontSize: 12),
+                                        ),
+                                        Text(
+                                          'Size: ${cartItem['selectedSize']}',
+                                          style: const TextStyle(fontSize: 12),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                                trailing: IconButton(
-                                  icon: const Icon(Icons.cancel),
-                                  onPressed: () => Provider.of<CartModel>(
-                                          context,
-                                          listen: false)
-                                      .removeItemFromCart(index),
+                                  ),
                                 ),
                               ),
                             ),
@@ -182,21 +229,6 @@ class CartPage extends StatelessWidget {
           }
         },
       ),
-      // bottomNavigationBar: BottomNavigationBarWrapper(
-      //   onItemTapped: (index) {
-      //     switch (index) {
-      //       case 0:
-      //         Navigator.pushNamed(context, '/home');
-      //         break;
-      //       case 1:
-      //         Navigator.pushNamed(context, '/products');
-      //         break;
-      //       case 2:
-      //         Navigator.pushNamed(context, '/settings');
-      //         break;
-      //     }
-      //   },
-      // ),
     );
   }
 }

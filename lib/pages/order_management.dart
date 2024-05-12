@@ -62,7 +62,7 @@ class OrdersScreen extends StatelessWidget {
         itemCount: orders.length,
         itemBuilder: (ctx, i) => ExpansionTile(
           title: Card(
-            margin: const EdgeInsets.all(10),
+            // margin: const EdgeInsets.all(10),
             child: Column(
               children: [
                 ListTile(
