@@ -623,87 +623,96 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   void showModalNewItemForm(BuildContext context) {
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true, // Ensure the modal sheet occupies the full height
       builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              FutureBuilder<List<dynamic>>(
-                future: fetchProductSize(),
-                // Call the fetchProductSize function
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else {
-                    List<dynamic> sizes = snapshot.data!;
-                    // Dropdown button to select size
-                    _selectedSizeId = sizes.isNotEmpty
-                        ? sizes.first['size_id'].toString()
-                        : null;
-                    return DropdownButtonFormField<String>(
-                      value: _selectedSizeId,
-                      items: sizes.map<DropdownMenuItem<String>>((size) {
-                        return DropdownMenuItem<String>(
-                          value: size['size_id'].toString(),
-                          child: Text(
-                              "${size['size_id']}    ${size['size_name']}"),
-                        );
-                      }).toList(),
-                      onChanged: (newValue) {
-                        setState(() {
-                          _selectedSizeId =
-                              newValue; // Update the selected size_id
-                        });
-                      },
-                    );
-                  }
-                },
-              ),
-              SizedBox(height: 15),
-              // TextFormField for inputting stock
-              TextFormField(
-                controller: _stockController,
-                // Assign the _stockController here
-                decoration: InputDecoration(
-                  labelText: 'Stock',
-                  border: OutlineInputBorder(),
+        return SingleChildScrollView(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+            left: 20.0,
+            right: 20.0,
+            top: 20.0,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                FutureBuilder<List<dynamic>>(
+                  future: fetchProductSize(),
+                  // Call the fetchProductSize function
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else {
+                      List<dynamic> sizes = snapshot.data!;
+                      // Dropdown button to select size
+                      _selectedSizeId = sizes.isNotEmpty
+                          ? sizes.first['size_id'].toString()
+                          : null;
+                      return DropdownButtonFormField<String>(
+                        value: _selectedSizeId,
+                        items: sizes.map<DropdownMenuItem<String>>((size) {
+                          return DropdownMenuItem<String>(
+                            value: size['size_id'].toString(),
+                            child: Text(
+                                "${size['size_id']}    ${size['size_name']}"),
+                          );
+                        }).toList(),
+                        onChanged: (newValue) {
+                          setState(() {
+                            _selectedSizeId =
+                                newValue; // Update the selected size_id
+                          });
+                        },
+                      );
+                    }
+                  },
                 ),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter stock';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 15),
-              ElevatedButton(
-                onPressed: () {
-                  submitFormData();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.teal.shade200,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                        0), // Set borderRadius to 0 for no rounding
+                SizedBox(height: 15),
+                // TextFormField for inputting stock
+                TextFormField(
+                  controller: _stockController,
+                  // Assign the _stockController here
+                  decoration: InputDecoration(
+                    labelText: 'Stock',
+                    border: OutlineInputBorder(),
                   ),
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter stock';
+                    }
+                    return null;
+                  },
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  // Adjust padding as needed
-                  child: Text(
-                    'Create',
-                    style: TextStyle(
-                      fontSize: 18, // Adjust fontsize as needed
-                      color: Colors.white, // Set text color to white
+                SizedBox(height: 15),
+                ElevatedButton(
+                  onPressed: () {
+                    submitFormData();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.teal.shade200,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                          0), // Set borderRadius to 0 for no rounding
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    // Adjust padding as needed
+                    child: Text(
+                      'Create',
+                      style: TextStyle(
+                        fontSize: 18, // Adjust fontsize as needed
+                        color: Colors.white, // Set text color to white
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },

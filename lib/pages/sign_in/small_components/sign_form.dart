@@ -87,7 +87,6 @@ class _SignFormState extends State<SignForm> {
 
     final token = await customer.loginUser();
     if (token != null) {
-      print('Token: $token');
       final userData = await customer.getUserData();
       if (userData != null) {
         print('User Data: $userData');

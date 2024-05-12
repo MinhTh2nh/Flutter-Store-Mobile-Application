@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:food_mobile_app/admin-pages/categories/category_detail_page.dart';
+import 'package:food_mobile_app/admin-pages/categories/small_components/category_form.dart';
+import 'package:food_mobile_app/components/category_tile.dart';
 import '../../components/slide_menu.dart';
 import 'package:food_mobile_app/admin-pages/products/small_components/create_button.dart';
-import 'package:food_mobile_app/admin-pages/products/small_components/product_form.dart';
 import '../../components/custome_app_bar/custom_app_bar_admin.dart';
-import '../../components/product_tile.dart';
 import '../../model/cart_model.dart';
 import 'package:provider/provider.dart';
-import '../products/product_detail_page.dart';
 
-class AdminProductPage extends StatefulWidget {
-  const AdminProductPage({Key? key}) : super(key: key);
+class AdminCategoryPage extends StatefulWidget {
+  const AdminCategoryPage({Key? key}) : super(key: key);
 
-  static String routeName = "/admin/products";
+  static String routeName = "/admin/categories";
 
   @override
-  _AdminProductPageState createState() => _AdminProductPageState();
+  _AdminCategoryPageState createState() => _AdminCategoryPageState();
 }
 
-class _AdminProductPageState extends State<AdminProductPage> {
+class _AdminCategoryPageState extends State<AdminCategoryPage> {
   // Define the callback function
-  void updateProductList() {
-    Provider.of<CartModel>(context, listen: false).fetchProducts();
+  void updateCategoryList() {
+    Provider.of<CartModel>(context, listen: false).fetchCategories();
   }
 
   final scrollController = ScrollController();
@@ -30,7 +30,7 @@ class _AdminProductPageState extends State<AdminProductPage> {
     super.initState();
     scrollController.addListener(() {
       if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
-        Provider.of<CartModel>(context, listen: false).fetchProducts();
+        Provider.of<CartModel>(context, listen: false).fetchCategories();
       }
     });
   }
@@ -51,7 +51,7 @@ class _AdminProductPageState extends State<AdminProductPage> {
               child: Row(
                 children: [
                   Text(
-                    "List Of Products",
+                    "List Of Categories",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   Spacer(),
@@ -59,7 +59,7 @@ class _AdminProductPageState extends State<AdminProductPage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ProductCreationForm(onUpdate: updateProductList)),
+                        MaterialPageRoute(builder: (context) => CategoryCreationForm(onUpdate: updateCategoryList)),
                       );
                     },
                     title: "NEW",
@@ -75,30 +75,27 @@ class _AdminProductPageState extends State<AdminProductPage> {
             ),
             Consumer<CartModel>(
               builder: (context, cartModel, child) {
-                if (cartModel.shopItems.isEmpty) {
+                if (cartModel.categories.isEmpty) {
                   return Center(child: CircularProgressIndicator());
                 }
                 return GridView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: cartModel.shopItems.length,
+                  itemCount: cartModel.categories.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     childAspectRatio: 1 / 1.1,
                   ),
                   itemBuilder: (context, index) {
-                    var product = cartModel.shopItems[index];
-                    bool isUnavailable = product['STATUS'] == "Unavailable";
-
+                    var category = cartModel.categories[index];
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ProductDetailPage(
-                              index: product['product_id'],
-                              // Pass the callback function to the ProductDetailPage
-                              onUpdate: updateProductList,
+                            builder: (context) => CategoryDetailPage(
+                              index: category['category_id'],
+                              onUpdate: updateCategoryList,
                             ),
                           ),
                         );
@@ -113,19 +110,12 @@ class _AdminProductPageState extends State<AdminProductPage> {
                             padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                             child: Stack(
                               children: [
-                                ProductTile(
-                                  product_name: product['product_name'],
-                                  product_price: product["product_price"].toString(),
-                                  product_thumbnail: product["product_thumbnail"],
-                                  total_stock: product['total_stock'], // Convert integer to string
+                                CategoryTile(
+                                  category_name: category['category_name'],
+                                  category_description: category["category_description"].toString(),
+                                  category_thumbnail: category["category_thumbnail"],
                                   onPressed: () {}, // Placeholder onPressed function
                                 ),
-                                if (isUnavailable)
-                                  Positioned.fill(
-                                    child: Container(
-                                      color: Colors.grey.withOpacity(0.5),
-                                    ),
-                                  ),
                               ],
                             ),
                           ),

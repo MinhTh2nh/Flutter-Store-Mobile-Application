@@ -82,22 +82,35 @@ class Settings extends StatelessWidget {
                           children: [
                             SizedBox(
                               width: MediaQuery.of(context).size.width * 0.3, // Set button width to 30% of screen width
-                              child: TextButton(
+                              child:
+                              ElevatedButton(
                                 onPressed: () {
                                   Navigator.of(context).pop(); // Close the dialog
                                 },
-                                style: TextButton.styleFrom(
+                                style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.teal.shade200,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        0), // Set borderRadius to 0 for no rounding
+                                  ),
                                 ),
-                                child: const Text(
-                                  'Stay',
-                                  style: TextStyle(color: Colors.black),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  // Adjust padding as needed
+                                  child: Text(
+                                    'Stay',
+                                    style: TextStyle(
+                                      fontSize: 15, // Adjust fontsize as needed
+                                      color: Colors.white, // Set text color to white
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
                             SizedBox(
                               width: MediaQuery.of(context).size.width * 0.3, // Set button width to 30% of screen width
-                              child: TextButton(
+                              child:
+                              ElevatedButton(
                                 onPressed: () async {
                                   // Perform logout action
                                   final customer = CustomerModel(email: '', password: '');
@@ -105,12 +118,23 @@ class Settings extends StatelessWidget {
                                   // ignore: use_build_context_synchronously
                                   Navigator.pushReplacementNamed(context, '/sign_in');
                                 },
-                                style: TextButton.styleFrom(
+                                style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.red,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        0), // Set borderRadius to 0 for no rounding
+                                  ),
                                 ),
-                                child: const Text(
-                                  'Log Out',
-                                  style: TextStyle(color: Colors.black),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  // Adjust padding as needed
+                                  child: Text(
+                                    'Log Out',
+                                    style: TextStyle(
+                                      fontSize: 15, // Adjust fontsize as needed
+                                      color: Colors.white, // Set text color to white
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),

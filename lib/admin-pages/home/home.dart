@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_mobile_app/admin-pages/home/small_components/side_menu.dart';
+import '../../components/slide_menu.dart';
 import '../../components/custome_app_bar/custom_app_bar_admin.dart';
 import '../../model/cart_model.dart';
 import 'package:provider/provider.dart';

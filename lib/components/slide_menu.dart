@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:food_mobile_app/admin-pages/categories/categories.dart';
 import 'package:food_mobile_app/admin-pages/home/home.dart';
 import 'package:food_mobile_app/admin-pages/products/products.dart';
+import 'package:food_mobile_app/pages/sign_in/sign_in.dart';
 
 class SideMenu extends StatelessWidget {
   const SideMenu({
@@ -40,14 +42,14 @@ class SideMenu extends StatelessWidget {
             title: "CATEGORIES",
             leading: Icons.category,
             onPressed: () {
-              Navigator.pushNamed(context, AdminProductPage.routeName);
+              Navigator.pushNamed(context, AdminCategoryPage.routeName);
             },
           ),
           DrawerListTile(
             title: "LOG OUT",
             leading: Icons.logout,
             onPressed: () {
-              Navigator.pushNamed(context, AdminProductPage.routeName);
+              Navigator.pushNamed(context, SignInScreen.routeName);
             },
           ),
         ],
