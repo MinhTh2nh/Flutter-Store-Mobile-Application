@@ -13,12 +13,6 @@ class SignUpScreen extends StatelessWidget {
       body: Stack(
         children: [
           Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("lib/images/backgroud.png"), // Replace with your image path
-                fit: BoxFit.cover,
-              ),
-            ),
             child: SafeArea(
               child: Center(
                 child: LayoutBuilder(
@@ -28,11 +22,14 @@ class SignUpScreen extends StatelessWidget {
                     return SingleChildScrollView(
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.8), // Make the container slightly transparent
-                          borderRadius: BorderRadius.circular(10), // Apply border radius
+                          color: Colors.white.withOpacity(
+                              0.8), // Make the container slightly transparent
+                          borderRadius:
+                              BorderRadius.circular(10), // Apply border radius
                         ),
                         child: SizedBox(
-                          width: screenWidth * 0.8, // 80% width on larger screens
+                          width:
+                              screenWidth * 0.8, // 80% width on larger screens
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20),
                             child: Column(
@@ -42,9 +39,11 @@ class SignUpScreen extends StatelessWidget {
                                 Row(
                                   children: [
                                     IconButton(
-                                      icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                                      icon: const Icon(
+                                          Icons.arrow_back_ios_new_rounded),
                                       onPressed: () {
-                                        Navigator.of(context).pop(); // Navigate back to the previous screen
+                                        Navigator.of(context)
+                                            .pop(); // Navigate back to the previous screen
                                       },
                                     ),
                                   ],
@@ -58,7 +57,9 @@ class SignUpScreen extends StatelessWidget {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                const SizedBox(height: 8), // Add space between the two texts
+                                const SizedBox(
+                                    height:
+                                        8), // Add space between the two texts
                                 const Text(
                                   "Complete your details or continue \nwith social media",
                                   textAlign: TextAlign.center,

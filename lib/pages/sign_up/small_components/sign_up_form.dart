@@ -11,9 +11,10 @@ import '../../../components/form_error.dart';
 import '../../../consts/consts.dart';
 
 class SignUpForm extends StatefulWidget {
-  const SignUpForm({Key? key}) : super(key: key);
+  const SignUpForm({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _SignUpFormState createState() => _SignUpFormState();
 }
 
@@ -23,6 +24,7 @@ class _SignUpFormState extends State<SignUpForm> {
 
   bool isCheck = false;
   final storage = const FlutterSecureStorage();
+  var nameController = TextEditingController();
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
   var passwordRetypeController = TextEditingController();
@@ -35,18 +37,19 @@ class _SignUpFormState extends State<SignUpForm> {
       isLoading = true; // Show loading indicator when registering
     });
 
+    final String name = nameController.text;
     final String email = emailController.text;
     final String password = passwordController.text;
     try {
       const String apiUrl =
           'https://flutter-store-mobile-application-backend.onrender.com/users/register';
       final response = await http.post(
-        Uri.parse(
-            '$apiUrl'), // Replace with your actual endpoint
+        Uri.parse('$apiUrl'), // Replace with your actual endpoint
         headers: {
           'Content-Type': 'application/json',
         },
         body: jsonEncode({
+          'name': name,
           'email': email,
           'password': password,
         }),
@@ -57,8 +60,9 @@ class _SignUpFormState extends State<SignUpForm> {
 
         await storage.write(key: 'auth_token', value: token);
         await storage.write(key: 'email', value: email);
+        // ignore: use_build_context_synchronously
         Navigator.pushReplacementNamed(context, '/sign_in');
-        return ;
+        return;
       } else {
         print('Error response body: ${response.body}');
         print('Error response status code: ${response.statusCode}');
@@ -95,34 +99,43 @@ class _SignUpFormState extends State<SignUpForm> {
       key: _formKey,
       child: Column(
         children: [
-          SizedBox(height: 20),
+          const SizedBox(height: 10),
+          CustomTextField(
+            hint: nameHint,
+            title: name,
+            controller: nameController,
+            isPass: false,
+            suffixIcon: const CustomSurffixIcon(svgIcon: "/icons/Mail.svg"),
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+          ),
+          const SizedBox(height: 10),
           CustomTextField(
             hint: emailHint,
             title: email,
             controller: emailController,
             isPass: false,
-            suffixIcon: CustomSurffixIcon(svgIcon: "/icons/Mail.svg"),
+            suffixIcon: const CustomSurffixIcon(svgIcon: "/icons/Mail.svg"),
             floatingLabelBehavior: FloatingLabelBehavior.always,
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           CustomTextField(
             hint: passwordHint,
             title: password,
             controller: passwordController,
             isPass: true,
-            suffixIcon: CustomSurffixIcon(svgIcon: "/icons/Lock.svg"),
+            suffixIcon: const CustomSurffixIcon(svgIcon: "/icons/Lock.svg"),
             floatingLabelBehavior: FloatingLabelBehavior.always,
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           CustomTextField(
             hint: passwordHint,
             title: passwordConfirm,
             controller: passwordRetypeController,
             isPass: true,
-            suffixIcon: CustomSurffixIcon(svgIcon: "/icons/Lock.svg"),
+            suffixIcon: const CustomSurffixIcon(svgIcon: "/icons/Lock.svg"),
             floatingLabelBehavior: FloatingLabelBehavior.always,
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Row(
             children: [
               Checkbox(
@@ -134,10 +147,10 @@ class _SignUpFormState extends State<SignUpForm> {
                   });
                 },
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               Expanded(
                 child: RichText(
-                  text: TextSpan(
+                  text: const TextSpan(
                     children: [
                       TextSpan(
                         text: "I agree to the ",
@@ -161,7 +174,8 @@ class _SignUpFormState extends State<SignUpForm> {
             textColor: Colors.white,
             onPress: () async {
               if (!isCheck) {
-                VxToast.show(context, msg: "Please agree to the Terms and Conditions.");
+                VxToast.show(context,
+                    msg: "Please agree to the Terms and Conditions.");
                 return; // Prevent sign-up action if terms are not agreed
               }
               if (emailController.text.isEmpty ||
