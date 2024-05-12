@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:food_mobile_app/admin-pages/categories/categories.dart';
 import 'package:food_mobile_app/admin-pages/home/home.dart';
 import 'package:food_mobile_app/admin-pages/products/products.dart';
 import 'package:food_mobile_app/admin-pages/profile_admin/profile_admin.dart';
@@ -26,5 +27,5 @@ final Map<String, WidgetBuilder> routes = {
   AdminHomePage.routeName: (context) =>   const AdminHomePage(),
   AdminProfilePage.routeName : (context) => const AdminProfilePage(),
   AdminProductPage.routeName : (context) => const AdminProductPage(),
-
+  AdminCategoryPage.routeName : (context) => const AdminCategoryPage(),
 };

@@ -25,7 +25,6 @@ class CustomerModel {
       Map<String, dynamic> data = json.decode(response.body);
       String token = data['token'];
       userData = data['user'];
-
       globalCustomerId = userData?['customer_id'];
       globalUserName = userData?['name'];
 
