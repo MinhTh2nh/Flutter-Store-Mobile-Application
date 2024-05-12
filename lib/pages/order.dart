@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:food_mobile_app/model/cart_model.dart';
 import 'package:provider/provider.dart';
 import 'package:food_mobile_app/components/address_management.dart';
+import '../model/order_model.dart';
+import '../constants.dart';
 
 class OrderPage extends StatefulWidget {
   static String routeName = "/order-page";
@@ -27,6 +29,9 @@ class _OrderPageState extends State<OrderPage> {
   @override
   Widget build(BuildContext context) {
     double deliveryFee = 2.0; // Initialize delivery fee to $2
+    double totalPrice =
+        double.parse(Provider.of<CartModel>(context).calculateTotal()) +
+            deliveryFee;
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -119,6 +124,10 @@ class _OrderPageState extends State<OrderPage> {
                                     'Quantity: ${cartItem['quantity']}',
                                     style: const TextStyle(fontSize: 12),
                                   ),
+                                  Text(
+                                    'Size: ${cartItem['selectedSize']}',
+                                    style: const TextStyle(fontSize: 12),
+                                  ),
                                 ],
                               ),
                               trailing: IconButton(
@@ -147,7 +156,7 @@ class _OrderPageState extends State<OrderPage> {
                   ListTile(
                     title: const Text('Total'),
                     trailing: Text(
-                      '\$${((double.parse(value.calculateTotal()).toInt()) + deliveryFee).toStringAsFixed(2)}',
+                      '\$$totalPrice',
                     ),
                   )
                 ],
@@ -169,7 +178,43 @@ class _OrderPageState extends State<OrderPage> {
                   fontSize: 24,
                   fontWeight: FontWeight.bold)),
           onPressed: () {
-            // TODO: Implement order functionality
+            int orderQuantity =
+                Provider.of<CartModel>(context, listen: false).cartItems.length;
+
+            // Check if both address and phone number are selected
+            if (selectedAddress != null && selectedPhoneNumber != null) {
+              createOrder(
+                  context,
+                  Order(
+                    customerId: globalCustomerId!,
+                    orderQuantity: orderQuantity,
+                    orderAddress: '123 Shipping Address',
+                    shippingAddress: selectedAddress!,
+                    phoneNumber: selectedPhoneNumber!,
+                    totalPrice: totalPrice,
+                    items: Provider.of<CartModel>(context, listen: false)
+                        .cartItems
+                        .map((item) => OrderItem(
+                              detailPrice: item['product_price'].toDouble(),
+                              itemId: item['item_id'],
+                              quantity: item['quantity'],
+                            ))
+                        .toList(),
+                  ));
+            } else {
+              // Show a snackbar if address or phone number is not selected
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  backgroundColor: Colors.red,
+                  content: Text(
+                    'Please select both address and phone number.',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  duration:
+                      Duration(seconds: 3), // Adjust the duration as needed
+                ),
+              );
+            }
           },
         ),
       ),
