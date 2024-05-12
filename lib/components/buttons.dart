@@ -11,6 +11,9 @@ Widget buttons({
     style: ElevatedButton.styleFrom(
       backgroundColor: color,
       padding: const EdgeInsets.all(12),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.zero,
+      ),
     ),
     onPressed: onPress, // Use onPressed instead of onTap
     child: Text(

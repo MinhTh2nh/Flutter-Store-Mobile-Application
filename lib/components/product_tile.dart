@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 
 class ProductTile extends StatelessWidget {
-  // ignore: non_constant_identifier_names
   final String product_name;
   final String product_price;
   final String product_thumbnail;
@@ -22,7 +21,7 @@ class ProductTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 10), // Add margin bottom
+      margin: const EdgeInsets.only(bottom: 0), // Add margin bottom
       child: Material(
         elevation: 3, // Add elevation for shadow effect
         child: Column(
@@ -32,7 +31,7 @@ class ProductTile extends StatelessWidget {
               product_thumbnail,
               width: double.infinity, // Take whole width
               height: MediaQuery.of(context).size.height * 0.15,
-              fit: BoxFit.contain,
+              fit: BoxFit.cover,
               errorBuilder: (BuildContext context, Object exception,
                   StackTrace? stackTrace) {
                 // You can return an error image or a placeholder here

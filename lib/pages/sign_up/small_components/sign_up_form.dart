@@ -24,6 +24,7 @@ class _SignUpFormState extends State<SignUpForm> {
 
   bool isCheck = false;
   final storage = const FlutterSecureStorage();
+
   var nameController = TextEditingController();
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
@@ -37,21 +38,18 @@ class _SignUpFormState extends State<SignUpForm> {
       isLoading = true; // Show loading indicator when registering
     });
 
-    final String name = nameController.text;
-    final String email = emailController.text;
-    final String password = passwordController.text;
     try {
       const String apiUrl =
           'https://flutter-store-mobile-application-backend.onrender.com/users/register';
       final response = await http.post(
-        Uri.parse('$apiUrl'), // Replace with your actual endpoint
+        Uri.parse('$apiUrl'),
         headers: {
           'Content-Type': 'application/json',
         },
         body: jsonEncode({
-          'name': name,
-          'email': email,
-          'password': password,
+          'name': nameController.text,
+          'email': emailController.text,
+          'password': passwordController.text,
         }),
       );
       if (response.statusCode == 200) {
@@ -60,18 +58,18 @@ class _SignUpFormState extends State<SignUpForm> {
 
         await storage.write(key: 'auth_token', value: token);
         await storage.write(key: 'email', value: email);
+        await storage.write(key: 'password', value: password);
         // ignore: use_build_context_synchronously
         Navigator.pushReplacementNamed(context, '/sign_in');
-        return;
       } else {
         print('Error response body: ${response.body}');
         print('Error response status code: ${response.statusCode}');
-        return null;
+        throw Exception('Failed to register: ${response.statusCode}');
       }
     } catch (e) {
       print('Error during registration: $e');
+      throw Exception('Failed to register: $e');
     }
-
     setState(() {
       isLoading = false; // Hide loading indicator after registration attempt
     });
@@ -99,7 +97,6 @@ class _SignUpFormState extends State<SignUpForm> {
       key: _formKey,
       child: Column(
         children: [
-          const SizedBox(height: 10),
           CustomTextField(
             hint: nameHint,
             title: name,
@@ -108,7 +105,7 @@ class _SignUpFormState extends State<SignUpForm> {
             suffixIcon: const CustomSurffixIcon(svgIcon: "/icons/Mail.svg"),
             floatingLabelBehavior: FloatingLabelBehavior.always,
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 20),
           CustomTextField(
             hint: emailHint,
             title: email,
@@ -178,7 +175,8 @@ class _SignUpFormState extends State<SignUpForm> {
                     msg: "Please agree to the Terms and Conditions.");
                 return; // Prevent sign-up action if terms are not agreed
               }
-              if (emailController.text.isEmpty ||
+              if (nameController.text.isEmpty ||
+                  emailController.text.isEmpty ||
                   passwordController.text.isEmpty ||
                   passwordRetypeController.text.isEmpty) {
                 VxToast.show(context, msg: "Please fill in all fields.");
