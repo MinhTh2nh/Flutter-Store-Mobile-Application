@@ -1,8 +1,11 @@
 // ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'dart:convert';
+import 'package:food_mobile_app/model/cart_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../pages/order_management.dart';
 
 class Order {
   final int customerId;
@@ -80,6 +83,13 @@ Future<void> createOrder(BuildContext context, Order order) async {
           ),
           duration: Duration(seconds: 2), // Adjust the duration as needed
         ),
+      );
+
+      Provider.of<CartModel>(context, listen: false).clearCart();
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const OrdersScreen()),
       );
       print('Order created successfully');
     } else {

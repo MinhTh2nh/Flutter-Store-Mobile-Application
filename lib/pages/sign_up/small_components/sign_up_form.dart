@@ -23,6 +23,8 @@ class _SignUpFormState extends State<SignUpForm> {
   bool isLoading = false;
 
   bool isCheck = false;
+  bool isPass = true;
+
   final storage = const FlutterSecureStorage();
 
   var nameController = TextEditingController();
@@ -32,6 +34,12 @@ class _SignUpFormState extends State<SignUpForm> {
 
   bool remember = false;
   final List<String?> errors = [];
+
+  void togglePasswordVisibility() {
+    setState(() {
+      isPass = !isPass;
+    });
+  }
 
   Future<void> registerUser() async {
     setState(() {
@@ -102,7 +110,10 @@ class _SignUpFormState extends State<SignUpForm> {
             title: name,
             controller: nameController,
             isPass: false,
-            suffixIcon: const CustomSurffixIcon(svgIcon: "/icons/Mail.svg"),
+            suffixIcon: const Icon(
+              Icons.person,
+              size: 16,
+            ),
             floatingLabelBehavior: FloatingLabelBehavior.always,
           ),
           const SizedBox(height: 20),
@@ -111,7 +122,10 @@ class _SignUpFormState extends State<SignUpForm> {
             title: email,
             controller: emailController,
             isPass: false,
-            suffixIcon: const CustomSurffixIcon(svgIcon: "/icons/Mail.svg"),
+            suffixIcon: const Icon(
+              Icons.mail,
+              size: 16,
+            ),
             floatingLabelBehavior: FloatingLabelBehavior.always,
           ),
           const SizedBox(height: 10),
@@ -120,7 +134,17 @@ class _SignUpFormState extends State<SignUpForm> {
             title: password,
             controller: passwordController,
             isPass: true,
-            suffixIcon: const CustomSurffixIcon(svgIcon: "/icons/Lock.svg"),
+            suffixIcon: GestureDetector(
+              // Wrap the Icon with GestureDetector
+              onTap:
+                  togglePasswordVisibility, // Call togglePasswordVisibility method
+              child: Icon(
+                isPass
+                    ? Icons.lock
+                    : Icons.lock_open, // Change icon based on isPass value
+                size: 16,
+              ),
+            ),
             floatingLabelBehavior: FloatingLabelBehavior.always,
           ),
           const SizedBox(height: 10),
@@ -129,7 +153,17 @@ class _SignUpFormState extends State<SignUpForm> {
             title: passwordConfirm,
             controller: passwordRetypeController,
             isPass: true,
-            suffixIcon: const CustomSurffixIcon(svgIcon: "/icons/Lock.svg"),
+            suffixIcon: GestureDetector(
+              // Wrap the Icon with GestureDetector
+              onTap:
+                  togglePasswordVisibility, // Call togglePasswordVisibility method
+              child: Icon(
+                isPass
+                    ? Icons.lock
+                    : Icons.lock_open, // Change icon based on isPass value
+                size: 16,
+              ),
+            ),
             floatingLabelBehavior: FloatingLabelBehavior.always,
           ),
           const SizedBox(height: 10),

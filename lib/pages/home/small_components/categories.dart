@@ -1,7 +1,24 @@
 import 'package:flutter/material.dart';
 
 class Categories extends StatefulWidget {
-  const Categories({super.key});
+  const Categories(
+      {super.key,
+      required this.selectedCategory,
+      required this.onSelectCategory});
+
+  final int selectedCategory;
+  final Function(int) onSelectCategory;
+
+  static const List<Map<String, dynamic>> categories = [
+    {"icon": Icons.shopping_bag, "text": "All"},
+    {"icon": Icons.boy, "text": "Clothing"},
+    {"icon": Icons.brush, "text": "Cosmetic"},
+    {"icon": Icons.healing, "text": "Health"},
+    {"icon": Icons.electrical_services, "text": "Electric Devices"},
+    {"icon": Icons.toys, "text": "Toys"},
+    {"icon": Icons.chair, "text": "Furniture"},
+    {"icon": Icons.watch, "text": "Watch"},
+  ];
 
   @override
   // ignore: library_private_types_in_public_api
@@ -13,16 +30,6 @@ class _CategoriesState extends State<Categories> {
 
   @override
   Widget build(BuildContext context) {
-    List<Map<String, dynamic>> categories = [
-      {"icon": Icons.shopping_bag, "text": "All"},
-      {"icon": Icons.boy, "text": "Clothing"},
-      {"icon": Icons.brush, "text": "Cosmetic"},
-      {"icon": Icons.healing, "text": "Health"},
-      {"icon": Icons.electrical_services, "text": "Electric Devices"},
-      {"icon": Icons.toys, "text": "Toys"},
-      {"icon": Icons.chair, "text": "Furniture"},
-      {"icon": Icons.watch, "text": "Watch"},
-    ];
     return Padding(
       padding: const EdgeInsets.all(10),
       child: SingleChildScrollView(
@@ -31,10 +38,10 @@ class _CategoriesState extends State<Categories> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: List.generate(
-            categories.length,
+            Categories.categories.length,
             (index) => CategoryCard(
-              icon: categories[index]["icon"],
-              text: categories[index]["text"],
+              icon: Categories.categories[index]["icon"],
+              text: Categories.categories[index]["text"],
               press: () {
                 setState(() {
                   selectedIndex = index;

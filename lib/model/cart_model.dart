@@ -62,8 +62,10 @@ class CartModel extends ChangeNotifier {
       _isLoading = false; // Set loading state to false
     }
   }
+
   Future<void> fetchCategories() async {
-    final url = Uri.parse('https://flutter-store-mobile-application-backend.onrender.com/products/get/category/categoryList');
+    final url = Uri.parse(
+        'https://flutter-store-mobile-application-backend.onrender.com/products/get/category/categoryList');
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
@@ -157,5 +159,10 @@ class CartModel extends ChangeNotifier {
           double.parse(item['product_price'].toString()) * item['quantity'];
     }
     return totalPrice.toStringAsFixed(2);
+  }
+
+  void clearCart() {
+    cartItems.clear();
+    notifyListeners();
   }
 }

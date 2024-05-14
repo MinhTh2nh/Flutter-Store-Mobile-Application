@@ -9,14 +9,22 @@ import 'small_components/discount_banner.dart';
 import 'small_components/special_offers.dart';
 import 'package:food_mobile_app/components/slider_image.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
   static String routeName = "/home";
 
   @override
-  Widget build(BuildContext context) {
-    final scrollController = ScrollController(); // Add this line
+  // ignore: library_private_types_in_public_api
+  _HomePageState createState() => _HomePageState();
+}
 
+class _HomePageState extends State<HomePage> {
+  final scrollController = ScrollController(); // Add this line
+  int selectedCategory = 0; // Add this line
+
+  @override
+  void initState() {
+    super.initState();
     scrollController.addListener(() {
       // Add this block
       if (scrollController.position.pixels ==
@@ -24,6 +32,10 @@ class HomePage extends StatelessWidget {
         Provider.of<CartModel>(context, listen: false).fetchProducts();
       }
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(),
       body: SingleChildScrollView(
@@ -33,12 +45,19 @@ class HomePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SliderImages(),
-            const Column(
+            Column(
               // Wrap DiscountBanner and Categories in a Column
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                DiscountBanner(),
-                Categories(),
+                const DiscountBanner(),
+                Categories(
+                  selectedCategory: selectedCategory,
+                  onSelectCategory: (index) {
+                    setState(() {
+                      selectedCategory = index;
+                    });
+                  },
+                ),
               ],
             ),
             const SpecialOffers(),
@@ -55,20 +74,30 @@ class HomePage extends StatelessWidget {
             ),
             Consumer<CartModel>(
               builder: (context, cartModel, child) {
-                if (cartModel.shopItems.isEmpty) {
+                // Filter products based on selected category
+                final filteredProducts = cartModel.shopItems.where((product) {
+                  final category = product['category'] as String?;
+                  return category == null || category.isEmpty
+                      ? selectedCategory == 0
+                      : category ==
+                          Categories.categories[selectedCategory - 1]["text"];
+                }).toList();
+
+                if (filteredProducts.isEmpty) {
                   // Display loading indicator until products are fetched
                   return const Center(child: CircularProgressIndicator());
                 }
+
                 return GridView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: cartModel.shopItems.length,
+                  itemCount: filteredProducts.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     childAspectRatio: 1 / 1.1,
                   ),
                   itemBuilder: (context, index) {
-                    var product = cartModel.shopItems[index];
+                    var product = filteredProducts[index];
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(
