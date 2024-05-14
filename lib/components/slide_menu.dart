@@ -20,7 +20,7 @@ class SideMenu extends StatelessWidget {
               color: Colors.blue,
               image: DecorationImage(
                   fit: BoxFit.cover,
-                  image: AssetImage("lib/images/main_image.png")),
+                  image: AssetImage("lib/images/icons/logo-png.png")),
             ),
             child: null,
           ),
