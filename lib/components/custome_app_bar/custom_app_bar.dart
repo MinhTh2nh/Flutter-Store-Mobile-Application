@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_mobile_app/pages/products.dart';
 import 'package:provider/provider.dart'; // Import Provider package
 import '../../model/cart_model.dart';
 import '../../pages/cart_page.dart';
@@ -14,6 +15,7 @@ class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
 
 class _CustomAppBarState extends State<CustomAppBar> {
   late FocusNode _searchFocusNode; // Declare a FocusNode
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -60,37 +62,46 @@ class _CustomAppBarState extends State<CustomAppBar> {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(left: 12),
-                child: TextField(
-                  focusNode: _searchFocusNode, // Assign the FocusNode
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.all(4),
-                    focusedBorder: border,
-                    enabledBorder: border,
-                    isDense: true,
-                    hintText: "TIU....",
-                    hintStyle: TextStyle(
-                      fontSize: 18,
-                      color: Colors.teal.shade200,
-                    ),
-                    prefixIcon: const Icon(
-                      Icons.search,
-                    ),
-                    prefixIconConstraints: sizeIcon,
-                    suffixIcon: const Icon(
-                      Icons.camera_alt_outlined,
-                    ),
-                    suffixIconConstraints: sizeIcon,
-                    border: InputBorder.none,
-                    filled: true,
-                    fillColor: _searchFocusNode.hasFocus
-                        ? Colors.white
-                        : Colors.transparent, // Change color based on focus
-                  ),
-                  onChanged: (value) {
-                    setState(() {
-                      // No need to track background color anymore
-                    });
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      Products.routeName,
+                      arguments: _searchController.text,
+                    );
                   },
+                  child: TextField(
+                    focusNode: _searchFocusNode, // Assign the FocusNode
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.all(4),
+                      focusedBorder: border,
+                      enabledBorder: border,
+                      isDense: true,
+                      hintText: "TIU....",
+                      hintStyle: TextStyle(
+                        fontSize: 18,
+                        color: Colors.teal.shade200,
+                      ),
+                      prefixIcon: const Icon(
+                        Icons.search,
+                      ),
+                      prefixIconConstraints: sizeIcon,
+                      suffixIcon: const Icon(
+                        Icons.camera_alt_outlined,
+                      ),
+                      suffixIconConstraints: sizeIcon,
+                      border: InputBorder.none,
+                      filled: true,
+                      fillColor: _searchFocusNode.hasFocus
+                          ? Colors.white
+                          : Colors.transparent, // Change color based on focus
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        // No need to track background color anymore
+                      });
+                    },
+                  ),
                 ),
               ),
             ),

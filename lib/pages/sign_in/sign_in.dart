@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import '../../../components/no_account_text.dart';
 import '../../../components/socal_card.dart';
 import '../../consts/consts.dart';
@@ -13,6 +14,7 @@ class SignInScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        alignment: Alignment.center,
         child: SafeArea(
           child: Center(
             child: LayoutBuilder(

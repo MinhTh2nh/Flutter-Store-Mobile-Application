@@ -12,7 +12,10 @@ class CartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: const Color.fromRGBO(246, 246, 246, 1), // Add this line
+      appBar: AppBar(
+        backgroundColor: const Color.fromRGBO(246, 246, 246, 1),
+      ),
       body: Consumer<CartModel>(
         builder: (context, value, child) {
           if (value.cartItems.isEmpty) {

@@ -19,10 +19,13 @@ class _OrderPageState extends State<OrderPage> {
   String? selectedAddress;
   String? selectedPhoneNumber;
 
-  void onAddressSelected(String address, String phone) {
+  void onAddressSelected(String address, String phoneNumber) {
+    print(
+        'onAddressSelected called with address: $address and phone: $phoneNumber');
+
     setState(() {
       selectedAddress = address;
-      selectedPhoneNumber = phone;
+      selectedPhoneNumber = phoneNumber;
     });
   }
 
@@ -66,9 +69,9 @@ class _OrderPageState extends State<OrderPage> {
                             Text(selectedAddress != null
                                 ? '$selectedAddress'
                                 : 'No address selected'),
-                            if (selectedAddress != null &&
-                                selectedPhoneNumber != null)
-                              Text('$selectedPhoneNumber'),
+                            Text(selectedPhoneNumber != null
+                                ? '$selectedPhoneNumber'
+                                : 'No phone number selected'),
                           ],
                         ),
                         IconButton(
