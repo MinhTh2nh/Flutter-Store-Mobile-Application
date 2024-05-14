@@ -55,8 +55,9 @@ class Products extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  ProductDetailPage(index: product['product_id']),                            ),
+                              builder: (context) => ProductDetailPage(
+                                  index: product['product_id']),
+                            ),
                           );
                         },
                         child: Padding(
@@ -68,7 +69,8 @@ class Products extends StatelessWidget {
                             ),
                             child: ProductTile(
                               product_name: product['product_name'],
-                              product_price: product["product_price"].toString(),
+                              product_price:
+                                  product["product_price"].toString(),
                               product_thumbnail: product["product_thumbnail"],
                               total_stock: product['total_stock'],
                               // Inside the GridView.builder itemBuilder

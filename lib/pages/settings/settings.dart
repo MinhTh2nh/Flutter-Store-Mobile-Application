@@ -40,7 +40,7 @@ class Settings extends StatelessWidget {
               press: () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) =>
-                      OrdersScreen(), // Replace with your actual OrdersScreen widget
+                      const OrdersScreen(), // Replace with your actual OrdersScreen widget
                 ));
               },
             ),
@@ -94,8 +94,8 @@ class Settings extends StatelessWidget {
                                         0), // Set borderRadius to 0 for no rounding
                                   ),
                                 ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
+                                child: const Padding(
+                                  padding: EdgeInsets.all(10.0),
                                   // Adjust padding as needed
                                   child: Text(
                                     'Stay',
@@ -125,8 +125,8 @@ class Settings extends StatelessWidget {
                                         0), // Set borderRadius to 0 for no rounding
                                   ),
                                 ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
+                                child: const Padding(
+                                  padding: EdgeInsets.all(10.0),
                                   // Adjust padding as needed
                                   child: Text(
                                     'Log Out',

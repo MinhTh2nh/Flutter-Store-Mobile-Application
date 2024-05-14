@@ -8,12 +8,12 @@ class CategoryTile extends StatelessWidget {
   final void Function()? onPressed;
 
   const CategoryTile({
-    Key? key,
+    super.key,
     required this.category_name,
     required this.category_description,
     required this.category_thumbnail,
     this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,7 @@ class CategoryTile extends StatelessWidget {
                       fit: BoxFit.contain,
                     );
                   } else {
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   }
                 },
               ),

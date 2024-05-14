@@ -22,6 +22,7 @@ class _SignFormState extends State<SignForm> {
   final _formKey = GlobalKey<FormState>();
   bool? remember = false;
   bool isLoading = false; // Added isLoading state
+  bool isPass = true;
 
   final storage = const FlutterSecureStorage();
   var emailController = TextEditingController();
@@ -33,6 +34,12 @@ class _SignFormState extends State<SignForm> {
   void initState() {
     super.initState();
     _getSavedCredentials();
+  }
+
+  void togglePasswordVisibility() {
+    setState(() {
+      isPass = !isPass;
+    });
   }
 
   Future<void> _getSavedCredentials() async {
@@ -123,13 +130,18 @@ class _SignFormState extends State<SignForm> {
     return Form(
       key: _formKey,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           CustomTextField(
             hint: emailHint,
             title: email,
             controller: emailController,
             isPass: false,
-            suffixIcon: const CustomSurffixIcon(svgIcon: "/icons/Mail.svg"),
+            // suffixIcon: const CustomSurffixIcon(svgIcon: "/icons/Mail.svg"),
+            suffixIcon: const Icon(
+              Icons.mail,
+              size: 16,
+            ),
             floatingLabelBehavior: FloatingLabelBehavior.always,
           ),
           const SizedBox(height: 20),
@@ -137,8 +149,19 @@ class _SignFormState extends State<SignForm> {
             hint: passwordHint,
             title: password,
             controller: passwordController,
-            isPass: false,
-            suffixIcon: const CustomSurffixIcon(svgIcon: "/icons/Lock.svg"),
+            isPass: isPass,
+            // suffixIcon: const CustomSurffixIcon(svgIcon: "/icons/Lock.svg"),
+            suffixIcon: GestureDetector(
+              // Wrap the Icon with GestureDetector
+              onTap:
+                  togglePasswordVisibility, // Call togglePasswordVisibility method
+              child: Icon(
+                isPass
+                    ? Icons.lock
+                    : Icons.lock_open, // Change icon based on isPass value
+                size: 16,
+              ),
+            ),
             floatingLabelBehavior: FloatingLabelBehavior.always,
           ),
           const SizedBox(height: 20),
@@ -177,6 +200,7 @@ class _SignFormState extends State<SignForm> {
                     await _saveCredentials();
                     if (emailController.text == "admin@gmail.com" &&
                         passwordController.text == "testingdemo") {
+                      // ignore: use_build_context_synchronously
                       Navigator.pushNamed(context, AdminHomePage.routeName);
                     } else if (_formKey.currentState!.validate()) {
                       await loginUser();

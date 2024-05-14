@@ -9,14 +9,14 @@ class CustomTextField extends StatelessWidget {
   final FloatingLabelBehavior? floatingLabelBehavior;
 
   const CustomTextField({
-    Key? key,
+    super.key,
     this.title,
     this.hint,
     this.controller,
     this.isPass = false,
     this.suffixIcon,
     this.floatingLabelBehavior,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,12 +26,12 @@ class CustomTextField extends StatelessWidget {
         children: [
           Text(
             title!,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.red,
               fontSize: 15,
             ),
           ),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -43,13 +43,13 @@ class CustomTextField extends StatelessWidget {
                     hintText: hint,
                     isDense: true,
                     filled: false,
-                    enabledBorder: UnderlineInputBorder(
+                    enabledBorder: const UnderlineInputBorder(
                       borderSide: BorderSide(
                         color: Colors.grey, // Adjust border color as needed
                         width: 1, // Adjust border thickness as needed
                       ),
                     ),
-                    focusedBorder: UnderlineInputBorder(
+                    focusedBorder: const UnderlineInputBorder(
                       borderSide: BorderSide(
                         color: Colors.red, // Adjust border color as needed
                         width: 2, // Adjust border thickness as needed
@@ -62,7 +62,7 @@ class CustomTextField extends StatelessWidget {
               if (suffixIcon != null) suffixIcon!,
             ],
           ),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
         ],
       ),
     );
