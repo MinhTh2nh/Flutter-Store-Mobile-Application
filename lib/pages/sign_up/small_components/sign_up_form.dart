@@ -61,14 +61,13 @@ class _SignUpFormState extends State<SignUpForm> {
         }),
       );
       if (response.statusCode == 200) {
+        Navigator.pushReplacementNamed(context, '/sign_in');
         Map<String, dynamic> data = json.decode(response.body);
         String token = data['token'];
-
         await storage.write(key: 'auth_token', value: token);
         await storage.write(key: 'email', value: email);
         await storage.write(key: 'password', value: password);
         // ignore: use_build_context_synchronously
-        Navigator.pushReplacementNamed(context, '/sign_in');
       } else {
         print('Error response body: ${response.body}');
         print('Error response status code: ${response.statusCode}');
