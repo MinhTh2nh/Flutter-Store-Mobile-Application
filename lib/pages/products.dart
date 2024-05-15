@@ -35,28 +35,24 @@ class Products extends StatelessWidget {
               const SizedBox(height: 12),
               Consumer<CartModel>(
                 builder: (context, cartModel, child) {
-                  if (cartModel.shopItems.isEmpty) {
-                    // Display loading indicator until products are fetched
-                    return const Center(child: CircularProgressIndicator());
-                  }
+                  // Filter products based on selected category
                   return GridView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: cartModel.shopItems.length,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       childAspectRatio: 1 / 1.1,
                     ),
                     itemBuilder: (context, index) {
-                      var product = cartModel.shopItems[index];
+                      var product =cartModel.shopItems[index];
                       return GestureDetector(
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ProductDetailPage(
-                                  index: product['product_id']),
+                              builder: (context) =>
+                                  ProductDetailPage(index: index),
                             ),
                           );
                         },
@@ -69,8 +65,7 @@ class Products extends StatelessWidget {
                             ),
                             child: ProductTile(
                               product_name: product['product_name'],
-                              product_price:
-                                  product["product_price"].toString(),
+                              product_price: product["product_price"].toString(),
                               product_thumbnail: product["product_thumbnail"],
                               total_stock: product['total_stock'],
                               // Inside the GridView.builder itemBuilder
