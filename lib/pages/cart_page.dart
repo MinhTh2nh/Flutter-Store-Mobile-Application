@@ -12,7 +12,7 @@ class CartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(246, 246, 246, 1), // Add this line
+      backgroundColor: const Color.fromRGBO(246, 246, 246, 1),
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(246, 246, 246, 1),
       ),
@@ -68,54 +68,7 @@ class CartPage extends StatelessWidget {
                               child: Dismissible(
                                 key: Key(cartItem['item_id'].toString()),
                                 direction: DismissDirection.endToStart,
-                                background: Container(
-                                  color: Colors.red,
-                                  // alignment: Alignment.centerRight,
-                                  // child: const Padding(
-                                  //   padding: EdgeInsets.all(10),
-                                  //   child: Icon(
-                                  //     Icons.delete,
-                                  //     color: Colors.white,
-                                  //   ),
-                                  // ),
-                                ),
-                                // secondaryBackground: Container(
-                                //   color: Colors.red,
-                                //   alignment: Alignment.centerLeft,
-                                //   child: const Padding(
-                                //     padding: EdgeInsets.all(10),
-                                //     child: Icon(
-                                //       Icons.delete,
-                                //       color: Colors.white,
-                                //     ),
-                                //   ),
-                                // ),
-                                confirmDismiss: (direction) async {
-                                  return await showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: const Text("Confirm"),
-                                        content: const Text(
-                                          "Are you sure you want to delete this item from cart?",
-                                        ),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            onPressed: () =>
-                                                Navigator.of(context)
-                                                    .pop(false),
-                                            child: const Text("CANCEL"),
-                                          ),
-                                          TextButton(
-                                            onPressed: () =>
-                                                Navigator.of(context).pop(true),
-                                            child: const Text("DELETE"),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
+                                background: stackBehindDismiss(),
                                 onDismissed: (direction) {
                                   Provider.of<CartModel>(context, listen: false)
                                       .removeItemFromCart(index);
@@ -136,7 +89,7 @@ class CartPage extends StatelessWidget {
                                     ),
                                     subtitle: Column(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           '\$${cartItem['product_price']}',
@@ -231,6 +184,21 @@ class CartPage extends StatelessWidget {
             );
           }
         },
+      ),
+    );
+  }
+
+  Widget stackBehindDismiss() {
+    return Container(
+      color: Colors.red,
+      child: Padding(
+        padding: const EdgeInsets.all(15),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Icon(Icons.delete, color: Colors.white),
+          ],
+        ),
       ),
     );
   }

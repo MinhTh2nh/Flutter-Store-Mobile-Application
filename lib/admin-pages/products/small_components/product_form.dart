@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:velocity_x/velocity_x.dart';
+import 'package:file_picker/file_picker.dart';
 
 import '../../../components/buttons.dart';
 
 class ProductCreationForm extends StatefulWidget {
-  final void Function() onUpdate; // Declare the callback function
+  final void Function() onUpdate;
+
   ProductCreationForm({required this.onUpdate});
 
   @override
@@ -20,7 +22,6 @@ class _ProductCreationFormState extends State<ProductCreationForm> {
   final TextEditingController _productPriceController = TextEditingController();
   final TextEditingController _productThumbnailController = TextEditingController();
   final TextEditingController _productDescriptionController = TextEditingController();
-  final TextEditingController _totalStockController = TextEditingController();
   final TextEditingController _productCategoryController = TextEditingController();
   final TextEditingController _productSubCategoryController = TextEditingController();
 
@@ -30,6 +31,25 @@ class _ProductCreationFormState extends State<ProductCreationForm> {
   Map<String, dynamic>? _selectedCategory;
   Map<String, dynamic>? _selectedSubCategory;
 
+  bool _isUrlInput = true; // Track if the current input method is URL
+
+  void _toggleInputMethod() {
+    setState(() {
+      _isUrlInput = !_isUrlInput;
+      _productThumbnailController.clear(); // Clear the input field when toggling
+    });
+  }
+
+  void _pickFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if (result != null) {
+      String filePath = result.files.single.path!;
+      setState(() {
+        _productThumbnailController.text = filePath;
+        _isUrlInput = false; // Set input method to file upload
+      });
+    }
+  }
   @override
   void initState() {
     super.initState();
@@ -72,7 +92,7 @@ class _ProductCreationFormState extends State<ProductCreationForm> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 10),
-                Text("Preview Product Thumbail"),
+                Text("Preview Product Thumbnail"),
                 Center(
                   child: SizedBox(
                     width: MediaQuery.of(context).size.width * 0.6,
@@ -80,9 +100,7 @@ class _ProductCreationFormState extends State<ProductCreationForm> {
                     child: Image.network(
                       _productThumbnailController.text,
                       fit: BoxFit.cover,
-                      errorBuilder: (BuildContext context, Object exception,
-                          StackTrace? stackTrace) {
-                        // You can return an error image or a placeholder here
+                      errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
                         return Image.asset(
                           'lib/images/blank.png',
                           fit: BoxFit.cover,
@@ -91,6 +109,7 @@ class _ProductCreationFormState extends State<ProductCreationForm> {
                     ),
                   ),
                 ),
+                SizedBox(height: 15),
                 TextFormField(
                   controller: _productNameController,
                   decoration: InputDecoration(labelText: 'Product Name', border: OutlineInputBorder()),
@@ -114,15 +133,44 @@ class _ProductCreationFormState extends State<ProductCreationForm> {
                   },
                 ),
                 SizedBox(height: 15),
-                TextFormField(
-                  controller: _productThumbnailController,
-                  decoration: InputDecoration(labelText: 'Product Thumbnail URL', border: OutlineInputBorder()),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter product thumbnail URL';
-                    }
-                    return null;
-                  },
+                Row(
+                  children: [
+                    Expanded(
+                      child: _isUrlInput
+                          ? TextFormField(
+                        controller: _productThumbnailController,
+                        decoration: InputDecoration(
+                          labelText: 'Product Thumbnail URL',
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter product thumbnail URL';
+                          }
+                          return null;
+                        },
+                      )
+                          : ElevatedButton.icon(
+                        onPressed: _pickFile,
+                        icon: Icon(Icons.file_upload),
+                        label: Text('Choose File'),
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.black,
+                          padding: EdgeInsets.symmetric(vertical: 15),
+                          textStyle: TextStyle(fontSize: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            side: BorderSide(color: Colors.black, width: 1), // Adding border
+                          ),
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(_isUrlInput ? Icons.upload_file : Icons.link),
+                      onPressed: _toggleInputMethod,
+                      tooltip: _isUrlInput ? 'Switch to file upload' : 'Switch to URL input',
+                    ),
+                  ],
                 ),
                 SizedBox(height: 15),
                 DropdownButtonFormField<String>(
@@ -191,26 +239,13 @@ class _ProductCreationFormState extends State<ProductCreationForm> {
                   },
                 ),
                 SizedBox(height: 15),
-                TextFormField(
-                  controller: _totalStockController,
-                  decoration: InputDecoration(labelText: 'Total Stock', border: OutlineInputBorder()),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter total stock';
-                    }
-                    return null;
-                  },
-                ),
                 SizedBox(height: 20),
                 buttons(
                   title: "Create",
                   color: Colors.red,
                   textColor: Colors.white,
                   onPress: () {
-                    // Validate form
                     if (_formKey.currentState!.validate()) {
-                      // If the form is valid, proceed with form submission
                       submitFormData();
                     }
                   },
@@ -241,44 +276,56 @@ class _ProductCreationFormState extends State<ProductCreationForm> {
   }
 
   Future<void> submitFormData() async {
-    // Prepare form data
-    final formData = {
-      "product_name": _productNameController.text,
-      "product_price": _productPriceController.text,
-      "product_thumbnail": _productThumbnailController.text,
-      "product_description": _productDescriptionController.text,
-      "category_id": _selectedCategory!['category_id'],
-      "sub_id": _selectedSubCategory!['sub_id'],
-      "total_stock": _totalStockController.text,
-      "status": "Available",
-    };
+    if (_formKey.currentState!.validate()) {
+      String thumbnailUrl;
+      if (_isUrlInput) {
+        thumbnailUrl = _productThumbnailController.text;
+      } else {
+        // Upload file to Google Cloud Storage
+        String filePath = _productThumbnailController.text;
+        thumbnailUrl = await uploadFileToCloudStorage(filePath);
+      }
 
-    // Send HTTP POST request
-    final response = await http.post(
-      Uri.parse("https://flutter-store-mobile-application-backend.onrender.com/products/create"),
-      body: jsonEncode(formData),
-      headers: {'Content-Type': 'application/json'},
-    );
+      final formData = {
+        "product_name": _productNameController.text,
+        "product_price": _productPriceController.text,
+        "product_thumbnail": thumbnailUrl,
+        "product_description": _productDescriptionController.text,
+        "category_id": _selectedCategory!['category_id'],
+        "sub_id": _selectedSubCategory!['sub_id'],
+        "total_stock": 0,
+        "status": "Available",
+      };
 
-    // Check response status
-    if (response.statusCode == 200) {
-      // Handle successful response
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Product created successfully!'),
-          duration: Duration(seconds: 2),
-        ),
+      final response = await http.post(
+        Uri.parse("https://flutter-store-mobile-application-backend.onrender.com/products/create"),
+        body: jsonEncode(formData),
+        headers: {'Content-Type': 'application/json'},
       );
-      Navigator.of(context).pushNamed("/admin/products");
-      _handleUpdate();
-    } else {
-      // Handle error response
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to create product!'),
-          duration: Duration(seconds: 2),
-        ),
-      );
+
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Product created successfully!'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+        Navigator.of(context).pushNamed("/admin/products");
+        _handleUpdate();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to create product!'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
     }
   }
+  Future<String> uploadFileToCloudStorage(String filePath) async {
+    // Implement logic to upload the file to Google Cloud Storage
+    // Return the URL of the uploaded file
+    return "1231";
+  }
+
 }
