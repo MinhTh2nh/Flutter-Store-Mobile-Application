@@ -1,17 +1,26 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../constants.dart';
+// import '../constants.dart';
 
 class CustomerDetail {
+  final int cdId;
+  final int customerId;
   final String phone;
   final String address;
 
-  CustomerDetail({required this.phone, required this.address});
+  CustomerDetail({
+    required this.cdId,
+    required this.customerId,
+    required this.phone,
+    required this.address,
+  });
 
   factory CustomerDetail.fromJson(Map<String, dynamic> json) {
     return CustomerDetail(
-      phone: json['phone'],
-      address: json['address'],
+      cdId: json['cd_id'] ?? 0,
+      customerId: json['customer_id'] ?? 0,
+      phone: json['phone'] ?? '',
+      address: json['address'] ?? '',
     );
   }
 
@@ -35,7 +44,7 @@ class CustomerDetail {
     }
   }
 
-    static Future<void> createAddress(
+  static Future<void> createAddress(
       String phone, String address, int customerId) async {
     const apiUrl =
         'https://flutter-store-mobile-application-backend.onrender.com/users/address/create';
@@ -50,6 +59,42 @@ class CustomerDetail {
       // Address created successfully
     } else {
       throw Exception('Failed to create address: ${response.statusCode}');
+    }
+  }
+
+  static Future<void> updateAddress(
+      int cdId, String phone, String address) async {
+    final apiUrl =
+        'https://flutter-store-mobile-application-backend.onrender.com/users/address/update/$cdId';
+
+    final response = await http.put(
+      Uri.parse(apiUrl),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'phone': phone,
+        'address': address,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      // Address updated successfully
+    } else {
+      throw Exception('Failed to update address: ${response.statusCode}');
+    }
+  }
+
+  static Future<void> deleteAddress(int cdId) async {
+    final apiUrl =
+        'https://flutter-store-mobile-application-backend.onrender.com/users/address/delete/$cdId';
+
+    final response = await http.delete(Uri.parse(apiUrl));
+
+    if (response.statusCode == 200) {
+      // Address deleted successfully
+    } else {
+      throw Exception('Failed to delete address: ${response.statusCode}');
     }
   }
 }
