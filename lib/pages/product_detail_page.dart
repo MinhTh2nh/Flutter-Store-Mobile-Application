@@ -1,8 +1,8 @@
 // ignore_for_file: avoid_print
 
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import '../components/custome_app_bar/custom_app_bar_detail_page.dart';
 import '../components/star_rating.dart';
 import '../model/cart_model.dart';
@@ -333,24 +333,99 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               selectedSize,
                               product['product_id'],
                             );
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Product added to cart'),
-                              ),
+
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Dialog(
+                                  backgroundColor: Colors.transparent,
+                                  elevation: 0,
+                                  child: Container(
+                                    padding: EdgeInsets.all(16.0),
+                                    decoration: BoxDecoration(
+                                      color: Colors.transparent,
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        AwesomeSnackbarContent(
+                                          title: "Congratulations",
+                                          message: "Product added to cart",
+                                          contentType: ContentType.success,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
                             );
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Not enough stock available'),
-                              ),
+                            Future.delayed(Duration(seconds: 1), () {
+                              Navigator.pop(context);
+                            });
+                          }
+
+                          else {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Dialog(
+                                  backgroundColor: Colors.transparent,
+                                  elevation: 0,
+                                  child: Container(
+                                    padding: EdgeInsets.all(16.0),
+                                    decoration: BoxDecoration(
+                                      color: Colors.transparent,
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        AwesomeSnackbarContent(
+                                          title: "Oh no!",
+                                          message: "Not enough stock to add",
+                                          contentType: ContentType.warning,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
                             );
+                            Future.delayed(Duration(seconds: 1), () {
+                              Navigator.pop(context);
+                            });
                           }
                         } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Please select a size'),
-                            ),
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Dialog(
+                                backgroundColor: Colors.transparent,
+                                elevation: 0,
+                                child: Container(
+                                  padding: EdgeInsets.all(16.0),
+                                  decoration: BoxDecoration(
+                                    color: Colors.transparent,
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      AwesomeSnackbarContent(
+                                        title: "Oh no!",
+                                        message: "Please select options first!!",
+                                        contentType: ContentType.failure,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
                           );
+                          Future.delayed(Duration(seconds: 1), () {
+                            Navigator.pop(context);
+                          });
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -401,4 +476,5 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       ),
     );
   }
+
 }

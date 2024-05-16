@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:velocity_x/velocity_x.dart';
 import '../../components/buttons.dart';
 import '../../model/cart_model.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final int index;
@@ -586,58 +587,69 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               );
             } else {
               List items = snapshot.data as List;
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: items.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(
-                          'Item ID: ${items[index]['item_id']}',
-                          style: TextStyle(
-                            fontSize: 18, // Adjust fontsize as needed
-                          ),
-                        ),
-                        subtitle: Text(
-                          'Size: ${items[index]['size_name']}, Stock: ${items[index]['stock']}',
-                          style: TextStyle(
-                            fontSize: 18, // Adjust fontsize as needed
-                            fontWeight: FontWeight
-                                .bold, // Use FontWeight.bold for bold text
-                          ),
-                        ),
-                      );
-                    },
+              return SingleChildScrollView(
+                child: Container(
+                  constraints: BoxConstraints(
+                    maxHeight: MediaQuery.of(context).size.height * 0.8,
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      showModalNewItemForm(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.teal.shade200,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                            0), // Set borderRadius to 0 for no rounding
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      // Adjust padding as needed
-                      child: Text(
-                        'Create New Item',
-                        style: TextStyle(
-                          fontSize: 18, // Adjust fontsize as needed
-                          color: Colors.white, // Set text color to white
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(height: 10), // Add some spacing
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.4, // Set a specific height for the ListView
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: items.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              title: Text(
+                                'Item ID: ${items[index]['item_id']}',
+                                style: TextStyle(
+                                  fontSize: 18, // Adjust fontsize as needed
+                                ),
+                              ),
+                              subtitle: Text(
+                                'Size: ${items[index]['size_name']}, Stock: ${items[index]['stock']}',
+                                style: TextStyle(
+                                  fontSize: 18, // Adjust fontsize as needed
+                                  fontWeight: FontWeight.bold, // Use FontWeight.bold for bold text
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       ),
-                    ),
+                      SizedBox(height: 10), // Add some spacing
+                      ElevatedButton(
+                        onPressed: () {
+                          showModalNewItemForm(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.teal.shade200,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                              0,
+                            ), // Set borderRadius to 0 for no rounding
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(
+                            15.0,
+                          ),
+                          child: Text(
+                            'Create New Item',
+                            style: TextStyle(
+                              fontSize: 18, // Adjust fontsize as needed
+                              color: Colors.white, // Set text color to white
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10), // Add some spacing
+                    ],
                   ),
-                ],
+                ),
               );
             }
           },
@@ -687,6 +699,20 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                TextFormField(
+                  controller: _stockController,
+                  decoration: InputDecoration(
+                    labelText: 'Stock',
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter stock';
+                    }
+                    return null;
+                  },
+                ),
                 FutureBuilder<List<dynamic>>(
                   future: fetchProductSize(),
                   builder: (context, snapshot) {
@@ -724,20 +750,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   },
                 ),
                 SizedBox(height: 15),
-                TextFormField(
-                  controller: _stockController,
-                  decoration: InputDecoration(
-                    labelText: 'Stock',
-                    border: OutlineInputBorder(),
-                  ),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter stock';
-                    }
-                    return null;
-                  },
-                ),
                 SizedBox(height: 15),
                 ElevatedButton(
                   onPressed: () {
@@ -817,21 +829,66 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       );
 
       if (response.statusCode == 200) {
-        // Handle successful response
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Option created successfully!'),
-            duration: Duration(seconds: 2),
-          ),
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Dialog(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              child: Container(
+                padding: EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    AwesomeSnackbarContent(
+                      title: "Congratulations",
+                      message: "Options created successfully!",
+                      contentType: ContentType.success,
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
         );
+        Future.delayed(Duration(seconds: 1), () {
+          Navigator.pop(context);
+        });
       } else {
         // Handle error response
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Failed to create new option!'),
-            duration: Duration(seconds: 2),
-          ),
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Dialog(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              child: Container(
+                padding: EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    AwesomeSnackbarContent(
+                      title: "Oh no!!!",
+                      message: "Options created unsuccessfully!",
+                      contentType: ContentType.failure,
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
         );
+        Future.delayed(Duration(seconds: 1), () {
+          Navigator.pop(context);
+        });
       }
     }
   }
@@ -853,21 +910,68 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     if (response.statusCode == 200) {
       // Handle successful response
       Navigator.of(context).pop(); // Close the modal bottom sheet
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Item created successfully!'),
-          duration: Duration(seconds: 2),
-        ),
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            child: Container(
+              padding: EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  AwesomeSnackbarContent(
+                    title: "Congratulations",
+                    message: "Item created successfully!",
+                    contentType: ContentType.success,
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
       );
+      Future.delayed(Duration(seconds: 1), () {
+        Navigator.pop(context);
+      });
+      Navigator.of(context).pop(); // Close the modal bottom sheet
     } else {
       // Handle error response
       Navigator.of(context).pop(); // Close the modal bottom sheet
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to create item!'),
-          duration: Duration(seconds: 2),
-        ),
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            child: Container(
+              padding: EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  AwesomeSnackbarContent(
+                    title: "Oh no!!!",
+                    message: "Item created unsuccessfully!",
+                    contentType: ContentType.failure,
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
       );
+      Future.delayed(Duration(seconds: 1), () {
+        Navigator.pop(context);
+      });
     }
   }
 

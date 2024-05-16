@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:velocity_x/velocity_x.dart';
 import '../../../components/buttons.dart';
-import '../../../components/custom_surfix_icon.dart';
 import '../../../components/custom_textfield.dart';
 import '../../../components/form_error.dart';
 import '../../../consts/consts.dart';
@@ -61,13 +60,12 @@ class _SignUpFormState extends State<SignUpForm> {
         }),
       );
       if (response.statusCode == 200) {
-        Navigator.pushReplacementNamed(context, '/sign_in');
         Map<String, dynamic> data = json.decode(response.body);
         String token = data['token'];
         await storage.write(key: 'auth_token', value: token);
         await storage.write(key: 'email', value: email);
         await storage.write(key: 'password', value: password);
-        // ignore: use_build_context_synchronously
+        Navigator.pushReplacementNamed(context, '/sign_in');
       } else {
         print('Error response body: ${response.body}');
         print('Error response status code: ${response.statusCode}');
