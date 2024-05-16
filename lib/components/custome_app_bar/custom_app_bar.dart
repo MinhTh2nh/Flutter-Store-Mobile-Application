@@ -42,7 +42,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
     );
 
     return AppBar(
-      surfaceTintColor: Colors.transparent,
+      surfaceTintColor: Colors.grey.shade200,
+
       automaticallyImplyLeading: false,
       backgroundColor: Colors.white, // Change background color based on scroll
       // Add the search field

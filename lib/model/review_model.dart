@@ -7,7 +7,7 @@ class Review {
   final int reviewId;
   final int itemId;
   final int customerId;
-  final int reviewRating;
+  final double reviewRating;
   final String reviewComment;
   final String reviewTimestamp;
   final String name;
@@ -27,7 +27,8 @@ class Review {
       reviewId: json['review_id'],
       itemId: json['item_id'],
       customerId: json['customer_id'],
-      reviewRating: json['review_rating'],
+      reviewRating: (json['review_rating'] as num)
+          .toDouble(), // Ensure it's parsed as double
       reviewComment: json['review_comment'],
       reviewTimestamp: json['review_timestamp'],
       name: json['name'],
@@ -68,7 +69,7 @@ class Review {
     }
 
     // Calculate the total rating
-    int totalRating = filteredReviews.fold(
+    double totalRating = filteredReviews.fold(
         0, (previousValue, review) => previousValue + review.reviewRating);
 
     // Calculate the average rating

@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_print
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../components/custome_app_bar/custom_app_bar_detail_page.dart';
 import '../components/star_rating.dart';
@@ -25,6 +24,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   String selectedSize = '';
   int selectedItemID = -1;
   double averageRating = 0.0; // Declare averageRating as a member variable
+  bool showAllReviews = false; // State to control the display of reviews
 
 // Fetch reviews and calculate average rating
   Future<void> fetchReviewsAndCalculateAverageRating(int productId) async {
@@ -62,8 +62,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   void initState() {
     super.initState();
     fetchReviewsAndCalculateAverageRating(
-        Provider.of<CartModel>(context, listen: false).shopItems[widget.index]
-            ['product_id']);
+      Provider.of<CartModel>(context, listen: false).shopItems[widget.index]
+          ['product_id'],
+    );
   }
 
   @override
@@ -91,22 +92,26 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
     return Scaffold(
       appBar: const CustomAppBarForDetailPage(),
-      body: Column(
-        children: [
+      body: Container(
+        color: Colors.grey.shade100,
+        child: Column(children: [
           Expanded(
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Center(
-                    child: SizedBox(
-                      child: Image.network(
-                        product['product_thumbnail'],
-                        width: double.infinity, // Take whole width
-                        height: MediaQuery.of(context).size.height * 0.3,
-                        fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) =>
-                            const Icon(Icons.error),
+                  Container(
+                    color: Colors.white,
+                    child: Center(
+                      child: SizedBox(
+                        child: Image.network(
+                          product['product_thumbnail'],
+                          width: double.infinity, // Take whole width
+                          height: MediaQuery.of(context).size.height * 0.3,
+                          fit: BoxFit.contain,
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Icon(Icons.error),
+                        ),
                       ),
                     ),
                   ),
@@ -287,16 +292,38 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           ),
                         ),
                         const SizedBox(height: 16),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Reviews',
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            ProductReview(reviews: reviews),
-                          ],
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(18),
+                            color: Colors.white,
+                          ),
+                          padding: const EdgeInsets.only(top: 8, bottom: 8),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Text(
+                                'Reviews',
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              ProductReview(
+                                reviews: showAllReviews
+                                    ? reviews
+                                    : reviews.take(3).toList(),
+                              ),
+                              if (reviews.length > 3)
+                                TextButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      showAllReviews = !showAllReviews;
+                                    });
+                                  },
+                                  child: Text(
+                                    showAllReviews ? 'Show Less' : 'Show More',
+                                  ),
+                                ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -341,7 +368,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                   backgroundColor: Colors.transparent,
                                   elevation: 0,
                                   child: Container(
-                                    padding: EdgeInsets.all(16.0),
+                                    padding: const EdgeInsets.all(16.0),
                                     decoration: BoxDecoration(
                                       color: Colors.transparent,
                                       borderRadius: BorderRadius.circular(8.0),
@@ -360,12 +387,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 );
                               },
                             );
-                            Future.delayed(Duration(seconds: 1), () {
+                            Future.delayed(const Duration(seconds: 1), () {
                               Navigator.pop(context);
                             });
-                          }
-
-                          else {
+                          } else {
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -373,7 +398,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                   backgroundColor: Colors.transparent,
                                   elevation: 0,
                                   child: Container(
-                                    padding: EdgeInsets.all(16.0),
+                                    padding: const EdgeInsets.all(16.0),
                                     decoration: BoxDecoration(
                                       color: Colors.transparent,
                                       borderRadius: BorderRadius.circular(8.0),
@@ -392,7 +417,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 );
                               },
                             );
-                            Future.delayed(Duration(seconds: 1), () {
+                            Future.delayed(const Duration(seconds: 1), () {
                               Navigator.pop(context);
                             });
                           }
@@ -404,7 +429,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 backgroundColor: Colors.transparent,
                                 elevation: 0,
                                 child: Container(
-                                  padding: EdgeInsets.all(16.0),
+                                  padding: const EdgeInsets.all(16.0),
                                   decoration: BoxDecoration(
                                     color: Colors.transparent,
                                     borderRadius: BorderRadius.circular(8.0),
@@ -414,7 +439,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                     children: [
                                       AwesomeSnackbarContent(
                                         title: "Oh no!",
-                                        message: "Please select options first!!",
+                                        message:
+                                            "Please select options first!!",
                                         contentType: ContentType.failure,
                                       ),
                                     ],
@@ -423,7 +449,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               );
                             },
                           );
-                          Future.delayed(Duration(seconds: 1), () {
+                          Future.delayed(const Duration(seconds: 1), () {
                             Navigator.pop(context);
                           });
                         }
@@ -472,9 +498,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               ],
             ),
           ),
-        ],
+        ]),
       ),
     );
   }
-
 }

@@ -28,7 +28,7 @@ class CartModel extends ChangeNotifier {
 
   int get itemsCount => _cartItems.length;
 
-  void fetchProducts() async {
+  Future<void> fetchProducts() async {
     if (_isLoading) return; // If a request is already in progress, do nothing
 
     _isLoading = true; // Set loading state to true

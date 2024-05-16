@@ -20,8 +20,15 @@ class ProductTile extends StatelessWidget {
     required this.average_rating,
   });
 
+  static double _roundRating(double rating) {
+    double clampedRating = rating.clamp(0.0, 5.0);
+    return (clampedRating * 2).round() / 2.0;
+  }
+
   @override
   Widget build(BuildContext context) {
+    double roundedRating = _roundRating(average_rating);
+
     return Container(
       margin: const EdgeInsets.only(bottom: 10), // Add margin bottom
       child: Material(
@@ -85,7 +92,7 @@ class ProductTile extends StatelessWidget {
                     children: [
                       const Icon(Icons.star, color: Colors.amber, size: 16),
                       Text(
-                        average_rating.toStringAsFixed(1),
+                        roundedRating.toStringAsFixed(1),
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ],
