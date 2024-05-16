@@ -26,65 +26,64 @@ class Products extends StatelessWidget {
       appBar: const CustomAppBar(),
       body: SingleChildScrollView(
         controller: scrollController,
-        child: Container(
-          padding: const EdgeInsets.all(8),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              SliderButtons(),
-              const SizedBox(height: 12),
-              Consumer<CartModel>(
-                builder: (context, cartModel, child) {
-                  if (cartModel.shopItems.isEmpty) {
-                    // Display loading indicator until products are fetched
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  return GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: cartModel.shopItems.length,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 1 / 1.1,
-                    ),
-                    itemBuilder: (context, index) {
-                      var product = cartModel.shopItems[index];
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ProductDetailPage(
-                                  index: product['product_id']),
-                            ),
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: ProductTile(
-                              product_name: product['product_name'],
-                              product_price:
-                                  product["product_price"].toString(),
-                              product_thumbnail: product["product_thumbnail"],
-                              total_stock: product['total_stock'],
-                              // Inside the GridView.builder itemBuilder
-                              onPressed: () => {},
-                            ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            SliderButtons(),
+            const SizedBox(height: 12),
+            Consumer<CartModel>(
+              builder: (context, cartModel, child) {
+                if (cartModel.shopItems.isEmpty) {
+                  // Display loading indicator until products are fetched
+                  return const Center(child: CircularProgressIndicator());
+                }
+                return GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: cartModel.shopItems.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 1 / 1.1,
+                  ),
+                  itemBuilder: (context, index) {
+                    var product = cartModel.shopItems[index];
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ProductDetailPage(index: product['product_id']),
+                          ),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: ProductTile(
+                            product_name: product['product_name'],
+                            product_price: product["product_price"].toString(),
+                            product_thumbnail: product["product_thumbnail"],
+                            total_stock: product['total_stock'],
+                            average_rating: product['average_rating'] != 0
+                                ? product['average_rating']
+                                : 0.0,
+
+                            // Inside the GridView.builder itemBuilder
+                            onPressed: () => {},
                           ),
                         ),
-                      );
-                    },
-                  );
-                },
-              ),
-            ],
-          ),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ],
         ),
       ),
     );

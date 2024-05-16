@@ -9,11 +9,12 @@ import 'package:provider/provider.dart';
 import '../products/product_detail_page.dart';
 
 class AdminProductPage extends StatefulWidget {
-  const AdminProductPage({Key? key}) : super(key: key);
+  const AdminProductPage({super.key});
 
   static String routeName = "/admin/products";
 
   @override
+  // ignore: library_private_types_in_public_api
   _AdminProductPageState createState() => _AdminProductPageState();
 }
 
@@ -29,7 +30,8 @@ class _AdminProductPageState extends State<AdminProductPage> {
   void initState() {
     super.initState();
     scrollController.addListener(() {
-      if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
+      if (scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent) {
         Provider.of<CartModel>(context, listen: false).fetchProducts();
       }
     });
@@ -38,8 +40,8 @@ class _AdminProductPageState extends State<AdminProductPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
-      drawer: SideMenu(),
+      appBar: const CustomAppBar(),
+      drawer: const SideMenu(),
       body: SingleChildScrollView(
         controller: scrollController,
         padding: const EdgeInsets.symmetric(vertical: 16),
@@ -50,16 +52,18 @@ class _AdminProductPageState extends State<AdminProductPage> {
               padding: const EdgeInsets.all(10.0),
               child: Row(
                 children: [
-                  Text(
+                  const Text(
                     "List Of Products",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   buttonAdmin(
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ProductCreationForm(onUpdate: updateProductList)),
+                        MaterialPageRoute(
+                            builder: (context) => ProductCreationForm(
+                                onUpdate: updateProductList)),
                       );
                     },
                     title: "NEW",
@@ -76,7 +80,7 @@ class _AdminProductPageState extends State<AdminProductPage> {
             Consumer<CartModel>(
               builder: (context, cartModel, child) {
                 if (cartModel.shopItems.isEmpty) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
                 return GridView.builder(
                   shrinkWrap: true,
@@ -104,21 +108,30 @@ class _AdminProductPageState extends State<AdminProductPage> {
                         );
                       },
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 5, vertical: 5),
                             child: Stack(
                               children: [
                                 ProductTile(
                                   product_name: product['product_name'],
-                                  product_price: product["product_price"].toString(),
-                                  product_thumbnail: product["product_thumbnail"],
-                                  total_stock: product['total_stock'], // Convert integer to string
-                                  onPressed: () {}, // Placeholder onPressed function
+                                  product_price:
+                                      product["product_price"].toString(),
+                                  product_thumbnail:
+                                      product["product_thumbnail"],
+                                  total_stock: product[
+                                      'total_stock'], // Convert integer to string
+                                  average_rating: product['average_rating'] != 0
+                                      ? product['average_rating']
+                                      : 0.0,
+                                  onPressed:
+                                      () {}, // Placeholder onPressed function
                                 ),
                                 if (isUnavailable)
                                   Positioned.fill(

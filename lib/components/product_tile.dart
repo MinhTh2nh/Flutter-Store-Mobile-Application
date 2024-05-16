@@ -7,6 +7,7 @@ class ProductTile extends StatelessWidget {
   final String product_price;
   final String product_thumbnail;
   final int total_stock;
+  final double average_rating;
   final void Function()? onPressed;
 
   const ProductTile({
@@ -16,6 +17,7 @@ class ProductTile extends StatelessWidget {
     required this.product_thumbnail,
     required this.total_stock,
     required this.onPressed,
+    required this.average_rating,
   });
 
   @override
@@ -74,6 +76,23 @@ class ProductTile extends StatelessWidget {
                 ),
               ],
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8), // Add padding
+                  child: Row(
+                    children: [
+                      const Icon(Icons.star, color: Colors.amber, size: 16),
+                      Text(
+                        average_rating.toStringAsFixed(1),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            )
           ],
         ),
       ),
