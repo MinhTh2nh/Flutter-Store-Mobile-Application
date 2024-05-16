@@ -120,7 +120,9 @@ class _HomePageState extends State<HomePage> {
                             product_price: product["product_price"].toString(),
                             product_thumbnail: product["product_thumbnail"],
                             total_stock: product['total_stock'],
-                            // Inside the GridView.builder itemBuilder
+                            average_rating: product['average_rating'] != 0
+                                ? product['average_rating']
+                                : 0.0,
                             onPressed: () => {},
                           ),
                         ),

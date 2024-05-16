@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +8,7 @@ import '../components/star_rating.dart';
 import '../model/cart_model.dart';
 import 'package:provider/provider.dart';
 import '../components/review_field.dart';
+import '../model/review_model.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final int index;
@@ -21,6 +24,47 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   int quantity = 1;
   String selectedSize = '';
   int selectedItemID = -1;
+  double averageRating = 0.0; // Declare averageRating as a member variable
+
+// Fetch reviews and calculate average rating
+  Future<void> fetchReviewsAndCalculateAverageRating(int productId) async {
+    try {
+      List<Review> reviews = await Review.fetchReview(productId);
+      averageRating = Review.calculateAverageRating(reviews);
+
+      // Convert reviews to List<Map<String, dynamic>>
+      List<Map<String, dynamic>> reviewMaps = reviews.map((review) {
+        return {
+          'review_id': review.reviewId,
+          'item_id': review.itemId,
+          'customer_id': review.customerId,
+          'review_rating': review.reviewRating,
+          'review_comment': review.reviewComment,
+          'review_timestamp': review.reviewTimestamp,
+          'name': review.name,
+        };
+      }).toList();
+
+      // Update UI with averageRating if required
+      // Pass reviews to ProductReview widget
+      setState(() {
+        this.reviews = reviewMaps;
+      });
+    } catch (e) {
+      // Handle error
+      print('Error fetching reviews: $e');
+    }
+  }
+
+  List<Map<String, dynamic>> reviews = []; // List to hold reviews
+
+  @override
+  void initState() {
+    super.initState();
+    fetchReviewsAndCalculateAverageRating(
+        Provider.of<CartModel>(context, listen: false).shopItems[widget.index]
+            ['product_id']);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,30 +88,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     // final productItems = cartModel.productItems
     //     .where((item) => item['product_id'] == product['product_id'])
     //     .toList();
-
-    //sample review data
-    final reviews = [
-      {
-        'username': 'John Doe',
-        'reviewText': 'This product is really awesome!',
-        'rating': 4,
-      },
-      {
-        'username': 'Jane Doe',
-        'reviewText': 'I love this product!',
-        'rating': 5,
-      },
-      {
-        'username': 'Bob Smith',
-        'reviewText': 'This product is okay.',
-        'rating': 3,
-      },
-      {
-        'username': 'Alice Johnson',
-        'reviewText': 'Not what I expected.',
-        'rating': 2,
-      },
-    ];
 
     return Scaffold(
       appBar: const CustomAppBarForDetailPage(),
@@ -111,10 +131,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         Builder(builder: (context) {
                           return Row(
                             children: <Widget>[
-                              const Expanded(
+                              Expanded(
                                 child: IconTheme(
-                                  data: IconThemeData(),
-                                  child: StarDisplay(value: 4),
+                                  data: const IconThemeData(),
+                                  child: StarDisplay(value: averageRating),
                                 ),
                               ),
                               Container(
