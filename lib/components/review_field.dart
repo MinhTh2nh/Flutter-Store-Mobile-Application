@@ -28,7 +28,11 @@ class ProductReview extends StatelessWidget {
       itemBuilder: (context, index) {
         final review = reviews[index];
         return Container(
-          padding: const EdgeInsets.only(top: 8, bottom: 8),
+          margin: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            color: Colors.grey[200],
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -36,7 +40,7 @@ class ProductReview extends StatelessWidget {
                 borderRadius:
                     BorderRadius.circular(10), // Adjust the radius as needed
                 child: Container(
-                  color: Colors.grey[200],
+                  // color: Colors.grey[200],
                   padding: const EdgeInsets.all(8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,8 +67,7 @@ class ProductReview extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 8),
-                      StarDisplay(
-                          value: (review['review_rating'] as int).toDouble()),
+                      StarDisplay(value: review['review_rating']),
                       const SizedBox(height: 8),
                       Text(
                         review['review_comment'],

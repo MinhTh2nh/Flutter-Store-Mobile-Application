@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -6,6 +6,7 @@ import '../model/order_detail_model.dart';
 import '../constants.dart';
 import 'package:intl/intl.dart';
 import '../model/review_model.dart';
+import '../model/cart_model.dart';
 
 class OrdersScreen extends StatefulWidget {
   const OrdersScreen({super.key});
@@ -33,6 +34,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
           reviewComment: comment,
           itemId: itemId,
           customerId: globalCustomerId!);
+
+      // Optionally, refresh the products list after submitting the review
+      await CartModel().fetchProducts();
       // Optionally, you can refresh the orders list after review submission
       setState(() {
         _ordersFuture =
@@ -114,7 +118,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                 fit: BoxFit.contain,
                               ),
                               title: Text(
-                                'Product: ${detail.product.productName}',
+                                ' ${detail.product.productName}',
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold),
                               ),
@@ -184,7 +188,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                                   color: Colors.amber,
                                                 ),
                                                 onRatingUpdate: (newRating) {
-                                                  // ignore: avoid_print
                                                   rating = newRating;
                                                   print(rating);
                                                 },
