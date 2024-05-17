@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_mobile_app/admin-pages/categories/categories.dart';
 import 'package:food_mobile_app/admin-pages/home/home.dart';
+import 'package:food_mobile_app/admin-pages/orders/orders.dart';
 import 'package:food_mobile_app/admin-pages/products/products.dart';
 import 'package:food_mobile_app/pages/sign_in/sign_in.dart';
 
@@ -36,6 +37,13 @@ class SideMenu extends StatelessWidget {
             leading: Icons.shopping_bag,
             onPressed: () {
               Navigator.pushNamed(context, AdminProductPage.routeName);
+            },
+          ),
+          DrawerListTile(
+            title: "ORDERS",
+            leading: Icons.local_shipping_outlined,
+            onPressed: () {
+              Navigator.pushNamed(context, AdminOrderPage.routeName);
             },
           ),
           DrawerListTile(
