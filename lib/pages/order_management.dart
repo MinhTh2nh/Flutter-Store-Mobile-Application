@@ -1,8 +1,12 @@
+// ignore_for_file: use_build_context_synchronously, avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import '../model/order_detail_model.dart';
 import '../constants.dart';
 import 'package:intl/intl.dart';
+import '../model/review_model.dart';
+import '../model/cart_model.dart';
 
 class OrdersScreen extends StatefulWidget {
   const OrdersScreen({super.key});
@@ -20,6 +24,39 @@ class _OrdersScreenState extends State<OrdersScreen> {
   void initState() {
     super.initState();
     _ordersFuture = orderDetailModel.fetchOrdersByCustomerId(globalCustomerId!);
+  }
+
+  Future<void> submitReview(int itemId, double rating, String comment) async {
+    // Implement submit review
+    try {
+      await Review.addReview(
+          reviewRating: rating,
+          reviewComment: comment,
+          itemId: itemId,
+          customerId: globalCustomerId!);
+
+      // Optionally, refresh the products list after submitting the review
+      await CartModel().fetchProducts();
+      // Optionally, you can refresh the orders list after review submission
+      setState(() {
+        _ordersFuture =
+            orderDetailModel.fetchOrdersByCustomerId(globalCustomerId!);
+      });
+      // Show a success message or perform any other actions as needed
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Review submitted successfully'),
+        ),
+      );
+    } catch (error) {
+      // Handle errors, e.g., display an error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to submit review: $error'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   @override
@@ -81,7 +118,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                 fit: BoxFit.contain,
                               ),
                               title: Text(
-                                'Product: ${detail.product.productName}',
+                                ' ${detail.product.productName}',
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold),
                               ),
@@ -119,13 +156,19 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                     showDialog(
                                       context: context,
                                       builder: (context) {
+                                        TextEditingController reviewController =
+                                            TextEditingController();
+
+                                        double rating = 3;
                                         return AlertDialog(
                                           title: const Text('Write Review'),
                                           content: Column(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
-                                              const TextField(
-                                                decoration: InputDecoration(
+                                              TextField(
+                                                controller: reviewController,
+                                                decoration:
+                                                    const InputDecoration(
                                                   hintText:
                                                       'Write your review here',
                                                 ),
@@ -144,8 +187,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                                   Icons.star,
                                                   color: Colors.amber,
                                                 ),
-                                                onRatingUpdate: (rating) {
-                                                  // ignore: avoid_print
+                                                onRatingUpdate: (newRating) {
+                                                  rating = newRating;
                                                   print(rating);
                                                 },
                                               ),
@@ -161,7 +204,13 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                             TextButton(
                                               child: const Text('Submit'),
                                               onPressed: () {
-                                                // Handle submit button press
+                                                int itemId = detail.itemId;
+                                                rating = rating;
+                                                String comment =
+                                                    reviewController.text;
+                                                submitReview(
+                                                    itemId, rating, comment);
+                                                Navigator.of(context).pop();
                                               },
                                             ),
                                           ],

@@ -7,6 +7,7 @@ class ProductTile extends StatelessWidget {
   final String product_price;
   final String product_thumbnail;
   final int total_stock;
+  final double average_rating;
   final void Function()? onPressed;
 
   const ProductTile({
@@ -16,10 +17,18 @@ class ProductTile extends StatelessWidget {
     required this.product_thumbnail,
     required this.total_stock,
     required this.onPressed,
+    required this.average_rating,
   });
+
+  static double _roundRating(double rating) {
+    double clampedRating = rating.clamp(0.0, 5.0);
+    return (clampedRating * 2).round() / 2.0;
+  }
 
   @override
   Widget build(BuildContext context) {
+    double roundedRating = _roundRating(average_rating);
+
     return Container(
       margin: const EdgeInsets.only(bottom: 10), // Add margin bottom
       child: Material(
@@ -74,6 +83,23 @@ class ProductTile extends StatelessWidget {
                 ),
               ],
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8), // Add padding
+                  child: Row(
+                    children: [
+                      const Icon(Icons.star, color: Colors.amber, size: 16),
+                      Text(
+                        roundedRating.toStringAsFixed(1),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            )
           ],
         ),
       ),
