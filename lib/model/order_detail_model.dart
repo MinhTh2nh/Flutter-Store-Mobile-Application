@@ -66,6 +66,7 @@ class OrderDetailModel {
 
 class OrderDetail {
   final int detailId;
+  final int itemId;
   final int quantity;
   final Product product;
 
@@ -73,11 +74,13 @@ class OrderDetail {
     required this.detailId,
     required this.quantity,
     required this.product,
+    required this.itemId,
   });
 
   factory OrderDetail.fromJson(Map<String, dynamic> json) {
     return OrderDetail(
       detailId: json['detail_id'],
+      itemId: json['item_id'],
       quantity: json['quantity'],
       product: Product.fromJson(json['product']),
     );

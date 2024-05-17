@@ -1,11 +1,13 @@
+// ignore_for_file: avoid_print
+
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../components/custome_app_bar/custom_app_bar_detail_page.dart';
 import '../components/star_rating.dart';
 import '../model/cart_model.dart';
 import 'package:provider/provider.dart';
 import '../components/review_field.dart';
+import '../model/review_model.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final int index;
@@ -21,6 +23,49 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   int quantity = 1;
   String selectedSize = '';
   int selectedItemID = -1;
+  double averageRating = 0.0; // Declare averageRating as a member variable
+  bool showAllReviews = false; // State to control the display of reviews
+
+// Fetch reviews and calculate average rating
+  Future<void> fetchReviewsAndCalculateAverageRating(int productId) async {
+    try {
+      List<Review> reviews = await Review.fetchReview(productId);
+      averageRating = Review.calculateAverageRating(reviews);
+
+      // Convert reviews to List<Map<String, dynamic>>
+      List<Map<String, dynamic>> reviewMaps = reviews.map((review) {
+        return {
+          'review_id': review.reviewId,
+          'item_id': review.itemId,
+          'customer_id': review.customerId,
+          'review_rating': review.reviewRating,
+          'review_comment': review.reviewComment,
+          'review_timestamp': review.reviewTimestamp,
+          'name': review.name,
+        };
+      }).toList();
+
+      // Update UI with averageRating if required
+      // Pass reviews to ProductReview widget
+      setState(() {
+        this.reviews = reviewMaps;
+      });
+    } catch (e) {
+      // Handle error
+      print('Error fetching reviews: $e');
+    }
+  }
+
+  List<Map<String, dynamic>> reviews = []; // List to hold reviews
+
+  @override
+  void initState() {
+    super.initState();
+    fetchReviewsAndCalculateAverageRating(
+      Provider.of<CartModel>(context, listen: false).shopItems[widget.index]
+          ['product_id'],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,48 +90,28 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     //     .where((item) => item['product_id'] == product['product_id'])
     //     .toList();
 
-    //sample review data
-    final reviews = [
-      {
-        'username': 'John Doe',
-        'reviewText': 'This product is really awesome!',
-        'rating': 4,
-      },
-      {
-        'username': 'Jane Doe',
-        'reviewText': 'I love this product!',
-        'rating': 5,
-      },
-      {
-        'username': 'Bob Smith',
-        'reviewText': 'This product is okay.',
-        'rating': 3,
-      },
-      {
-        'username': 'Alice Johnson',
-        'reviewText': 'Not what I expected.',
-        'rating': 2,
-      },
-    ];
-
     return Scaffold(
       appBar: const CustomAppBarForDetailPage(),
-      body: Column(
-        children: [
+      body: Container(
+        color: Colors.grey.shade100,
+        child: Column(children: [
           Expanded(
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Center(
-                    child: SizedBox(
-                      child: Image.network(
-                        product['product_thumbnail'],
-                        width: double.infinity, // Take whole width
-                        height: MediaQuery.of(context).size.height * 0.3,
-                        fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) =>
-                            const Icon(Icons.error),
+                  Container(
+                    color: Colors.white,
+                    child: Center(
+                      child: SizedBox(
+                        child: Image.network(
+                          product['product_thumbnail'],
+                          width: double.infinity, // Take whole width
+                          height: MediaQuery.of(context).size.height * 0.3,
+                          fit: BoxFit.contain,
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Icon(Icons.error),
+                        ),
                       ),
                     ),
                   ),
@@ -111,10 +136,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         Builder(builder: (context) {
                           return Row(
                             children: <Widget>[
-                              const Expanded(
+                              Expanded(
                                 child: IconTheme(
-                                  data: IconThemeData(),
-                                  child: StarDisplay(value: 4),
+                                  data: const IconThemeData(),
+                                  child: StarDisplay(value: averageRating),
                                 ),
                               ),
                               Container(
@@ -267,16 +292,38 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           ),
                         ),
                         const SizedBox(height: 16),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Reviews',
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            ProductReview(reviews: reviews),
-                          ],
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(18),
+                            color: Colors.white,
+                          ),
+                          padding: const EdgeInsets.only(top: 8, bottom: 8),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Text(
+                                'Reviews',
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              ProductReview(
+                                reviews: showAllReviews
+                                    ? reviews
+                                    : reviews.take(3).toList(),
+                              ),
+                              if (reviews.length > 3)
+                                TextButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      showAllReviews = !showAllReviews;
+                                    });
+                                  },
+                                  child: Text(
+                                    showAllReviews ? 'Show Less' : 'Show More',
+                                  ),
+                                ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -321,7 +368,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                   backgroundColor: Colors.transparent,
                                   elevation: 0,
                                   child: Container(
-                                    padding: EdgeInsets.all(16.0),
+                                    padding: const EdgeInsets.all(16.0),
                                     decoration: BoxDecoration(
                                       color: Colors.transparent,
                                       borderRadius: BorderRadius.circular(8.0),
@@ -340,12 +387,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 );
                               },
                             );
-                            Future.delayed(Duration(seconds: 1), () {
+                            Future.delayed(const Duration(seconds: 1), () {
                               Navigator.pop(context);
                             });
-                          }
-
-                          else {
+                          } else {
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -353,7 +398,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                   backgroundColor: Colors.transparent,
                                   elevation: 0,
                                   child: Container(
-                                    padding: EdgeInsets.all(16.0),
+                                    padding: const EdgeInsets.all(16.0),
                                     decoration: BoxDecoration(
                                       color: Colors.transparent,
                                       borderRadius: BorderRadius.circular(8.0),
@@ -372,7 +417,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 );
                               },
                             );
-                            Future.delayed(Duration(seconds: 1), () {
+                            Future.delayed(const Duration(seconds: 1), () {
                               Navigator.pop(context);
                             });
                           }
@@ -384,7 +429,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 backgroundColor: Colors.transparent,
                                 elevation: 0,
                                 child: Container(
-                                  padding: EdgeInsets.all(16.0),
+                                  padding: const EdgeInsets.all(16.0),
                                   decoration: BoxDecoration(
                                     color: Colors.transparent,
                                     borderRadius: BorderRadius.circular(8.0),
@@ -394,7 +439,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                     children: [
                                       AwesomeSnackbarContent(
                                         title: "Oh no!",
-                                        message: "Please select options first!!",
+                                        message:
+                                            "Please select options first!!",
                                         contentType: ContentType.failure,
                                       ),
                                     ],
@@ -403,7 +449,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               );
                             },
                           );
-                          Future.delayed(Duration(seconds: 1), () {
+                          Future.delayed(const Duration(seconds: 1), () {
                             Navigator.pop(context);
                           });
                         }
@@ -452,9 +498,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               ],
             ),
           ),
-        ],
+        ]),
       ),
     );
   }
-
 }
