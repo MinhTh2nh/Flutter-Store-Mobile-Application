@@ -63,8 +63,8 @@ class _SignUpFormState extends State<SignUpForm> {
         Map<String, dynamic> data = json.decode(response.body);
         String token = data['token'];
         await storage.write(key: 'auth_token', value: token);
-        await storage.write(key: 'email', value: email);
-        await storage.write(key: 'password', value: password);
+        await storage.write(key: 'email', value: emailController.text);
+        await storage.write(key: 'password', value: passwordController.text);
         Navigator.pushReplacementNamed(context, '/sign_in');
       } else {
         print('Error response body: ${response.body}');
