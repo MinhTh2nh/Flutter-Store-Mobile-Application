@@ -61,7 +61,6 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
   }
 
   @override
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Category Detail')),
@@ -397,6 +396,9 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                         fontWeight: FontWeight.bold, // Use FontWeight.bold for bold text
                       ),
                     ),
+                    onTap: () {
+                      showModalEditItemForm(context, _sub_categories[index]);
+                    },
                   );
                 },
               ),
@@ -437,6 +439,93 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
     );
   }
 
+  Future<void> showModalEditItemForm(BuildContext context, dynamic subCategory) async {
+    final TextEditingController _editSubNameController = TextEditingController(text: subCategory['sub_name']);
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true, // Ensure the modal sheet occupies the full height
+      builder: (context) {
+        return SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+              left: 20.0,
+              right: 20.0,
+              top: 20.0,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 15),
+                TextFormField(
+                  controller: _editSubNameController,
+                  decoration: InputDecoration(
+                    labelText: 'Sub-category Name',
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.text,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter name';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 15),
+                ElevatedButton(
+                  onPressed: () async {
+                    final formData = {
+                      "sub_name": _editSubNameController.text,
+                      "category_id" : subCategory['category_id'],
+                  };
+                    final response = await http.put(
+                      Uri.parse("https://flutter-store-mobile-application-backend.onrender.com/products/update/sub_category/${subCategory['sub_id']}"),
+                      body: jsonEncode(formData),
+                      headers: {'Content-Type': 'application/json'},
+                    );
 
-
+                    if (response.statusCode == 200) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Sub-category updated successfully!'),
+                          duration: Duration(seconds: 2),
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                      Navigator.of(context).pop();
+                      fetchSubCategories(widget.index); // Refresh the sub-categories list
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Failed to update sub-category: ${response.statusCode}'),
+                          duration: Duration(seconds: 2),
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.teal.shade200,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(0),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Text(
+                      'Update',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 }

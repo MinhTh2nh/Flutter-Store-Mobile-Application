@@ -1,14 +1,14 @@
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:food_mobile_app/admin-pages/orders/orders.dart';
 import 'package:http/http.dart' as http;
-import 'package:food_mobile_app/admin-pages/home/small_components/overall_portfolio_card.dart';
-import 'package:food_mobile_app/admin-pages/products/products.dart';
+import 'package:provider/provider.dart';
+import 'package:fl_chart/fl_chart.dart';
 import '../../components/slide_menu.dart';
 import '../../components/custome_app_bar/custom_app_bar_admin.dart';
 import '../../model/cart_model.dart';
-import 'package:provider/provider.dart';
-import 'package:fl_chart/fl_chart.dart';
+import '../products/products.dart';
+import 'small_components/overall_portfolio_card.dart';
 
 class AdminHomePage extends StatefulWidget {
   const AdminHomePage({Key? key}) : super(key: key);
@@ -24,6 +24,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
   List<dynamic> _orderLists = [];
   double _estimatedRevenue = 0.0;
   double _realRevenue = 0.0;
+  bool _isLoading = true;
 
   final String pathUser =
       "https://flutter-store-mobile-application-backend.onrender.com/users/get";
@@ -33,14 +34,20 @@ class _AdminHomePageState extends State<AdminHomePage> {
   @override
   void initState() {
     super.initState();
-    fetchCustomers();
-    fetchOrders();
+    fetchData();
     scrollController.addListener(() {
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
         // Assuming CartModel fetchProducts method is defined correctly.
         Provider.of<CartModel>(context, listen: false).fetchProducts();
       }
+    });
+  }
+
+  Future<void> fetchData() async {
+    await Future.wait([fetchCustomers(), fetchOrders()]);
+    setState(() {
+      _isLoading = false;
     });
   }
 
@@ -115,7 +122,9 @@ class _AdminHomePageState extends State<AdminHomePage> {
     return Scaffold(
       appBar: CustomAppBar(),
       drawer: SideMenu(),
-      body: SingleChildScrollView(
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
         controller: scrollController,
         padding: const EdgeInsets.symmetric(vertical: 16),
         child: Column(
@@ -241,9 +250,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
                         ],
                       ),
                     ),
-                    onPress: () {
-                      // Add your navigation logic here for Orders
-                    },
+                    onPress: () => Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (_) => AdminOrderPage())),
                   ),
                 ),
               ],
@@ -253,27 +261,27 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 estimatedRevenue: _estimatedRevenue, realRevenue: _realRevenue),
             SizedBox(height: 20),
             _buildTile(
-              Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Expanded(
-                      child: Center(
-                        child: Text(
-                          'Summary Products',
-                          style: TextStyle(
-                            fontSize: 26.0,
-                            color: Colors.redAccent,
-                            fontWeight: FontWeight.bold,
+                Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Expanded(
+                        child: Center(
+                          child: Text(
+                            'Summary Products',
+                            style: TextStyle(
+                              fontSize: 26.0,
+                              color: Colors.redAccent,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ), onPress: () {  }
+                    ],
+                  ),
+                ), onPress: () {  }
             ),
             Padding(
               padding: const EdgeInsets.all(20.0),
@@ -308,7 +316,6 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 ],
               ),
             ),
-
           ],
         ),
       ),

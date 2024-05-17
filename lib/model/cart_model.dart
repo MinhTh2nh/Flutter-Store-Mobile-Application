@@ -9,13 +9,15 @@ class CartModel extends ChangeNotifier {
   final List _cartItems = [];
   List _productItems = [];
   List _categories = [];
-  List _subCategories = [];
+  List _orders = [];
+
   int _page = 1;
   bool _isLoading = false;
 
   bool get isLoading => _isLoading;
 
   CartModel() {
+    fetchOrders();
     _shopItems = [];
     fetchCategories();
     fetchProducts();
@@ -24,11 +26,12 @@ class CartModel extends ChangeNotifier {
   List get cartItems => _cartItems;
   List get shopItems => _shopItems;
   List get categories => _categories;
+  List get orders => _orders;
   List get productItems => _productItems;
 
   int get itemsCount => _cartItems.length;
 
-  void fetchProducts() async {
+  Future<void> fetchProducts() async {
     if (_isLoading) return; // If a request is already in progress, do nothing
 
     _isLoading = true; // Set loading state to true
@@ -65,7 +68,7 @@ class CartModel extends ChangeNotifier {
 
   Future<void> fetchCategories() async {
     final url = Uri.parse(
-        'https://flutter-store-mobile-application-backend.onrender.com/products/get/category/categoryList');
+          'https://flutter-store-mobile-application-backend.onrender.com/products/get/category/categoryList');
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
@@ -76,6 +79,25 @@ class CartModel extends ChangeNotifier {
       }
     } catch (error) {
       print('Error fetching categories: $error');
+    }
+  }
+
+  Future<void> fetchOrders() async {
+    final url = Uri.parse(
+        'https://flutter-store-mobile-application-backend.onrender.com/orders/get'
+    );
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final List<dynamic> orders = json.decode(response.body)['data'];
+        _orders = orders;
+        print(orders);
+        notifyListeners(); // Notify listeners after updating the orders list
+      } else {
+        throw Exception('Failed to fetch orders: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error fetching orders: $error');
     }
   }
 

@@ -143,9 +143,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               _selectedCategory?['category_id']?.toString() ?? '';
           _productSubCategoryController.text =
               _selectedSubCategory?['sub_id']?.toString() ?? '';
-          print(_selectedSubCategory);
-          print("Fetched from server responseData['sub_id'] :" +
-              responseData['sub_id'].toString());
 
           // Set data loaded flag
           _isDataLoaded = true;
@@ -589,6 +586,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               List items = snapshot.data as List;
               return SingleChildScrollView(
                 child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0), // Add horizontal padding
                   constraints: BoxConstraints(
                     maxHeight: MediaQuery.of(context).size.height * 0.8,
                   ),
@@ -616,6 +614,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                   fontWeight: FontWeight.bold, // Use FontWeight.bold for bold text
                                 ),
                               ),
+                              onTap: () {
+                                showModalEditItemForm(context, items[index]);
+                              },
                             );
                           },
                         ),
@@ -973,6 +974,97 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         Navigator.pop(context);
       });
     }
+  }
+
+  Future<void> showModalEditItemForm(BuildContext context, dynamic item) async {
+    final TextEditingController _editItemController = TextEditingController(text: item['stock'].toString());
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true, // Ensure the modal sheet occupies the full height
+      builder: (context) {
+        return SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+              left: 20.0,
+              right: 20.0,
+              top: 20.0,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 15),
+                TextFormField(
+                  controller: _editItemController,
+                  decoration: InputDecoration(
+                    labelText: 'Item Stock',
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter stock';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 15),
+                ElevatedButton(
+                  onPressed: () async {
+                    final formData = {
+                      "stock": _editItemController.text,
+                      "product_id": item['product_id'],
+                      "size_id": item['size_id']
+                    };
+                    final response = await http.put(
+                      Uri.parse("https://flutter-store-mobile-application-backend.onrender.com/products/update/product/item/${item['item_id']}"),
+                      body: jsonEncode(formData),
+                      headers: {'Content-Type': 'application/json'},
+                    );
+
+                    if (response.statusCode == 200) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Item updated successfully!'),
+                          duration: Duration(seconds: 2),
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                      Navigator.of(context).pop();
+                      fetchProductItems(widget.index); // Refresh the sub-categories list
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Failed to update Item stock: ${response.statusCode}'),
+                          duration: Duration(seconds: 2),
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.teal.shade200,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(0),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Text(
+                      'Update',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
 }
