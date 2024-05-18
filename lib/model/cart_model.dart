@@ -47,8 +47,6 @@ class CartModel extends ChangeNotifier {
 
         // Update _shopItems with fetched products
         _shopItems = products;
-        // Print fetched products
-        // print('Fetched products: $_shopItems');
 
         // Notify listeners of the change
         notifyListeners();
@@ -91,7 +89,6 @@ class CartModel extends ChangeNotifier {
       if (response.statusCode == 200) {
         final List<dynamic> orders = json.decode(response.body)['data'];
         _orders = orders;
-        print(orders);
         notifyListeners(); // Notify listeners after updating the orders list
       } else {
         throw Exception('Failed to fetch orders: ${response.statusCode}');

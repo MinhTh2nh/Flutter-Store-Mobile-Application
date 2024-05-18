@@ -47,6 +47,9 @@ dependencies:
   fl_chart: ^0.68.0
   awesome_snackbar_content: ^0.1.3
   file_picker: ^8.0.3
+  googleapis_auth: ^1.6.0
+  gcloud: ^0.8.12
+  mime: ^1.0.5
 
 dev_dependencies:
   flutter_test:
@@ -75,6 +78,7 @@ flutter:
   assets:
     - lib/images/
     - lib/images/icons/
+    - assets/credentials.json
 flutter_icons:
   image_path: "lib/images/icons/logo-png.png"
   android: true

@@ -301,11 +301,10 @@ class _AdminOrderPageState extends State<AdminOrderPage> {
   }
 
   void _showOrderDetail(int orderId) {
-    // Navigate to a new page or show a dialog to display order details and update options
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => OrderDetailPage(orderId: orderId),
+        builder: (context) => OrderDetailPage(orderId: orderId, onUpdate: updateOrderList),
       ),
     );
   }

@@ -40,19 +40,23 @@ class ProductTile extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.network(
-              product_thumbnail,
-              width: double.infinity, // Take whole width
-              height: MediaQuery.of(context).size.height * 0.15,
-              fit: BoxFit.contain,
-              errorBuilder: (BuildContext context, Object exception,
-                  StackTrace? stackTrace) {
-                // You can return an error image or a placeholder here
-                return Image.asset(
-                  'lib/images/blank.png',
-                  fit: BoxFit.contain,
-                );
-              },
+            Padding(
+              padding:
+              const EdgeInsets.all(5), // Add padding
+              child:  Image.network(
+                product_thumbnail,
+                width: double.infinity, // Take whole width
+                height: MediaQuery.of(context).size.height * 0.14,
+                fit: BoxFit.cover,
+                errorBuilder: (BuildContext context, Object exception,
+                    StackTrace? stackTrace) {
+                  // You can return an error image or a placeholder here
+                  return Image.asset(
+                    'lib/images/blank.png',
+                    fit: BoxFit.cover,
+                  );
+                },
+              ),
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,

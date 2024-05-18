@@ -7,6 +7,7 @@ import '../../components/product_tile.dart';
 import '../../model/cart_model.dart';
 import 'package:provider/provider.dart';
 import '../products/product_detail_page.dart';
+import './api.dart';
 
 class AdminProductPage extends StatefulWidget {
   const AdminProductPage({super.key});
@@ -82,6 +83,7 @@ class _AdminProductPageState extends State<AdminProductPage> {
                 if (cartModel.shopItems.isEmpty) {
                   return const Center(child: CircularProgressIndicator());
                 }
+                cartModel.shopItems.sort((a, b) => a['product_id'].compareTo(b['product_id']));
                 return GridView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
@@ -100,24 +102,19 @@ class _AdminProductPageState extends State<AdminProductPage> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => ProductDetailPage(
-                              index: index,
-                              // ProductDetailPage(index: product['product_id'],
-                              // Pass the callback function to the ProductDetailPage
+                              index: product['product_id'],
                               onUpdate: updateProductList,
                             ),
                           ),
                         );
                       },
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 5),
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Container(
                           decoration: BoxDecoration(
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 5, vertical: 5),
                             child: Stack(
                               children: [
                                 ProductTile(
@@ -144,7 +141,6 @@ class _AdminProductPageState extends State<AdminProductPage> {
                             ),
                           ),
                         ),
-                      ),
                     );
                   },
                 );

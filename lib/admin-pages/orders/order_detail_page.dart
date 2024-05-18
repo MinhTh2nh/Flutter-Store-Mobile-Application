@@ -10,12 +10,14 @@ import '../../components/buttons.dart';
 
 class OrderDetailPage extends StatefulWidget {
   final int orderId;
+  final void Function() onUpdate;
 
-  const OrderDetailPage({Key? key, required this.orderId}) : super(key: key);
+  const OrderDetailPage({Key? key, required this.orderId, required this.onUpdate}) : super(key: key);
 
   @override
   _OrderDetailPageState createState() => _OrderDetailPageState();
 }
+
 
 class _OrderDetailPageState extends State<OrderDetailPage> {
   late Future<Order> _orderFuture;
@@ -44,8 +46,12 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     }
   }
 
+  void _handleUpdate() {
+    widget.onUpdate();
+  }
+
   Future<void> _updateOrderStatus() async {
-    var path = "https://flutter-store-mobile-application-backend.onrender.com/orders/updateStatus/${widget.orderId}";
+    var path = "https://flutter-store-mobile-application-backend.onrender.com/orders/update/${widget.orderId}/status";
     try {
       final response = await http.put(
         Uri.parse(path),
@@ -58,8 +64,11 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           _orderFuture = fetchOrderDetails(widget.orderId);
         });
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Order status updated successfully.')));
-      } else {
+        _handleUpdate();
+
+    } else {
         throw Exception('Failed to update order status: ${response.statusCode}');
+        _handleUpdate();
       }
     } catch (error) {
       print('Error updating order status: $error');
@@ -113,36 +122,42 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                             fontSize: 18,
                           ),
                         ),
-                        trailing: DropdownButton<String>(
-                          value: selectedStatus,
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              selectedStatus = newValue;
-                            });
-                          },
-                          items: <String>[
-                            'pending',
-                            'delivering',
-                            'successful',
-                            'cancelled',
-                            'processing',
-                          ].map((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  value[0].toUpperCase() + value.substring(1),
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
+                        trailing:
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.teal.shade200,
+                          ),
+                          child:  DropdownButton<String>(
+                            value: selectedStatus,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedStatus = newValue;
+                              });
+                            },
+                            items: <String>[
+                              'pending',
+                              'delivering',
+                              'successful',
+                              'cancelled',
+                              'processing',
+                            ].map((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    value[0].toUpperCase() + value.substring(1),
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          }).toList(),
-                          style: TextStyle(color: Colors.black),
-                          dropdownColor: Colors.grey.shade200,
+                              );
+                            }).toList(),
+                            style: TextStyle(color: Colors.black),
+                            dropdownColor: Colors.grey.shade200,
+                          ),
                         ),
                       ),
                     ),
