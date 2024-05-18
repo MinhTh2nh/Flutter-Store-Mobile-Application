@@ -54,7 +54,6 @@ class ProductTile extends StatelessWidget {
                 );
               },
             ),
-            const SizedBox(height: 12),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -90,7 +89,7 @@ class ProductTile extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(8), // Add padding
+                  padding: const EdgeInsets.all(4), // Add padding
                   child: Row(
                     children: [
                       const Icon(Icons.star, color: Colors.amber, size: 16),

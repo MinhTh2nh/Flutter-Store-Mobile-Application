@@ -296,7 +296,6 @@ class _ProductCreationFormState extends State<ProductCreationForm> {
         "total_stock": 0,
         "status": "Available",
       };
-
       final response = await http.post(
         Uri.parse("https://flutter-store-mobile-application-backend.onrender.com/products/create"),
         body: jsonEncode(formData),
