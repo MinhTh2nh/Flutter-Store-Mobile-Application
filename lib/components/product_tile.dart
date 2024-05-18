@@ -30,6 +30,9 @@ class ProductTile extends StatelessWidget {
     double roundedRating = _roundRating(average_rating);
 
     return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
       margin: const EdgeInsets.only(bottom: 10), // Add margin bottom
       child: Material(
         elevation: 3, // Add elevation for shadow effect

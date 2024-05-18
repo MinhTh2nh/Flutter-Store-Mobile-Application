@@ -44,14 +44,16 @@ class CartPage extends StatelessWidget {
             );
           } else {
             return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24.0),
-                  child: Text(
-                    "My Cart",
-                    style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
-                  ),
+                const Text(
+                  "My Cart",
+                  style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+                ),
+                const Text(
+                  'SWIPE left to remove item from cart',
+                  style: TextStyle(color: Colors.red),
+                  textAlign: TextAlign.center,
                 ),
                 Expanded(
                   child: Padding(
@@ -89,19 +91,65 @@ class CartPage extends StatelessWidget {
                                     ),
                                     subtitle: Column(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          '\$${cartItem['product_price']}',
-                                          style: const TextStyle(fontSize: 12),
-                                        ),
-                                        Text(
-                                          'Quantity: ${cartItem['quantity']}',
-                                          style: const TextStyle(fontSize: 12),
-                                        ),
-                                        Text(
-                                          'Size: ${cartItem['selectedSize']}',
-                                          style: const TextStyle(fontSize: 12),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  'Size: ${cartItem['selectedSize']}',
+                                                  style: const TextStyle(
+                                                      fontSize: 12),
+                                                ),
+                                                Text(
+                                                  '\$${cartItem['product_price']}',
+                                                  style: const TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ],
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                IconButton(
+                                                  icon:
+                                                      const Icon(Icons.remove),
+                                                  onPressed: () {
+                                                    Provider.of<CartModel>(
+                                                            context,
+                                                            listen: false)
+                                                        .decreaseQuantity(
+                                                            index);
+                                                  },
+                                                ),
+                                                Text(
+                                                  '${cartItem['quantity']}',
+                                                  style: const TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                IconButton(
+                                                  icon: const Icon(Icons.add),
+                                                  onPressed: () {
+                                                    Provider.of<CartModel>(
+                                                            context,
+                                                            listen: false)
+                                                        .increaseQuantity(
+                                                            index);
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
@@ -191,8 +239,8 @@ class CartPage extends StatelessWidget {
   Widget stackBehindDismiss() {
     return Container(
       color: Colors.red,
-      child: Padding(
-        padding: const EdgeInsets.all(15),
+      child: const Padding(
+        padding: EdgeInsets.all(15),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [

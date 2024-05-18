@@ -100,7 +100,8 @@ class _AdminProductPageState extends State<AdminProductPage> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => ProductDetailPage(
-                              index: product['product_id'],
+                              index: index,
+                              // ProductDetailPage(index: product['product_id'],
                               // Pass the callback function to the ProductDetailPage
                               onUpdate: updateProductList,
                             ),
