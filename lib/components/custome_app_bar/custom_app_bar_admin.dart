@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:food_mobile_app/admin-pages/profile_admin/profile_admin.dart';
 import 'package:provider/provider.dart'; // Import Provider package
 import '../../model/cart_model.dart';
-import '../../pages/cart_page.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
   const CustomAppBar({super.key});
