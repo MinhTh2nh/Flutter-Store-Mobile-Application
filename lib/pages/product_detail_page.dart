@@ -61,16 +61,16 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   @override
   void initState() {
     super.initState();
-    fetchReviewsAndCalculateAverageRating(
-      Provider.of<CartModel>(context, listen: false).shopItems[widget.index]
-          ['product_id'],
-    );
+    final productId = Provider.of<CartModel>(context, listen: false)
+        .shopItems[widget.index - 1]['product_id'];
+    fetchReviewsAndCalculateAverageRating(productId);
   }
+
 
   @override
   Widget build(BuildContext context) {
     final cartModel = Provider.of<CartModel>(context);
-    final product = cartModel.shopItems[widget.index];
+    final product = cartModel.shopItems[widget.index-1];
     // Fetch product items when building the widget
     // ignore: no_leading_underscores_for_local_identifiers
     Future<void> _fetchProductItems(int productId) async {
@@ -78,12 +78,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     }
 
     // Call _fetchProductItems when the widget initializes
-    _fetchProductItems(cartModel.shopItems[widget.index]['product_id']);
+    _fetchProductItems(cartModel.shopItems[widget.index-1]['product_id']);
 
     final productItems = cartModel.productItems
         .where((item) =>
             item['product_id'] ==
-            cartModel.shopItems[widget.index]['product_id'])
+            cartModel.shopItems[widget.index-1]['product_id'])
         .toList();
 
     // final productItems = cartModel.productItems
@@ -107,8 +107,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         child: Image.network(
                           product['product_thumbnail'],
                           width: double.infinity, // Take whole width
-                          height: MediaQuery.of(context).size.height * 0.3,
-                          fit: BoxFit.contain,
+                          height: MediaQuery.of(context).size.height * 0.5,
+                          fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) =>
                               const Icon(Icons.error),
                         ),
