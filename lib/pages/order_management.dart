@@ -148,7 +148,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                 ],
                               ),
                             ),
-                            if (order.orderStatus == 'Successful')
+                            if (order.orderStatus == 'successful')
                               SizedBox(
                                 width: double.infinity,
                                 child: TextButton(
@@ -253,15 +253,15 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
 Color _getStatusColor(String status) {
   switch (status) {
-    case 'Pending':
+    case 'pending':
       return Colors.orange;
-    case 'Delivering':
+    case 'delivering':
       return Colors.blue;
-    case 'Successful':
+    case 'successful':
       return Colors.green;
-    case 'Cancelled':
+    case 'cancelled':
       return Colors.red;
-    case 'Processing':
+    case 'processing':
       return Colors.purple;
     default:
       return Colors.grey;

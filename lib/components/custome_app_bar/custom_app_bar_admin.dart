@@ -81,8 +81,9 @@ class _CustomAppBarState extends State<CustomAppBar> {
                     suffixIconConstraints: sizeIcon,
                     border: InputBorder.none,
                     filled: true,
-                    fillColor:
-                    _searchFocusNode.hasFocus ? Colors.white : Colors.transparent,
+                    fillColor: _searchFocusNode.hasFocus
+                        ? Colors.white
+                        : Colors.transparent,
                   ),
                   onChanged: (value) {
                     setState(() {});
@@ -111,7 +112,6 @@ class _CustomAppBarState extends State<CustomAppBar> {
                     Navigator.pushNamed(context, AdminProfilePage.routeName);
                   },
                   icon: const Icon(Icons.person),
-
                 ),
               ],
             );

@@ -13,17 +13,20 @@ class Products extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scrollController = ScrollController(); // Add this line
+    final scrollController = ScrollController();
 
     scrollController.addListener(() {
-      // Add this block
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
         Provider.of<CartModel>(context, listen: false).fetchProducts();
       }
     });
+
+    final hasSearchResults =
+        Provider.of<CartModel>(context).searchResults.isNotEmpty;
+
     return Scaffold(
-      appBar: const CustomAppBar(),
+      appBar: hasSearchResults ? _buildAppBar(context) : const CustomAppBar(),
       body: SingleChildScrollView(
         controller: scrollController,
         child: Column(
@@ -33,20 +36,25 @@ class Products extends StatelessWidget {
             const SizedBox(height: 12),
             Consumer<CartModel>(
               builder: (context, cartModel, child) {
-                if (cartModel.shopItems.isEmpty) {
+                final items = hasSearchResults
+                    ? cartModel.searchResults
+                    : cartModel.shopItems;
+
+                if (items.isEmpty) {
                   // Display loading indicator until products are fetched
                   return const Center(child: CircularProgressIndicator());
                 }
+
                 return GridView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: cartModel.shopItems.length,
+                  itemCount: items.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     childAspectRatio: 1 / 1.1,
                   ),
                   itemBuilder: (context, index) {
-                    var product = cartModel.shopItems[index];
+                    var product = items[index];
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -58,24 +66,18 @@ class Products extends StatelessWidget {
                         );
                       },
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: ProductTile(
-                            product_name: product['product_name'],
-                            product_price: product["product_price"].toString(),
-                            product_thumbnail: product["product_thumbnail"],
-                            total_stock: product['total_stock'],
-                            average_rating: product['average_rating'] != 0
-                                ? product['average_rating']
-                                : 0.0,
-
-                            // Inside the GridView.builder itemBuilder
-                            onPressed: () => {},
-                          ),
+                        // padding: const EdgeInsets.symmetric(
+                        //     horizontal: 5, vertical: 5),
+                        padding: const EdgeInsets.all(5),
+                        child: ProductTile(
+                          product_name: product['product_name'],
+                          product_price: product["product_price"].toString(),
+                          product_thumbnail: product["product_thumbnail"],
+                          total_stock: product['total_stock'],
+                          average_rating: product['average_rating'] != 0
+                              ? product['average_rating']
+                              : 0.0,
+                          onPressed: () => {},
                         ),
                       ),
                     );
@@ -86,6 +88,20 @@ class Products extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  AppBar _buildAppBar(BuildContext context) {
+    return AppBar(
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back),
+        onPressed: () {
+          // final cartModel = Provider.of<CartModel>(context, listen: false);
+          // cartModel.clearSearchResults();
+          Navigator.pop(context);
+        },
+      ),
+      title: const Text('Products'),
     );
   }
 }

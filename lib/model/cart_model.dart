@@ -149,12 +149,20 @@ class CartModel extends ChangeNotifier {
     }
   }
 
-  List<String> _mockSearch(String query) {
-    List<String> allItems =
-        _shopItems.map((item) => item['product_name'].toString()).toList();
+  List<Map<String, dynamic>> _mockSearch(String query) {
+    List<Map<String, dynamic>> allItems =
+        _shopItems.cast<Map<String, dynamic>>().toList();
     return allItems
-        .where((item) => item.toLowerCase().contains(query.toLowerCase()))
+        .where((item) =>
+            item['product_name'].toLowerCase().contains(query.toLowerCase()))
         .toList();
+  }
+
+  void clearSearchResults() {
+    Future.microtask(() {
+      _searchResults.clear();
+      notifyListeners();
+    });
   }
 
   void addItemToCartWithQuantity(
