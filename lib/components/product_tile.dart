@@ -45,13 +45,13 @@ class ProductTile extends StatelessWidget {
             product_thumbnail,
             width: double.infinity, // Take whole width
             height: MediaQuery.of(context).size.height * 0.15,
-            fit: BoxFit.contain,
+            fit: BoxFit.cover,
             errorBuilder: (BuildContext context, Object exception,
                 StackTrace? stackTrace) {
               // You can return an error image or a placeholder here
               return Image.asset(
                 'lib/images/blank.png',
-                fit: BoxFit.contain,
+                fit: BoxFit.cover,
               );
             },
           ),
@@ -69,40 +69,45 @@ class ProductTile extends StatelessWidget {
               ),
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 8), // Add padding
+                    const EdgeInsets.symmetric(horizontal: 0), // Add padding
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      '\$$product_price',
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      'Available: $total_stock',
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    Padding(
+                      padding: const EdgeInsets.all(4), // Add padding
+                      child: Row(
+                        children: [
+                          const Icon(Icons.star, color: Colors.amber, size: 16),
+                          Text(
+                            roundedRating.toStringAsFixed(1),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
-                ),
+                )
+                ,
               ),
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(4), // Add padding
-                child: Row(
-                  children: [
-                    const Icon(Icons.star, color: Colors.amber, size: 16),
-                    Text(
-                      roundedRating.toStringAsFixed(1),
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ],
+          Padding(
+            padding:
+            const EdgeInsets.symmetric(horizontal: 8), // Add padding
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '\$$product_price',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-              ),
-            ],
-          )
+                Text(
+                  'Available: $total_stock',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

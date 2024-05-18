@@ -138,6 +138,9 @@ class CartModel extends ChangeNotifier {
 
       _searchResults = _mockSearch(query);
 
+      // Sort the search results by product_id
+      _searchResults.sort((a, b) => a['product_id'].compareTo(b['product_id']));
+
       notifyListeners();
     } catch (error) {
       print('Error searching: $error');
@@ -148,10 +151,10 @@ class CartModel extends ChangeNotifier {
 
   List<Map<String, dynamic>> _mockSearch(String query) {
     List<Map<String, dynamic>> allItems =
-        _shopItems.cast<Map<String, dynamic>>().toList();
+    _shopItems.cast<Map<String, dynamic>>().toList();
     return allItems
         .where((item) =>
-            item['product_name'].toLowerCase().contains(query.toLowerCase()))
+        item['product_name'].toLowerCase().contains(query.toLowerCase()))
         .toList();
   }
 

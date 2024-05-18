@@ -92,6 +92,8 @@ class _SearchScreenState extends State<SearchScreen> {
           : ListView.builder(
               itemCount: cartModel.searchResults.length,
               itemBuilder: (context, index) {
+                var product = cartModel.searchResults[index];
+
                 return Padding(
                   padding: const EdgeInsets.symmetric(
                       vertical: 4.0, horizontal: 8.0),
@@ -101,15 +103,16 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
                     elevation: 4,
                     child: ListTile(
-                      title:
-                          Text(cartModel.searchResults[index]['product_name']),
+                      title: Text(product['product_name']),
                       onTap: () {
                         // Navigate to the product detail page with the selected product index
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
-                                ProductDetailPage(index: index),
+                                ProductDetailPage(
+                                  index: product['product_id'],
+                                ),
                           ),
                         );
                       },
