@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -49,7 +51,7 @@ class _SignUpFormState extends State<SignUpForm> {
       const String apiUrl =
           'https://flutter-store-mobile-application-backend.onrender.com/users/register';
       final response = await http.post(
-        Uri.parse('$apiUrl'),
+        Uri.parse(apiUrl),
         headers: {
           'Content-Type': 'application/json',
         },

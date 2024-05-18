@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, avoid_print
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:food_mobile_app/admin-pages/orders/orders.dart';
@@ -11,7 +13,7 @@ import '../products/products.dart';
 import 'small_components/overall_portfolio_card.dart';
 
 class AdminHomePage extends StatefulWidget {
-  const AdminHomePage({Key? key}) : super(key: key);
+  const AdminHomePage({super.key});
   static String routeName = "/admin";
 
   @override
@@ -129,7 +131,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
         padding: const EdgeInsets.symmetric(vertical: 16),
         child: Column(
           children: [
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             _buildTile(
               Padding(
                 padding: const EdgeInsets.all(24.0),
@@ -143,10 +145,10 @@ class _AdminHomePageState extends State<AdminHomePage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text('Shop Items',
+                            const Text('Shop Items',
                                 style: TextStyle(color: Colors.redAccent)),
                             Text('${cartModel.shopItems.length}',
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.w700,
                                     fontSize: 34.0)),
@@ -157,7 +159,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                     Material(
                       color: Colors.blue,
                       borderRadius: BorderRadius.circular(24.0),
-                      child: Center(
+                      child: const Center(
                         child: Padding(
                           padding: EdgeInsets.all(16.0),
                           child: Icon(Icons.store,
@@ -169,9 +171,9 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 ),
               ),
               onPress: () => Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (_) => AdminProductPage())),
+                  .push(MaterialPageRoute(builder: (_) => const AdminProductPage())),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Row(
               children: [
                 Expanded(
@@ -186,10 +188,10 @@ class _AdminHomePageState extends State<AdminHomePage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text('Customers',
+                              const Text('Customers',
                                   style: TextStyle(color: Colors.redAccent)),
                               Text('${_userLists.length}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.w700,
                                       fontSize: 34.0)),
@@ -198,7 +200,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                           Material(
                             color: Colors.red,
                             borderRadius: BorderRadius.circular(24.0),
-                            child: Center(
+                            child: const Center(
                               child: Padding(
                                 padding: EdgeInsets.all(16.0),
                                 child: Icon(Icons.people,
@@ -214,7 +216,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                     },
                   ),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Expanded(
                   child: _buildTile(
                     Padding(
@@ -227,10 +229,10 @@ class _AdminHomePageState extends State<AdminHomePage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text('Total Orders',
+                              const Text('Total Orders',
                                   style: TextStyle(color: Colors.redAccent)),
                               Text('${_orderLists.length}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.w700,
                                       fontSize: 34.0)),
@@ -239,7 +241,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                           Material(
                             color: Colors.green,
                             borderRadius: BorderRadius.circular(24.0),
-                            child: Center(
+                            child: const Center(
                               child: Padding(
                                 padding: EdgeInsets.all(16.0),
                                 child: Icon(Icons.shopping_cart,
@@ -256,10 +258,10 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 ),
               ],
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             OverallPortfolioCard(
                 estimatedRevenue: _estimatedRevenue, realRevenue: _realRevenue),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _buildTile(
                 Padding(
                   padding: const EdgeInsets.all(5.0),
@@ -288,7 +290,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'By Category',
                     style: TextStyle(
                       fontSize: 20,
@@ -299,13 +301,13 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 ],
               ),
             ),
-            SizedBox(width: 16), // Add some space between the two columns
+            const SizedBox(width: 16), // Add some space between the two columns
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'By Sub-Category',
                     style: TextStyle(
                       fontSize: 20,
@@ -361,7 +363,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
 
     return Container(
       height: 200,
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: BarChart(
         BarChartData(
           barGroups: List.generate(categories.length, (index) {
@@ -415,7 +417,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
 
     return Container(
       height: 200,
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: BarChart(
         BarChartData(
           barGroups: List.generate(categories.length, (index) {
@@ -489,7 +491,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
     return Material(
       elevation: 14.0,
       borderRadius: BorderRadius.circular(12.0),
-      shadowColor: Color(0x802196F3),
+      shadowColor: const Color(0x802196F3),
       child: InkWell(
         onTap: onPress,
         child: child,

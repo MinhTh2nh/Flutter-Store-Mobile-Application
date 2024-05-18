@@ -309,15 +309,30 @@ class _AddressManagementState extends State<AddressManagement> {
                 return ListTile(
                   title: Text(deliveryAddresses[index].address),
                   subtitle: Text(deliveryAddresses[index].phoneNumber),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () {
-                      removeAddress(index);
-                    },
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      IconButton(
+                        icon: const Icon(Icons.edit),
+                        onPressed: () {
+                          _showAddOrUpdateDialog(
+                              address: deliveryAddresses[index]);
+                        },
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () {
+                          removeAddress(index);
+                        },
+                      ),
+                    ],
                   ),
                   onTap: () {
-                    print('cd_id: ${deliveryAddresses[index].cdId}');
-                    _showAddOrUpdateDialog(address: deliveryAddresses[index]);
+                    widget.onAddressSelected!(
+                      deliveryAddresses[index].address,
+                      deliveryAddresses[index].phoneNumber,
+                    );
+                    Navigator.pop(context);
                   },
                 );
               },
