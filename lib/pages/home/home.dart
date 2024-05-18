@@ -109,22 +109,18 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: ProductTile(
-                            product_name: product['product_name'],
-                            product_price: product["product_price"].toString(),
-                            product_thumbnail: product["product_thumbnail"],
-                            total_stock: product['total_stock'],
-                            average_rating: product['average_rating'] != 0
-                                ? product['average_rating']
-                                : 0.0,
-                            onPressed: () => {},
-                          ),
+                        // padding: const EdgeInsets.symmetric(horizontal: 10),
+                        padding: const EdgeInsets.all(5),
+
+                        child: ProductTile(
+                          product_name: product['product_name'],
+                          product_price: product["product_price"].toString(),
+                          product_thumbnail: product["product_thumbnail"],
+                          total_stock: product['total_stock'],
+                          average_rating: product['average_rating'] != 0
+                              ? product['average_rating']
+                              : 0.0,
+                          onPressed: () => {},
                         ),
                       ),
                     );

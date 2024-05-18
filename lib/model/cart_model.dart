@@ -10,6 +10,7 @@ class CartModel extends ChangeNotifier {
   List _productItems = [];
   List _categories = [];
   List _orders = [];
+  List _searchResults = [];
 
   int _page = 1;
   bool _isLoading = false;
@@ -28,6 +29,7 @@ class CartModel extends ChangeNotifier {
   List get categories => _categories;
   List get orders => _orders;
   List get productItems => _productItems;
+  List get searchResults => _searchResults;
 
   int get itemsCount => _cartItems.length;
 
@@ -68,7 +70,7 @@ class CartModel extends ChangeNotifier {
 
   Future<void> fetchCategories() async {
     final url = Uri.parse(
-          'https://flutter-store-mobile-application-backend.onrender.com/products/get/category/categoryList');
+        'https://flutter-store-mobile-application-backend.onrender.com/products/get/category/categoryList');
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
@@ -84,8 +86,7 @@ class CartModel extends ChangeNotifier {
 
   Future<void> fetchOrders() async {
     final url = Uri.parse(
-        'https://flutter-store-mobile-application-backend.onrender.com/orders/get'
-    );
+        'https://flutter-store-mobile-application-backend.onrender.com/orders/get');
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
@@ -129,6 +130,39 @@ class CartModel extends ChangeNotifier {
     } finally {
       _isLoading = false; // Set loading state to false
     }
+  }
+
+  Future<void> search(String query) async {
+    if (_isLoading) return;
+
+    _isLoading = true;
+    try {
+      await Future.delayed(const Duration(seconds: 1));
+
+      _searchResults = _mockSearch(query);
+
+      notifyListeners();
+    } catch (error) {
+      print('Error searching: $error');
+    } finally {
+      _isLoading = false;
+    }
+  }
+
+  List<Map<String, dynamic>> _mockSearch(String query) {
+    List<Map<String, dynamic>> allItems =
+        _shopItems.cast<Map<String, dynamic>>().toList();
+    return allItems
+        .where((item) =>
+            item['product_name'].toLowerCase().contains(query.toLowerCase()))
+        .toList();
+  }
+
+  void clearSearchResults() {
+    Future.microtask(() {
+      _searchResults.clear();
+      notifyListeners();
+    });
   }
 
   void addItemToCartWithQuantity(
