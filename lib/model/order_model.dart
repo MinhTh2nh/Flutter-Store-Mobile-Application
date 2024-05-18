@@ -87,9 +87,11 @@ Future<void> createOrder(BuildContext context, Order order) async {
 
       Provider.of<CartModel>(context, listen: false).clearCart();
 
-      Navigator.push(
+      Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const OrdersScreen()),
+        (Route<dynamic> route) => route
+            .isFirst, // This predicate returns true if the route is the first route in the navigator (i.e., the Home page)
       );
       print('Order created successfully');
     } else {

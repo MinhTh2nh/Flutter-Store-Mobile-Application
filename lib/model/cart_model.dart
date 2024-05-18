@@ -174,6 +174,21 @@ class CartModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void increaseQuantity(int index) {
+    _cartItems[index]['quantity']++;
+    notifyListeners();
+  }
+
+  void decreaseQuantity(int index) {
+    if (_cartItems[index]['quantity'] > 1) {
+      _cartItems[index]['quantity']--;
+    } else {
+      // If quantity is 1, remove the item from the cart
+      removeItemFromCart(index);
+    }
+    notifyListeners();
+  }
+
   String calculateTotal() {
     double totalPrice = 0.0;
     for (var item in _cartItems) {

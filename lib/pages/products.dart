@@ -53,7 +53,7 @@ class Products extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
-                                ProductDetailPage(index: product['product_id']),
+                                ProductDetailPage(index: index),
                           ),
                         );
                       },
