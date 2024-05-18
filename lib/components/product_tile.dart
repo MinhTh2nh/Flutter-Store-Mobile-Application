@@ -31,83 +31,79 @@ class ProductTile extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
+        color: Colors.grey.shade100,
         borderRadius: BorderRadius.circular(10.0),
       ),
-      margin: const EdgeInsets.only(bottom: 10), // Add margin bottom
-      child: Material(
-        elevation: 3, // Add elevation for shadow effect
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding:
-              const EdgeInsets.all(5), // Add padding
-              child:  Image.network(
-                product_thumbnail,
-                width: double.infinity, // Take whole width
-                height: MediaQuery.of(context).size.height * 0.14,
-                fit: BoxFit.cover,
-                errorBuilder: (BuildContext context, Object exception,
-                    StackTrace? stackTrace) {
-                  // You can return an error image or a placeholder here
-                  return Image.asset(
-                    'lib/images/blank.png',
-                    fit: BoxFit.cover,
-                  );
-                },
+      // margin: const EdgeInsets.only(bottom: 10), // Add margin bottom
+      margin: const EdgeInsets.all(5),
+      // margin: const EdgeInsets.only(right: 5, left: 5), // Add margin
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Image.network(
+            product_thumbnail,
+            width: double.infinity, // Take whole width
+            height: MediaQuery.of(context).size.height * 0.15,
+            fit: BoxFit.contain,
+            errorBuilder: (BuildContext context, Object exception,
+                StackTrace? stackTrace) {
+              // You can return an error image or a placeholder here
+              return Image.asset(
+                'lib/images/blank.png',
+                fit: BoxFit.contain,
+              );
+            },
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8), // Add padding
+                child: Text(
+                  product_name,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
               ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8), // Add padding
-                  child: Text(
-                    product_name,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8), // Add padding
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '\$$product_price',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      'Available: $total_stock',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8), // Add padding
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '\$$product_price',
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        'Available: $total_stock',
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(4), // Add padding
+                child: Row(
+                  children: [
+                    const Icon(Icons.star, color: Colors.amber, size: 16),
+                    Text(
+                      roundedRating.toStringAsFixed(1),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(4), // Add padding
-                  child: Row(
-                    children: [
-                      const Icon(Icons.star, color: Colors.amber, size: 16),
-                      Text(
-                        roundedRating.toStringAsFixed(1),
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            )
-          ],
-        ),
+              ),
+            ],
+          )
+        ],
       ),
     );
   }
