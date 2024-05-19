@@ -12,7 +12,7 @@ class Categories extends StatefulWidget {
   static const List<Map<String, dynamic>> categories = [
     {"icon": Icons.shopping_bag, "text": "All"},
     {"icon": Icons.boy, "text": "Clothing"},
-    {"icon": Icons.brush, "text": "Cosmetic"},
+    {"icon": Icons.face_4, "text": "Cosmetic"},
     {"icon": Icons.healing, "text": "Health"},
     {"icon": Icons.electrical_services, "text": "Electric Devices"},
     {"icon": Icons.toys, "text": "Toys"},

@@ -34,38 +34,27 @@ class CartModel extends ChangeNotifier {
   int get itemsCount => _cartItems.length;
 
   Future<void> fetchProducts() async {
-    if (_isLoading) return; // If a request is already in progress, do nothing
+    if (_isLoading) return;
 
-    _isLoading = true; // Set loading state to true
+    _isLoading = true;
     try {
-      // Make HTTP GET request to fetch products from API
       final response = await http.get(Uri.parse(
           'https://flutter-store-mobile-application-backend.onrender.com/products/get'));
 
-      // Check if request is successful
       if (response.statusCode == 200) {
-        // Decode JSON response body
         final List<dynamic> products = json.decode(response.body)['data'];
-
-        // Update _shopItems with fetched products
         _shopItems = products;
-
-        // Notify listeners of the change
         notifyListeners();
-
-        _page++; // Increment the page number for the next request
+        _page++;
       } else {
-        // Handle error response
         print('Failed to fetch products: ${response.statusCode}');
       }
     } catch (error) {
-      // Handle network errors
       print('Network error: $error');
     } finally {
-      _isLoading = false; // Set loading state to false
+      _isLoading = false;
     }
   }
-
   Future<void> fetchCategories() async {
     final url = Uri.parse(
         'https://flutter-store-mobile-application-backend.onrender.com/products/get/category/categoryList');

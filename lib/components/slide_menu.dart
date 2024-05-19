@@ -15,7 +15,7 @@ class SideMenu extends StatelessWidget {
     return Drawer(
       child: Column(
         children:  [
-          DrawerHeader(
+          const DrawerHeader(
             padding: EdgeInsets.zero,
             decoration: BoxDecoration(
               color: Colors.blue,
@@ -81,7 +81,7 @@ class DrawerListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(right: 16), // Adjust the margin as needed
+      padding: const EdgeInsets.only(right: 16), // Adjust the margin as needed
       child: ListTile(
         horizontalTitleGap: 0.0,
         onTap: onPressed, // Assign the onPressed callback to onTap
@@ -92,12 +92,12 @@ class DrawerListTile extends StatelessWidget {
               leading,
               color: Colors.black54,
             ),
-            SizedBox(width: 16), // Add margin between Icon and Text
+            const SizedBox(width: 16), // Add margin between Icon and Text
           ],
         ),
         title: Text(
           title,
-          style: TextStyle(color: Colors.black54),
+          style: const TextStyle(color: Colors.black54),
         ),
       ),
     );
