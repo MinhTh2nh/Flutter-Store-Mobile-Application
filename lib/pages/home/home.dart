@@ -103,8 +103,9 @@ class _HomePageState extends State<HomePage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                ProductDetailPage(index: index),
+                            builder: (context) => ProductDetailPage(
+                              productId: product['product_id'],
+                            ),
                           ),
                         );
                       },
@@ -117,9 +118,7 @@ class _HomePageState extends State<HomePage> {
                           product_price: product["product_price"].toString(),
                           product_thumbnail: product["product_thumbnail"],
                           total_stock: product['total_stock'],
-                          average_rating: product['average_rating'] != 0
-                              ? product['average_rating']
-                              : 0.0,
+                          average_rating: product['average_rating'] != 0 ? product['average_rating'] : 0.0,
                           onPressed: () => {},
                         ),
                       ),

@@ -10,12 +10,11 @@ import '../components/review_field.dart';
 import '../model/review_model.dart';
 
 class ProductDetailPage extends StatefulWidget {
-  final int index;
+  final int productId;
 
-  const ProductDetailPage({super.key, required this.index});
+  const ProductDetailPage({super.key, required this.productId});
 
   @override
-  // ignore: library_private_types_in_public_api
   _ProductDetailPageState createState() => _ProductDetailPageState();
 }
 
@@ -23,17 +22,24 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   int quantity = 1;
   String selectedSize = '';
   int selectedItemID = -1;
-  double averageRating = 0.0; // Declare averageRating as a member variable
-  bool showAllReviews = false; // State to control the display of reviews
+  double averageRating = 0.0;
+  bool showAllReviews = false;
 
-// Fetch reviews and calculate average rating
+  List<Map<String, dynamic>> reviews = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchReviewsAndCalculateAverageRating(widget.productId);
+    fetchProductItems(widget.productId);
+  }
+
   Future<void> fetchReviewsAndCalculateAverageRating(int productId) async {
     try {
-      List<Review> reviews = await Review.fetchReview(productId);
-      averageRating = Review.calculateAverageRating(reviews);
+      List<Review> reviewsList = await Review.fetchReview(productId);
+      double avgRating = Review.calculateAverageRating(reviewsList);
 
-      // Convert reviews to List<Map<String, dynamic>>
-      List<Map<String, dynamic>> reviewMaps = reviews.map((review) {
+      List<Map<String, dynamic>> reviewMaps = reviewsList.map((review) {
         return {
           'review_id': review.reviewId,
           'item_id': review.itemId,
@@ -45,50 +51,25 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         };
       }).toList();
 
-      // Update UI with averageRating if required
-      // Pass reviews to ProductReview widget
       setState(() {
-        this.reviews = reviewMaps;
+        reviews = reviewMaps;
+        averageRating = avgRating;
       });
     } catch (e) {
-      // Handle error
       print('Error fetching reviews: $e');
     }
   }
 
-  List<Map<String, dynamic>> reviews = []; // List to hold reviews
-
-  @override
-  void initState() {
-    super.initState();
-    final productId = Provider.of<CartModel>(context, listen: false)
-        .shopItems[widget.index - 1]['product_id'];
-    fetchReviewsAndCalculateAverageRating(productId);
+  Future<void> fetchProductItems(int productId) async {
+    await Provider.of<CartModel>(context, listen: false).fetchProductItems(productId);
   }
-
 
   @override
   Widget build(BuildContext context) {
     final cartModel = Provider.of<CartModel>(context);
-    final product = cartModel.shopItems[widget.index-1];
-    // Fetch product items when building the widget
-    // ignore: no_leading_underscores_for_local_identifiers
-    Future<void> _fetchProductItems(int productId) async {
-      await cartModel.fetchProductItems(productId);
-    }
+    final product = cartModel.shopItems.firstWhere((p) => p['product_id'] == widget.productId);
 
-    // Call _fetchProductItems when the widget initializes
-    _fetchProductItems(cartModel.shopItems[widget.index-1]['product_id']);
-
-    final productItems = cartModel.productItems
-        .where((item) =>
-            item['product_id'] ==
-            cartModel.shopItems[widget.index-1]['product_id'])
-        .toList();
-
-    // final productItems = cartModel.productItems
-    //     .where((item) => item['product_id'] == product['product_id'])
-    //     .toList();
+    final productItems = cartModel.productItems.where((item) => item['product_id'] == widget.productId).toList();
 
     return Scaffold(
       appBar: const CustomAppBarForDetailPage(),
@@ -106,26 +87,23 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       child: SizedBox(
                         child: Image.network(
                           product['product_thumbnail'],
-                          width: double.infinity, // Take whole width
+                          width: double.infinity,
                           height: MediaQuery.of(context).size.height * 0.5,
                           fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              const Icon(Icons.error),
+                          errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
                         ),
                       ),
                     ),
                   ),
                   Padding(
-                    padding:
-                        const EdgeInsets.all(12), // Adjust padding as needed
+                    padding: const EdgeInsets.all(12),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 32),
                         Text(
                           product['product_name'],
-                          style: const TextStyle(
-                              fontSize: 24, fontWeight: FontWeight.bold),
+                          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 8),
                         Text(
@@ -133,98 +111,74 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           style: const TextStyle(fontSize: 18),
                         ),
                         const SizedBox(height: 16),
-                        Builder(builder: (context) {
-                          return Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: IconTheme(
-                                  data: const IconThemeData(),
-                                  child: StarDisplay(value: averageRating),
-                                ),
+                        Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: IconTheme(
+                                data: const IconThemeData(),
+                                child: StarDisplay(value: averageRating),
                               ),
-                              Container(
-                                height: 45.0,
-                                padding: const EdgeInsets.all(5.0),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  color: const Color(0xFFD0D0D0),
-                                ),
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 35.0,
-                                      child: RawMaterialButton(
-                                        onPressed: () {
-                                          if (quantity > 1) {
-                                            setState(() {
-                                              quantity--;
-                                            });
-                                          }
-                                        },
-                                        child: const Icon(
-                                          Icons.remove,
-                                          size: 30.0,
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.only(
-                                        right: 5.0,
-                                        left: 5.0,
-                                      ),
-                                      child: Text(
-                                        quantity.toString(),
-                                        style: const TextStyle(fontSize: 18),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 2.0,
-                                    ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                      width: 35.0,
-                                      child: RawMaterialButton(
-                                        onPressed: () {
-                                          if (quantity <
-                                              (selectedItemID != -1
-                                                  ? productItems.firstWhere(
-                                                          (item) =>
-                                                              item['item_id'] ==
-                                                              selectedItemID)[
-                                                      'stock']
-                                                  : 1)) {
-                                            setState(() {
-                                              quantity++;
-                                            });
-                                          }
-                                        },
-                                        child: const Icon(
-                                          Icons.add,
-                                          size: 30.0,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          );
-                        }),
-                        const SizedBox(height: 16),
-                        Container(
-                          padding: const EdgeInsets.only(bottom: 6.0),
-                          child: const Text(
-                            "Available Options",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
                             ),
-                          ),
+                            Container(
+                              height: 45.0,
+                              padding: const EdgeInsets.all(5.0),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.0),
+                                color: const Color(0xFFD0D0D0),
+                              ),
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 35.0,
+                                    child: RawMaterialButton(
+                                      onPressed: () {
+                                        if (quantity > 1) {
+                                          setState(() {
+                                            quantity--;
+                                          });
+                                        }
+                                      },
+                                      child: const Icon(
+                                        Icons.remove,
+                                        size: 30.0,
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                                    child: Text(
+                                      quantity.toString(),
+                                      style: const TextStyle(fontSize: 18),
+                                    ),
+                                  ),
+                                  Container(
+                                    width: 35.0,
+                                    child: RawMaterialButton(
+                                      onPressed: () {
+                                        if (quantity < (selectedItemID != -1
+                                            ? productItems.firstWhere((item) => item['item_id'] == selectedItemID)['stock']
+                                            : 1)) {
+                                          setState(() {
+                                            quantity++;
+                                          });
+                                        }
+                                      },
+                                      child: const Icon(
+                                        Icons.add,
+                                        size: 30.0,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                        // Display selection options based on product_items
+                        const SizedBox(height: 16),
+                        const Text(
+                          "Available Options",
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: productItems.map<Widget>((item) {
@@ -233,40 +187,24 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 setState(() {
                                   selectedSize = item['size_name'];
                                   selectedItemID = item['item_id'];
-                                  // Reset quantity to 1 when size is changed
                                   quantity = 1;
                                 });
                               },
                               child: Container(
                                 margin: const EdgeInsets.all(8.0),
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 8.0,
-                                  horizontal: 12.0,
-                                ),
+                                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
                                 decoration: BoxDecoration(
                                   border: Border.all(
-                                    color: selectedSize == item['size_name']
-                                        ? Colors.teal // Highlight selected size
-                                        : Colors.grey,
+                                    color: selectedSize == item['size_name'] ? Colors.teal : Colors.grey,
                                   ),
                                   borderRadius: BorderRadius.circular(5.0),
-                                  color: selectedSize == item['size_name']
-                                      ? Colors.teal
-                                          .shade200 // Background color for selected size
-                                      : null, // No background color for unselected size
+                                  color: selectedSize == item['size_name'] ? Colors.teal.shade200 : null,
                                 ),
                                 child: Text(
                                   item['size_name'],
                                   style: TextStyle(
-                                    color: selectedSize == item['size_name']
-                                        ? Colors
-                                            .white // Highlight selected size
-                                        : Colors.black,
-                                    fontWeight:
-                                        selectedSize == item['size_name']
-                                            ? FontWeight
-                                                .bold // Highlight selected size
-                                            : FontWeight.normal,
+                                    color: selectedSize == item['size_name'] ? Colors.white : Colors.black,
+                                    fontWeight: selectedSize == item['size_name'] ? FontWeight.bold : FontWeight.normal,
                                   ),
                                 ),
                               ),
@@ -274,22 +212,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           }).toList(),
                         ),
                         const SizedBox(height: 16),
-                        Container(
-                          padding: const EdgeInsets.only(bottom: 6.0),
-                          child: const Text(
-                            "About this product",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                        const Text(
+                          "About this product",
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                         ),
-                        Container(
-                          padding: const EdgeInsets.only(bottom: 6.0),
-                          child: Text(
-                            product['product_description'],
-                            style: const TextStyle(fontSize: 14),
-                          ),
+                        Text(
+                          product['product_description'],
+                          style: const TextStyle(fontSize: 14),
                         ),
                         const SizedBox(height: 16),
                         Container(
@@ -297,19 +226,16 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             borderRadius: BorderRadius.circular(18),
                             color: Colors.white,
                           ),
-                          padding: const EdgeInsets.only(top: 8, bottom: 8),
+                          padding: const EdgeInsets.symmetric(vertical: 8),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               const Text(
                                 'Reviews',
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                               ),
                               ProductReview(
-                                reviews: showAllReviews
-                                    ? reviews
-                                    : reviews.take(3).toList(),
+                                reviews: showAllReviews ? reviews : reviews.take(3).toList(),
                               ),
                               if (reviews.length > 3)
                                 TextButton(
@@ -318,9 +244,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                       showAllReviews = !showAllReviews;
                                     });
                                   },
-                                  child: Text(
-                                    showAllReviews ? 'Show Less' : 'Show More',
-                                  ),
+                                  child: Text(showAllReviews ? 'Show Less' : 'Show More'),
                                 ),
                             ],
                           ),
@@ -349,11 +273,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       onPressed: () {
                         if (selectedItemID != -1) {
                           final selectedProductItem = productItems.firstWhere(
-                            (item) => item['item_id'] == selectedItemID,
+                                (item) => item['item_id'] == selectedItemID,
                             orElse: () => null,
                           );
-                          if (selectedProductItem != null &&
-                              selectedProductItem['stock'] >= quantity) {
+                          if (selectedProductItem != null && selectedProductItem['stock'] >= quantity) {
                             cartModel.addItemToCartWithQuantity(
                               selectedItemID,
                               quantity,
@@ -439,8 +362,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                     children: [
                                       AwesomeSnackbarContent(
                                         title: "Oh no!",
-                                        message:
-                                            "Please select options first!!",
+                                        message: "Please select options first!!",
                                         contentType: ContentType.failure,
                                       ),
                                     ],
@@ -462,7 +384,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         backgroundColor: Colors.teal.shade200,
                       ),
                       child: const Padding(
-                        padding: EdgeInsets.all(10), // Adjust padding as needed
+                        padding: EdgeInsets.all(10),
                         child: Icon(
                           Icons.shopping_cart,
                           color: Colors.white,
