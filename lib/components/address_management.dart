@@ -23,6 +23,7 @@ class _AddressManagementState extends State<AddressManagement> {
 
   List<Address> deliveryAddresses = [];
   bool _isLoading = false;
+  bool _isFetching = false;
 
   @override
   void initState() {
@@ -31,6 +32,9 @@ class _AddressManagementState extends State<AddressManagement> {
   }
 
   Future<void> _fetchAddress() async {
+    setState(() {
+      _isFetching = true;
+    });
     try {
       List<CustomerDetail> addresses =
           await CustomerDetail.fetchAddress(globalCustomerId!);
@@ -45,14 +49,12 @@ class _AddressManagementState extends State<AddressManagement> {
     } catch (e) {
       print('Failed to load address: $e');
       // Handle error: Show a snackbar or display an error message
+    } finally {
+      setState(() {
+        _isFetching = false;
+      });
     }
   }
-
-  // void addAddress(Address address) {
-  //   setState(() {
-  //     deliveryAddresses.add(address);
-  //   });
-  // }
 
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
@@ -70,7 +72,7 @@ class _AddressManagementState extends State<AddressManagement> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             backgroundColor: Color.fromARGB(255, 78, 204, 82),
-            content: Text('Address create successfully'),
+            content: Text('Address created successfully'),
             duration: Duration(seconds: 2),
           ),
         );
@@ -278,68 +280,73 @@ class _AddressManagementState extends State<AddressManagement> {
           ),
         ),
       ),
-      body: Column(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 48),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+      body: _isFetching
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(double.infinity, 48),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          backgroundColor: Colors.teal.shade200,
+                          foregroundColor: Colors.white),
+                      child: const Text(
+                        'Add New Address',
+                        style: TextStyle(
+                            fontSize: 21, fontWeight: FontWeight.bold),
+                      ),
+                      onPressed: () {
+                        _showAddOrUpdateDialog();
+                      },
                     ),
-                    backgroundColor: Colors.teal.shade200,
-                    foregroundColor: Colors.white),
-                child: const Text(
-                  'Add New Address',
-                  style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold),
-                ),
-                onPressed: () {
-                  _showAddOrUpdateDialog();
-                },
-              ),
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: deliveryAddresses.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(deliveryAddresses[index].address),
-                  subtitle: Text(deliveryAddresses[index].phoneNumber),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      IconButton(
-                        icon: const Icon(Icons.edit),
-                        onPressed: () {
-                          _showAddOrUpdateDialog(
-                              address: deliveryAddresses[index]);
-                        },
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () {
-                          removeAddress(index);
-                        },
-                      ),
-                    ],
                   ),
-                  onTap: () {
-                    widget.onAddressSelected!(
-                      deliveryAddresses[index].address,
-                      deliveryAddresses[index].phoneNumber,
-                    );
-                    Navigator.pop(context);
-                  },
-                );
-              },
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: deliveryAddresses.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(deliveryAddresses[index].address),
+                        subtitle: Text(deliveryAddresses[index].phoneNumber),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            IconButton(
+                              icon: const Icon(Icons.edit),
+                              onPressed: () {
+                                _showAddOrUpdateDialog(
+                                    address: deliveryAddresses[index]);
+                              },
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.delete),
+                              onPressed: () {
+                                removeAddress(index);
+                              },
+                            ),
+                          ],
+                        ),
+                        onTap: () {
+                          widget.onAddressSelected!(
+                            deliveryAddresses[index].address,
+                            deliveryAddresses[index].phoneNumber,
+                          );
+                          Navigator.pop(context);
+                        },
+                      );
+                    },
+                  ),
+                )
+              ],
             ),
-          )
-        ],
-      ),
     );
   }
 }

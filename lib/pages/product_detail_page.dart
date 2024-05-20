@@ -15,6 +15,7 @@ class ProductDetailPage extends StatefulWidget {
   const ProductDetailPage({super.key, required this.productId});
 
   @override
+  // ignore: library_private_types_in_public_api
   _ProductDetailPageState createState() => _ProductDetailPageState();
 }
 

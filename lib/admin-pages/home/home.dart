@@ -122,10 +122,10 @@ class _AdminHomePageState extends State<AdminHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
-      drawer: SideMenu(),
+      appBar: const CustomAppBar(),
+      drawer: const SideMenu(),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
         controller: scrollController,
         padding: const EdgeInsets.symmetric(vertical: 16),
@@ -253,7 +253,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                       ),
                     ),
                     onPress: () => Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (_) => AdminOrderPage())),
+                        .push(MaterialPageRoute(builder: (_) => const AdminOrderPage())),
                   ),
                 ),
               ],
@@ -263,8 +263,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 estimatedRevenue: _estimatedRevenue, realRevenue: _realRevenue),
             const SizedBox(height: 20),
             _buildTile(
-                Padding(
-                  padding: const EdgeInsets.all(5.0),
+                const Padding(
+                  padding: EdgeInsets.all(5.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
