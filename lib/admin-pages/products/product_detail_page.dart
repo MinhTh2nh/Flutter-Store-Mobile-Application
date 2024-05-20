@@ -142,7 +142,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           _productCategoryController.text =
               _selectedCategory?['category_id']?.toString() ?? '';
           _productSubCategoryController.text =
-              _selectedSubCategory?['sub_id']?.toString() ?? '';
+              _selectedSubCategory?['sub_id']?.toString() ?? _productSubCategoryController.text;
+
 
           // Set data loaded flag
           _isDataLoaded = true;
@@ -157,7 +158,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   }
 
   @override
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -165,7 +165,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(30.0),
-        child: _isDataLoaded
+          child: _isDataLoaded
             ? SingleChildScrollView(
           child: Form(
             key: _formKey,
@@ -333,36 +333,39 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   value: _selectedSubCategory != null
                       ? _selectedSubCategory!['sub_id'].toString()
                       : null,
-                  items: [
-                    ..._sub_categories
-                        .map<DropdownMenuItem<String>>((sub_category) {
-                      return DropdownMenuItem<String>(
-                        value: sub_category['sub_id'].toString(),
-                        child: Text(sub_category['sub_name'] as String),
-                      );
-                    }).toList(),
-                    DropdownMenuItem<String>(
-                      value: null,
-                      child: Text('New Sub Category'),
+                  items: _sub_categories
+                      .map<DropdownMenuItem<String>>((sub_category) {
+                    return DropdownMenuItem<String>(
+                      value: sub_category['sub_id'].toString(),
+                      child: Text(sub_category['sub_name'] as String),
+                    );
+                  }).toList()
+                    ..add(
+                      DropdownMenuItem<String>(
+                        value: '', // Add an empty value for "New Sub Category"
+                        child: Text('New Sub Category'),
+                      ),
                     ),
-                  ],
                   onChanged: (newValue) {
                     setState(() {
-                      _selectedSubCategory = _sub_categories.firstWhere(
-                              (sub_category) =>
-                          sub_category['sub_id'].toString() ==
-                              newValue);
-                      if (_selectedSubCategory == null) {
-                        // Handle case for creating a new category
-                      } else {
+                      if (newValue != null && newValue.isNotEmpty) {
+                        _selectedSubCategory = _sub_categories.firstWhere(
+                              (subCategory) => subCategory['sub_id'].toString() == newValue,
+                          orElse: () => null,
+                        );
+                        print(_selectedSubCategory);
                         _productSubCategoryController.text =
-                        _selectedSubCategory!['sub_name'];
+                            _selectedSubCategory?['sub_id'];
+                      } else {
+                        _selectedSubCategory = null;
+                        _productSubCategoryController.text = ''; // Clear the controller if no sub-category is selected
                       }
                     });
                   },
                   decoration: InputDecoration(
-                      labelText: 'Product Sub Category',
-                      border: OutlineInputBorder()),
+                    labelText: 'Product Sub Category',
+                    border: OutlineInputBorder(),
+                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please select or enter a product sub category';
@@ -405,10 +408,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               "product_thumbnail": _productThumbnailController.text,
               "product_description": _productDescriptionController.text,
               "category_id": _productCategoryController.text,
-              "sub_id": _productSubCategoryController.text,
+              "sub_id": _selectedSubCategory?['sub_id'],
               "total_stock": _totalStockController.text,
               "status": "Available",
             };
+
+            print(formData);
 
             final response = await http.put(
               Uri.parse(

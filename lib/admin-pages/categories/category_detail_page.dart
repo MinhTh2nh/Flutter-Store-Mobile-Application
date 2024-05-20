@@ -197,10 +197,51 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
       context: context,
       builder: (context) {
         return _sub_categories.isEmpty
-            ? Center(
-          child: CircularProgressIndicator(),
+            ?
+        Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                flex: 2, // Takes 20% of the available space
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 100.0),
+                  child: Text(
+                    'No sub-category available for this category',
+                    style: TextStyle(
+                      fontSize: 24, // Increased font size
+                    ),
+                  ),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  showModalNewItemForm(context).then((value) {
+                    // Fetch the latest sub-categories data after the form is closed
+                    fetchSubCategories(widget.index);
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.teal.shade200,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(0),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Text(
+                    'Create New Item',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         )
-            : _buildSubCategoryList();
+        : _buildSubCategoryList();
       },
     );
   }
