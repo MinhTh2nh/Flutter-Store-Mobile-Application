@@ -83,7 +83,8 @@ class _AdminProductPageState extends State<AdminProductPage> {
                 if (cartModel.shopItems.isEmpty) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                cartModel.shopItems.sort((a, b) => a['product_id'].compareTo(b['product_id']));
+                cartModel.shopItems
+                    .sort((a, b) => a['product_id'].compareTo(b['product_id']));
                 return GridView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
@@ -115,32 +116,32 @@ class _AdminProductPageState extends State<AdminProductPage> {
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(20),
                           ),
-                            child: Stack(
-                              children: [
-                                ProductTile(
-                                  product_name: product['product_name'],
-                                  product_price:
-                                      product["product_price"].toString(),
-                                  product_thumbnail:
-                                      product["product_thumbnail"],
-                                  total_stock: product[
-                                      'total_stock'], // Convert integer to string
-                                  average_rating: product['average_rating'] != 0
-                                      ? product['average_rating']
-                                      : 0.0,
-                                  onPressed:
-                                      () {}, // Placeholder onPressed function
-                                ),
-                                if (isUnavailable)
-                                  Positioned.fill(
-                                    child: Container(
-                                      color: Colors.grey.withOpacity(0.5),
-                                    ),
+                          child: Stack(
+                            children: [
+                              ProductTile(
+                                product_name: product['product_name'],
+                                product_price:
+                                    product["product_price"].toString(),
+                                product_thumbnail: product["product_thumbnail"],
+                                total_stock: product[
+                                    'total_stock'], // Convert integer to string
+                                average_rating:
+                                    (product['average_rating'] as num?)
+                                            ?.toDouble() ??
+                                        0.0,
+                                onPressed:
+                                    () {}, // Placeholder onPressed function
+                              ),
+                              if (isUnavailable)
+                                Positioned.fill(
+                                  child: Container(
+                                    color: Colors.grey.withOpacity(0.5),
                                   ),
-                              ],
-                            ),
+                                ),
+                            ],
                           ),
                         ),
+                      ),
                     );
                   },
                 );

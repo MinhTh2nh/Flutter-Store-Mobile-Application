@@ -31,8 +31,8 @@ class ProductTile extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.grey.shade100,
-        borderRadius: BorderRadius.circular(10.0),
+        color: Colors.grey.shade200,
+        borderRadius: BorderRadius.circular(18.0),
       ),
       // margin: const EdgeInsets.only(bottom: 10), // Add margin bottom
       margin: const EdgeInsets.all(5),
@@ -41,19 +41,24 @@ class ProductTile extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.network(
-            product_thumbnail,
-            width: double.infinity, // Take whole width
-            height: MediaQuery.of(context).size.height * 0.15,
-            fit: BoxFit.cover,
-            errorBuilder: (BuildContext context, Object exception,
-                StackTrace? stackTrace) {
-              // You can return an error image or a placeholder here
-              return Image.asset(
-                'lib/images/blank.png',
-                fit: BoxFit.cover,
-              );
-            },
+          ClipRRect(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(18.0),
+              topRight: Radius.circular(18.0),
+            ),
+            child: Image.network(
+              product_thumbnail,
+              width: double.infinity,
+              height: MediaQuery.of(context).size.height * 0.15,
+              fit: BoxFit.cover,
+              errorBuilder: (BuildContext context, Object exception,
+                  StackTrace? stackTrace) {
+                return Image.asset(
+                  'lib/images/blank.png',
+                  fit: BoxFit.cover,
+                );
+              },
+            ),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,14 +91,12 @@ class ProductTile extends StatelessWidget {
                       ),
                     ),
                   ],
-                )
-                ,
+                ),
               ),
             ],
           ),
           Padding(
-            padding:
-            const EdgeInsets.symmetric(horizontal: 8), // Add padding
+            padding: const EdgeInsets.symmetric(horizontal: 8), // Add padding
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
