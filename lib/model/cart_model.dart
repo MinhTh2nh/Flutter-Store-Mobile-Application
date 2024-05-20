@@ -11,17 +11,25 @@ class CartModel extends ChangeNotifier {
   List _categories = [];
   List _orders = [];
   List _searchResults = [];
+  String _selectedCategory = 'All';
 
   int _page = 1;
   bool _isLoading = false;
 
   bool get isLoading => _isLoading;
+  String get selectedCategory => _selectedCategory;
 
   CartModel() {
     fetchOrders();
     _shopItems = [];
     fetchCategories();
     fetchProducts();
+  }
+
+  void resetSelectedCategory() {
+    _selectedCategory = 'All';
+    // _selectedSubcategory = null;
+    notifyListeners();
   }
 
   List get cartItems => _cartItems;
@@ -55,6 +63,7 @@ class CartModel extends ChangeNotifier {
       _isLoading = false;
     }
   }
+
   Future<void> fetchCategories() async {
     final url = Uri.parse(
         'https://flutter-store-mobile-application-backend.onrender.com/products/get/category/categoryList');
@@ -140,10 +149,10 @@ class CartModel extends ChangeNotifier {
 
   List<Map<String, dynamic>> _mockSearch(String query) {
     List<Map<String, dynamic>> allItems =
-    _shopItems.cast<Map<String, dynamic>>().toList();
+        _shopItems.cast<Map<String, dynamic>>().toList();
     return allItems
         .where((item) =>
-        item['product_name'].toLowerCase().contains(query.toLowerCase()))
+            item['product_name'].toLowerCase().contains(query.toLowerCase()))
         .toList();
   }
 
@@ -224,5 +233,38 @@ class CartModel extends ChangeNotifier {
   void clearCart() {
     cartItems.clear();
     notifyListeners();
+  }
+
+  Future<void> fetchProductByCategory(
+      String? category, String? subcategory) async {
+    if (_isLoading) return;
+    _isLoading = true;
+    try {
+      String baseUrl =
+          'https://flutter-store-mobile-application-backend.onrender.com/products/get/category/query';
+      Uri url;
+
+      if (category != null && subcategory == null) {
+        url = Uri.parse('$baseUrl?category_name=$category');
+      } else if (subcategory != null && category == null) {
+        url = Uri.parse('$baseUrl?sub_name=$subcategory');
+      } else {
+        throw Exception('Provide either category or subcategory, not both.');
+      }
+
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final List<dynamic> products = json.decode(response.body)['data'];
+        _shopItems = products;
+        notifyListeners();
+      } else {
+        print('Failed to fetch products: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Network error: $error');
+    } finally {
+      _isLoading = false;
+    }
   }
 }

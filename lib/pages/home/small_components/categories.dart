@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../../model/cart_model.dart';
+import '../../../model/cart_model.dart';
 
 class Categories extends StatefulWidget {
-  const Categories(
-      {super.key,
-      required this.selectedCategory,
-      required this.onSelectCategory});
+  const Categories({
+    super.key,
+    required this.onSelectCategory,
+  });
 
-  final int selectedCategory;
-  final Function(int) onSelectCategory;
+  final Function(String) onSelectCategory;
 
   static const List<Map<String, dynamic>> categories = [
     {"icon": Icons.shopping_bag, "text": "All"},
-    {"icon": Icons.boy, "text": "Clothing"},
+    {"icon": Icons.boy, "text": "Clothes"},
     {"icon": Icons.face_4, "text": "Cosmetic"},
     {"icon": Icons.healing, "text": "Health"},
     {"icon": Icons.electrical_services, "text": "Electric Devices"},
@@ -30,28 +32,40 @@ class _CategoriesState extends State<Categories> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: List.generate(
-            Categories.categories.length,
-            (index) => CategoryCard(
-              icon: Categories.categories[index]["icon"],
-              text: Categories.categories[index]["text"],
-              press: () {
-                setState(() {
-                  selectedIndex = index;
-                });
-              },
-              isSelected: selectedIndex == index,
+    return Consumer<CartModel>(
+      builder: (context, cartModel, child) {
+        // Update selected index when the category is reset
+        if (cartModel.selectedCategory == 'All' && selectedIndex != 0) {
+          selectedIndex = 0;
+        }
+
+        return Padding(
+          padding: const EdgeInsets.all(10),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: List.generate(
+                Categories.categories.length,
+                (index) => CategoryCard(
+                  icon: Categories.categories[index]["icon"],
+                  text: Categories.categories[index]["text"],
+                  press: () {
+                    setState(() {
+                      selectedIndex = index;
+                    });
+                    // Call the onSelectCategory function with the selected category text
+                    widget
+                        .onSelectCategory(Categories.categories[index]["text"]);
+                  },
+                  isSelected: selectedIndex == index,
+                ),
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
@@ -75,7 +89,7 @@ class CategoryCard extends StatelessWidget {
     return GestureDetector(
       onTap: press,
       child: SizedBox(
-        width: 70, // Set a fixed width for each card
+        width: 70,
         child: Column(
           children: [
             Container(
@@ -93,7 +107,7 @@ class CategoryCard extends StatelessWidget {
             Text(
               text,
               textAlign: TextAlign.center,
-              overflow: TextOverflow.ellipsis, // Add this
+              overflow: TextOverflow.ellipsis,
             )
           ],
         ),

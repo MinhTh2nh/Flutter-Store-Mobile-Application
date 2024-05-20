@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:food_mobile_app/pages/home/small_components/categories.dart';
 import '../../components/custome_app_bar/custom_app_bar.dart';
 import '../../components/product_tile.dart';
 import '../../model/cart_model.dart';
 import 'package:provider/provider.dart';
 import '../../pages/product_detail_page.dart';
-import 'small_components/categories.dart';
+import '../category_page.dart';
 import 'small_components/discount_banner.dart';
 import 'small_components/special_offers.dart';
 import 'package:food_mobile_app/components/slider_image.dart';
@@ -20,7 +21,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final scrollController = ScrollController();
-  int selectedCategory = 0;
 
   @override
   void initState() {
@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
       }
     });
     // Fetch initial products
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
       Provider.of<CartModel>(context, listen: false).fetchProducts();
     });
   }
@@ -54,19 +54,21 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SliderImages(),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const DiscountBanner(),
-                Categories(
-                  selectedCategory: selectedCategory,
-                  onSelectCategory: (index) {
-                    setState(() {
-                      selectedCategory = index;
-                    });
-                  },
-                ),
-              ],
+            const DiscountBanner(),
+            Categories(
+              onSelectCategory: (category) {
+                // Use the Navigator to push a new route when a category is selected
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CategoryPage(category: category),
+                  ),
+                ).then((_) {
+                  // Reset selected category to 'All' when returning to the home page
+                  Provider.of<CartModel>(context, listen: false)
+                      .resetSelectedCategory();
+                });
+              },
             ),
             const SpecialOffers(),
             const Padding(
@@ -82,33 +84,20 @@ class _HomePageState extends State<HomePage> {
             ),
             Consumer<CartModel>(
               builder: (context, cartModel, child) {
-                final filteredProducts = cartModel.shopItems.where((product) {
-                  final category = product['category'] as String?;
-                  return selectedCategory == 0 ||
-                      (category != null &&
-                          category ==
-                              Categories.categories[selectedCategory - 1]
-                                  ["text"]);
-                }).toList();
-
                 if (cartModel.isLoading && cartModel.shopItems.isEmpty) {
                   return const Center(child: CircularProgressIndicator());
-                }
-
-                if (filteredProducts.isEmpty) {
-                  return const Center(child: Text('No products found.'));
                 }
 
                 return GridView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: filteredProducts.length,
+                  itemCount: cartModel.shopItems.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     childAspectRatio: 1 / 1.1,
                   ),
                   itemBuilder: (context, index) {
-                    var product = filteredProducts[index];
+                    var product = cartModel.shopItems[index];
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(
