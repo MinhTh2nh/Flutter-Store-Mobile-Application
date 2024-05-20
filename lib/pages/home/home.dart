@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:food_mobile_app/pages/home/small_components/categories.dart';
 import '../../components/custome_app_bar/custom_app_bar.dart';
-import '../../components/product_tile.dart'; // Add this line
+import '../../components/product_tile.dart';
 import '../../model/cart_model.dart';
 import 'package:provider/provider.dart';
 import '../../pages/product_detail_page.dart';
-import 'small_components/categories.dart';
+import '../category_page.dart';
 import 'small_components/discount_banner.dart';
 import 'small_components/special_offers.dart';
 import 'package:food_mobile_app/components/slider_image.dart';
@@ -19,19 +20,27 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final scrollController = ScrollController(); // Add this line
-  int selectedCategory = 0; // Add this line
+  final scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     scrollController.addListener(() {
-      // Add this block
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
         Provider.of<CartModel>(context, listen: false).fetchProducts();
       }
     });
+    // Fetch initial products
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      Provider.of<CartModel>(context, listen: false).fetchProducts();
+    });
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -45,20 +54,21 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SliderImages(),
-            Column(
-              // Wrap DiscountBanner and Categories in a Column
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const DiscountBanner(),
-                Categories(
-                  selectedCategory: selectedCategory,
-                  onSelectCategory: (index) {
-                    setState(() {
-                      selectedCategory = index;
-                    });
-                  },
-                ),
-              ],
+            const DiscountBanner(),
+            Categories(
+              onSelectCategory: (category) {
+                // Use the Navigator to push a new route when a category is selected
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CategoryPage(category: category),
+                  ),
+                ).then((_) {
+                  // Reset selected category to 'All' when returning to the home page
+                  Provider.of<CartModel>(context, listen: false)
+                      .resetSelectedCategory();
+                });
+              },
             ),
             const SpecialOffers(),
             const Padding(
@@ -74,30 +84,20 @@ class _HomePageState extends State<HomePage> {
             ),
             Consumer<CartModel>(
               builder: (context, cartModel, child) {
-                // Filter products based on selected category
-                final filteredProducts = cartModel.shopItems.where((product) {
-                  final category = product['category'] as String?;
-                  return category == null || category.isEmpty
-                      ? selectedCategory == 0
-                      : category ==
-                          Categories.categories[selectedCategory - 1]["text"];
-                }).toList();
-
-                if (filteredProducts.isEmpty) {
-                  // Display loading indicator until products are fetched
+                if (cartModel.isLoading && cartModel.shopItems.isEmpty) {
                   return const Center(child: CircularProgressIndicator());
                 }
 
                 return GridView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: filteredProducts.length,
+                  itemCount: cartModel.shopItems.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     childAspectRatio: 1 / 1.1,
                   ),
                   itemBuilder: (context, index) {
-                    var product = filteredProducts[index];
+                    var product = cartModel.shopItems[index];
                     return GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -110,16 +110,16 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                       child: Padding(
-                        // padding: const EdgeInsets.symmetric(horizontal: 10),
                         padding: const EdgeInsets.all(5),
-
                         child: ProductTile(
                           product_name: product['product_name'],
                           product_price: product["product_price"].toString(),
                           product_thumbnail: product["product_thumbnail"],
                           total_stock: product['total_stock'],
-                          average_rating: product['average_rating'] != 0 ? product['average_rating'] : 0.0,
-                          onPressed: () => {},
+                          average_rating:
+                              (product['average_rating'] as num?)?.toDouble() ??
+                                  0.0,
+                          onPressed: () {},
                         ),
                       ),
                     );

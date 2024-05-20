@@ -79,37 +79,32 @@ class _OrdersScreenState extends State<OrdersScreen> {
           } else {
             final orders = snapshot.data!;
             return Container(
-              color: Colors.grey.shade200,
+              color: Colors.grey.shade100,
               // Set the background color of the parent container
               child: ListView.builder(
                 padding: const EdgeInsets.all(8),
                 itemCount: orders.length,
                 itemBuilder: (context, index) {
                   final order = orders[index];
-                  return Container( // Wrap the child elements in another Container
-                    color: Colors.white,
+                  return Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(18.0),
+                      color: Colors.white,
+                    ),
+                    // Wrap the child elements in another Container
                     // Set the background color of the child container
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              topRight: Radius.circular(10),
-                            ),
-                          ),
-                          child: ListTile(
-                            title: Text('Order: ${order.orderId}'),
-                            subtitle: Text(
-                                'Date: ${DateFormat('dd/MM/yyyy').format(
-                                    order.orderDate)}'),
-                            trailing: Text('Status: ${order.orderStatus}',
-                                style: TextStyle(
-                                    color: _getStatusColor(order.orderStatus),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18)),
-                          ),
+                        ListTile(
+                          title: Text('Order: ${order.orderId}'),
+                          subtitle: Text(
+                              'Date: ${DateFormat('dd/MM/yyyy').format(order.orderDate)}'),
+                          trailing: Text('Status: ${order.orderStatus}',
+                              style: TextStyle(
+                                  color: _getStatusColor(order.orderStatus),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18)),
                         ),
                         ListView.builder(
                           shrinkWrap: true,
@@ -117,7 +112,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
                           itemCount: order.orderDetails.length,
                           itemBuilder: (context, detailIndex) {
                             final detail = order.orderDetails[detailIndex];
-                            return Container( // Wrap the child elements in another Container
+                            return Container(
+                              // Wrap the child elements in another Container
                               color: Colors.white,
                               // Set the background color of the child container
                               child: Column(
@@ -133,37 +129,31 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                           fontWeight: FontWeight.bold),
                                     ),
                                     subtitle: Column(
-                                      crossAxisAlignment: CrossAxisAlignment
-                                          .start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Row(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                                '${detail.product.category
-                                                    .categoryName}, ${detail
-                                                    .product.subCategory
-                                                    .subName}, ${detail.product
-                                                    .size.sizeName} '),
+                                                '${detail.product.category.categoryName}, ${detail.product.subCategory.subName}, ${detail.product.size.sizeName} '),
                                             Text(
                                                 'Quantity: ${detail.quantity}'),
                                           ],
                                         ),
                                         Row(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
+                                            const Text(''),
                                             Text(
-                                                ''
-                                            ),
-                                            Text(
-                                                ' \$${detail.product.productPrice}'
-                                            , style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.red.shade500,
-                                            ),
+                                              ' \$${detail.product.productPrice}',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.red.shade500,
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -171,51 +161,53 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                     ),
                                   ),
                                   if (order.orderStatus == 'successful')
-                                  SizedBox(
+                                    SizedBox(
                                       width: double.infinity,
                                       child: TextButton(
                                         onPressed: () {
                                           showDialog(
                                             context: context,
                                             builder: (context) {
-                                              TextEditingController reviewController =
-                                              TextEditingController();
+                                              TextEditingController
+                                                  reviewController =
+                                                  TextEditingController();
 
                                               double rating = 3;
                                               return AlertDialog(
-                                                title: const Text(
-                                                    'Write Review'),
+                                                title:
+                                                    const Text('Write Review'),
                                                 content: Column(
-                                                  mainAxisSize: MainAxisSize
-                                                      .min,
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
                                                   children: [
                                                     TextField(
-                                                      controller: reviewController,
+                                                      controller:
+                                                          reviewController,
                                                       decoration:
-                                                      const InputDecoration(
+                                                          const InputDecoration(
                                                         hintText:
-                                                        'Write your review here',
+                                                            'Write your review here',
                                                       ),
                                                     ),
                                                     RatingBar.builder(
                                                       initialRating: 3,
                                                       minRating: 1,
-                                                      direction: Axis
-                                                          .horizontal,
+                                                      direction:
+                                                          Axis.horizontal,
                                                       allowHalfRating: true,
                                                       itemCount: 5,
                                                       itemPadding:
-                                                      const EdgeInsets
-                                                          .symmetric(
-                                                          horizontal: 4.0),
-                                                      itemBuilder: (context,
-                                                          _) =>
-                                                      const Icon(
+                                                          const EdgeInsets
+                                                              .symmetric(
+                                                              horizontal: 4.0),
+                                                      itemBuilder:
+                                                          (context, _) =>
+                                                              const Icon(
                                                         Icons.star,
                                                         color: Colors.amber,
                                                       ),
-                                                      onRatingUpdate: (
-                                                          newRating) {
+                                                      onRatingUpdate:
+                                                          (newRating) {
                                                         rating = newRating;
                                                         print(rating);
                                                       },
@@ -233,14 +225,13 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                                   TextButton(
                                                     child: const Text('Submit'),
                                                     onPressed: () {
-                                                      int itemId = detail
-                                                          .itemId;
+                                                      int itemId =
+                                                          detail.itemId;
                                                       rating = rating;
                                                       String comment =
                                                           reviewController.text;
-                                                      submitReview(
-                                                          itemId, rating,
-                                                          comment);
+                                                      submitReview(itemId,
+                                                          rating, comment);
                                                       Navigator.of(context)
                                                           .pop();
                                                     },
@@ -269,32 +260,16 @@ class _OrdersScreenState extends State<OrdersScreen> {
                           },
                         ),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Expanded(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                    bottom: BorderSide(
-                                      color: Colors.grey,
-                                      // The color of the border
-                                      width: 0.8, // The width of the border
-                                    ),
-                                  ),
-                                ),
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 10.0), // Add padding if needed
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                Text(
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
                                 'Total Price: \$${order.totalPrice}',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.red.shade500,
-                                  ),
-                                ),
-                                  ],
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.red.shade500,
                                 ),
                               ),
                             ),

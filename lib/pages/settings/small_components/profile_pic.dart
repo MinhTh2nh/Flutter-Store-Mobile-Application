@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import '../../../model/customer_model.dart';
 import '../../../constants.dart';
 
 class ProfileInformation extends StatelessWidget {
@@ -106,29 +105,24 @@ class ProfileInformation extends StatelessWidget {
 }
 
 Widget _buildInfoContainer(String value, String label) {
-  return Container(
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Container(
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                value,
-                style:
-                    const TextStyle(fontWeight: FontWeight.w800, fontSize: 20),
-              ),
-              const SizedBox(
-                  width: 5), // Add spacing between icon and info containers
-              Text(
-                label,
-                style: const TextStyle(fontSize: 15, color: Colors.blueGrey),
-              ),
-            ],
+  return Row(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            value,
+            style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 20),
           ),
-        ),
-      ],
-    ),
+          const SizedBox(
+              width: 5), // Add spacing between icon and info containers
+          Text(
+            label,
+            style: const TextStyle(fontSize: 15, color: Colors.blueGrey),
+          ),
+        ],
+      ),
+    ],
   );
 }
