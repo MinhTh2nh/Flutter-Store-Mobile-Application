@@ -29,64 +29,70 @@ class Products extends StatelessWidget {
       appBar: hasSearchResults ? _buildAppBar(context) : const CustomAppBar(),
       body: SingleChildScrollView(
         controller: scrollController,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            SliderButtons(),
-            const SizedBox(height: 12),
-            Consumer<CartModel>(
-              builder: (context, cartModel, child) {
-                final items = hasSearchResults
-                    ? cartModel.searchResults
-                    : cartModel.shopItems;
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.grey.shade100,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SliderButtons(),
+              const SizedBox(height: 12),
+              Consumer<CartModel>(
+                builder: (context, cartModel, child) {
+                  final items = hasSearchResults
+                      ? cartModel.searchResults
+                      : cartModel.shopItems;
 
-                if (items.isEmpty) {
-                  // Display loading indicator until products are fetched
-                  return const Center(child: CircularProgressIndicator());
-                }
+                  if (items.isEmpty) {
+                    // Display loading indicator until products are fetched
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
-                return GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: items.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 1 / 1.1,
-                  ),
-                  itemBuilder: (context, index) {
-                    var product = items[index];
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProductDetailPage(
-                              productId: product['product_id'],
+                  return GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: items.length,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 1 / 1.1,
+                    ),
+                    itemBuilder: (context, index) {
+                      var product = items[index];
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductDetailPage(
+                                productId: product['product_id'],
+                              ),
                             ),
+                          );
+                        },
+                        child: Padding(
+                          // padding: const EdgeInsets.symmetric(
+                          //     horizontal: 5, vertical: 5),
+                          padding: const EdgeInsets.all(5),
+                          child: ProductTile(
+                            product_name: product['product_name'],
+                            product_price: product["product_price"].toString(),
+                            product_thumbnail: product["product_thumbnail"],
+                            total_stock: product['total_stock'],
+                            average_rating: (product['average_rating'] as num?)
+                                    ?.toDouble() ??
+                                0.0,
+                            onPressed: () => {},
                           ),
-                        );
-                      },
-                      child: Padding(
-                        // padding: const EdgeInsets.symmetric(
-                        //     horizontal: 5, vertical: 5),
-                        padding: const EdgeInsets.all(5),
-                        child: ProductTile(
-                          product_name: product['product_name'],
-                          product_price: product["product_price"].toString(),
-                          product_thumbnail: product["product_thumbnail"],
-                          total_stock: product['total_stock'],
-                          average_rating:
-                              (product['average_rating'] as num?)?.toDouble() ??
-                                  0.0,
-                          onPressed: () => {},
                         ),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-          ],
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
