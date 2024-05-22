@@ -13,6 +13,7 @@ class Order {
   final String orderAddress;
   final String shippingAddress;
   final String phoneNumber;
+  final String paymentType;
   final double totalPrice;
   final List<OrderItem> items;
 
@@ -22,6 +23,7 @@ class Order {
     required this.orderAddress,
     required this.shippingAddress,
     required this.phoneNumber,
+    required this.paymentType,
     required this.totalPrice,
     required this.items,
   });
@@ -32,7 +34,8 @@ class Order {
       'order_quantity': orderQuantity,
       'order_address': orderAddress,
       'shipping_address': shippingAddress,
-      'phone_number': phoneNumber,
+      'phoneNumber': phoneNumber,
+      'payment_type': paymentType, // 'When receive order', 'smart banking', 'online banking
       'total_price': totalPrice,
       'items': items.map((item) => item.toJson()).toList(),
     };
