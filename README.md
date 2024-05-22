@@ -23,9 +23,9 @@ A mobile application about Ecommerce Application that support for Course Mobile 
  
 Here are some Illustration of App Screens
 
-| ![](illustrations/Home_Screen.png) | ![](illustrations/home_screen_drawer.png) | ![](illustrations/Search.png) |
-| :--------------------------------: | :---------------------------------------: | :----------------------------------: |
-|            Home Screen             |            Home Screen Drawer             |            Search Result             |
+| ![](illustrations/Home_Screen.png) | ![](illustrations/Search.png) |
+| :--------------------------------: | :----------------------------------: |
+|            Home Screen             |            Search Result             |
 
 | ![](illustrations/Product_Detail_screen_1.png) | ![](illustrations/Product_Detail_Screen_2.png) | ![](illustrations/Category_Product_Screen.png) |
 | :--------------------------------------: | :--------------------------------------: | :-------------------------------------: |
@@ -35,11 +35,11 @@ Here are some Illustration of App Screens
 | :-------------------------------------: | :-----------------------------------: | :-------------------------: |
 |         Manage Addresses Screen         |            Address Dialog             |         Cart Screen         |
 
-| ![](illustrations/My_Orders_Screen.png) | ![](illustrations/Order_Screen.png) | ![](illustrations/edit_product.png) |
+| ![](illustrations/My_Orders_Screen.png) | ![](illustrations/Order_Screen.png) | ![](illustrations/Dashboard_screen.png) |
 | :------------------------------: | :--------------------------------: | :---------------------------------: |
-|         My Orders Screen         |         Orders Screen         |     Add or Edit Product Screen      |
+|         My Orders Screen         |         Orders Screen         |     Admin Dashboard Screen      |
 
-| ![](illustrations/Dashboard_screen.png) | ![](illustrations/Sign_In_Screen.png) | ![](illustrations/Register_Screen.png) |
-| :----------------------------------: | :----------------------------: | :----------------------------: |
-|        Admin Dashboard Screen       |         Sign In Screen         |         Sign Up Screen         |
+| ![](illustrations/Sign_In_Screen.png) | ![](illustrations/Register_Screen.png) |
+| :----------------------------: | :----------------------------: |
+|         Sign In Screen         |         Sign Up Screen         |
 
