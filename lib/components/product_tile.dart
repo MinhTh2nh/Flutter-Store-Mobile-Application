@@ -31,7 +31,7 @@ class ProductTile extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.grey.shade200,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(18.0),
       ),
       // margin: const EdgeInsets.only(bottom: 10), // Add margin bottom
@@ -49,8 +49,8 @@ class ProductTile extends StatelessWidget {
             child: Image.network(
               product_thumbnail,
               width: double.infinity,
-              height: MediaQuery.of(context).size.height * 0.15,
-              fit: BoxFit.cover,
+              height: MediaQuery.of(context).size.height * 0.13,
+              fit: BoxFit.contain,
               errorBuilder: (BuildContext context, Object exception,
                   StackTrace? stackTrace) {
                 return Image.asset(
@@ -96,7 +96,7 @@ class ProductTile extends StatelessWidget {
             ],
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8), // Add padding
+            padding: const EdgeInsets.symmetric(horizontal: 12), // Add padding
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
