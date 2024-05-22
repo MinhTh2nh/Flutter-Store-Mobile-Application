@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import '../components/order_detail.dart';
 import '../model/order_detail_model.dart';
 import '../constants.dart';
 import 'package:intl/intl.dart';
@@ -86,201 +87,216 @@ class _OrdersScreenState extends State<OrdersScreen> {
                 itemCount: orders.length,
                 itemBuilder: (context, index) {
                   final order = orders[index];
-                  return Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(18.0),
-                      color: Colors.white,
-                    ),
-                    // Wrap the child elements in another Container
-                    // Set the background color of the child container
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ListTile(
-                          title: Text('Order: ${order.orderId}'),
-                          subtitle: Text(
-                              'Date: ${DateFormat('dd/MM/yyyy').format(order.orderDate)}'),
-                          trailing: Text('Status: ${order.orderStatus}',
-                              style: TextStyle(
-                                  color: _getStatusColor(order.orderStatus),
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18)),
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => OrderDetailScreen(order: order),
                         ),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: order.orderDetails.length,
-                          itemBuilder: (context, detailIndex) {
-                            final detail = order.orderDetails[detailIndex];
-                            return Container(
-                              // Wrap the child elements in another Container
-                              color: Colors.white,
-                              // Set the background color of the child container
-                              child: Column(
-                                children: [
-                                  ListTile(
-                                    leading: Image.network(
-                                      detail.product.productThumbnail,
-                                      fit: BoxFit.contain,
-                                    ),
-                                    title: Text(
-                                      ' ${detail.product.productName}',
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    subtitle: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                                '${detail.product.category.categoryName}, ${detail.product.subCategory.subName}, ${detail.product.size.sizeName} '),
-                                            Text(
-                                                'Quantity: ${detail.quantity}'),
-                                          ],
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            const Text(''),
-                                            Text(
-                                              ' \$${detail.product.productPrice}',
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.red.shade500,
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(18.0),
+                        color: Colors.white,
+                      ),
+                      // Wrap the child elements in another Container
+                      // Set the background color of the child container
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ListTile(
+                            title: Text('Order: ${order.orderId}'),
+                            subtitle: Text(
+                                'Date: ${DateFormat('dd/MM/yyyy').format(order.orderDate)}'),
+                            trailing: Text('Status: ${order.orderStatus}',
+                                style: TextStyle(
+                                    color: _getStatusColor(order.orderStatus),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18)),
+                          ),
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: order.orderDetails.length,
+                            itemBuilder: (context, detailIndex) {
+                              final detail = order.orderDetails[detailIndex];
+                              return Container(
+                                // Wrap the child elements in another Container
+                                color: Colors.white,
+                                // Set the background color of the child container
+                                child: Column(
+                                  children: [
+                                    ListTile(
+                                      leading: Image.network(
+                                        detail.product.productThumbnail,
+                                        fit: BoxFit.contain,
+                                      ),
+                                      title: Text(
+                                        ' ${detail.product.productName}',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      subtitle: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                  '${detail.product.category.categoryName}, ${detail.product.subCategory.subName}, ${detail.product.size.sizeName} '),
+                                              Text(
+                                                  'Quantity: ${detail.quantity}'),
+                                            ],
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              const Text(''),
+                                              Text(
+                                                ' \$${detail.product.productPrice}',
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.red.shade500,
+                                                ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  if (order.orderStatus == 'successful')
-                                    SizedBox(
-                                      width: double.infinity,
-                                      child: TextButton(
-                                        onPressed: () {
-                                          showDialog(
-                                            context: context,
-                                            builder: (context) {
-                                              TextEditingController
-                                                  reviewController =
-                                                  TextEditingController();
+                                    if (order.orderStatus == 'successful')
+                                      SizedBox(
+                                        width: double.infinity,
+                                        child: TextButton(
+                                          onPressed: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                TextEditingController
+                                                    reviewController =
+                                                    TextEditingController();
 
-                                              double rating = 3;
-                                              return AlertDialog(
-                                                title:
-                                                    const Text('Write Review'),
-                                                content: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    TextField(
-                                                      controller:
-                                                          reviewController,
-                                                      decoration:
-                                                          const InputDecoration(
-                                                        hintText:
-                                                            'Write your review here',
+                                                double rating = 3;
+                                                return AlertDialog(
+                                                  title: const Text(
+                                                      'Write Review'),
+                                                  content: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      TextField(
+                                                        controller:
+                                                            reviewController,
+                                                        decoration:
+                                                            const InputDecoration(
+                                                          hintText:
+                                                              'Write your review here',
+                                                        ),
                                                       ),
+                                                      RatingBar.builder(
+                                                        initialRating: 3,
+                                                        minRating: 1,
+                                                        direction:
+                                                            Axis.horizontal,
+                                                        allowHalfRating: true,
+                                                        itemCount: 5,
+                                                        itemPadding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal:
+                                                                    4.0),
+                                                        itemBuilder:
+                                                            (context, _) =>
+                                                                const Icon(
+                                                          Icons.star,
+                                                          color: Colors.amber,
+                                                        ),
+                                                        onRatingUpdate:
+                                                            (newRating) {
+                                                          rating = newRating;
+                                                          print(rating);
+                                                        },
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  actions: [
+                                                    TextButton(
+                                                      child:
+                                                          const Text('Cancel'),
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
                                                     ),
-                                                    RatingBar.builder(
-                                                      initialRating: 3,
-                                                      minRating: 1,
-                                                      direction:
-                                                          Axis.horizontal,
-                                                      allowHalfRating: true,
-                                                      itemCount: 5,
-                                                      itemPadding:
-                                                          const EdgeInsets
-                                                              .symmetric(
-                                                              horizontal: 4.0),
-                                                      itemBuilder:
-                                                          (context, _) =>
-                                                              const Icon(
-                                                        Icons.star,
-                                                        color: Colors.amber,
-                                                      ),
-                                                      onRatingUpdate:
-                                                          (newRating) {
-                                                        rating = newRating;
-                                                        print(rating);
+                                                    TextButton(
+                                                      child:
+                                                          const Text('Submit'),
+                                                      onPressed: () {
+                                                        int itemId =
+                                                            detail.itemId;
+                                                        rating = rating;
+                                                        String comment =
+                                                            reviewController
+                                                                .text;
+                                                        submitReview(itemId,
+                                                            rating, comment);
+                                                        Navigator.of(context)
+                                                            .pop();
                                                       },
                                                     ),
                                                   ],
-                                                ),
-                                                actions: [
-                                                  TextButton(
-                                                    child: const Text('Cancel'),
-                                                    onPressed: () {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                  ),
-                                                  TextButton(
-                                                    child: const Text('Submit'),
-                                                    onPressed: () {
-                                                      int itemId =
-                                                          detail.itemId;
-                                                      rating = rating;
-                                                      String comment =
-                                                          reviewController.text;
-                                                      submitReview(itemId,
-                                                          rating, comment);
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    },
-                                                  ),
-                                                ],
-                                              );
-                                            },
-                                          );
-                                        },
-                                        style: TextButton.styleFrom(
-                                          foregroundColor: Colors.white,
-                                          backgroundColor: Colors.blue,
-                                          shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.only(
-                                              bottomLeft: Radius.circular(10),
-                                              bottomRight: Radius.circular(10),
+                                                );
+                                              },
+                                            );
+                                          },
+                                          style: TextButton.styleFrom(
+                                            foregroundColor: Colors.white,
+                                            backgroundColor: Colors.blue,
+                                            shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.only(
+                                                bottomLeft: Radius.circular(10),
+                                                bottomRight:
+                                                    Radius.circular(10),
+                                              ),
                                             ),
                                           ),
+                                          child: const Text('Write Review'),
                                         ),
-                                        child: const Text('Write Review'),
                                       ),
-                                    ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                'Total Price: \$${order.totalPrice}',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.red.shade500,
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  'Total Price: \$${order.totalPrice}',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.red.shade500,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        Container(
-                          color: Colors.grey.shade200,
-                          // Set the background color of the bottom container
-                          padding: const EdgeInsets.all(15),
-                        ),
-                      ],
+                            ],
+                          ),
+                          Container(
+                            color: Colors.grey.shade200,
+                            // Set the background color of the bottom container
+                            padding: const EdgeInsets.all(15),
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 },

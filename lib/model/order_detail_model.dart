@@ -6,6 +6,11 @@ class Order {
   final DateTime orderDate;
   final String orderStatus;
   final double totalPrice;
+  final String orderAddress;
+  final String shippingAddress;
+  final String? phoneNumber;
+  final String paymentType;
+  final String paymentStatus;
   final List<OrderDetail> orderDetails;
 
   Order({
@@ -14,6 +19,11 @@ class Order {
     required this.orderStatus,
     required this.totalPrice,
     required this.orderDetails,
+    required this.orderAddress,
+    required this.shippingAddress,
+    this.phoneNumber,
+    required this.paymentType,
+    required this.paymentStatus,
   });
 
   factory Order.fromJson(Map<String, dynamic> json) {
@@ -22,6 +32,11 @@ class Order {
       orderDate: DateTime.parse(json['order_date']),
       orderStatus: json['order_status'],
       totalPrice: json['total_price'].toDouble(),
+      orderAddress: json['order_address'],
+      shippingAddress: json['shipping_address'],
+      phoneNumber: json['phoneNumber'],
+      paymentType: json['payment_type'],
+      paymentStatus: json['payment_status'],
       orderDetails: List<OrderDetail>.from(
           json['order_details'].map((detail) => OrderDetail.fromJson(detail))),
     );

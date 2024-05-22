@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
       }
     });
     // Fetch initial products
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<CartModel>(context, listen: false).fetchProducts();
     });
   }

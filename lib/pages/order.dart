@@ -1,7 +1,11 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:food_mobile_app/model/cart_model.dart';
 import 'package:provider/provider.dart';
 import 'package:food_mobile_app/components/address_management.dart';
+import '../components/payment_method.dart';
 import '../model/order_model.dart';
 import '../constants.dart';
 
@@ -18,6 +22,7 @@ class OrderPage extends StatefulWidget {
 class _OrderPageState extends State<OrderPage> {
   String? selectedAddress;
   String? selectedPhoneNumber;
+  String? selectedPaymentMethod;
 
   void onAddressSelected(String address, String phoneNumber) {
     print(
@@ -26,6 +31,14 @@ class _OrderPageState extends State<OrderPage> {
     setState(() {
       selectedAddress = address;
       selectedPhoneNumber = phoneNumber;
+    });
+  }
+
+  void onPaymentSelected(String paymentMethod) {
+    print('Payment method selected: $paymentMethod');
+
+    setState(() {
+      selectedPaymentMethod = paymentMethod;
     });
   }
 
@@ -38,7 +51,7 @@ class _OrderPageState extends State<OrderPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Order Details',
+          'Order',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
         ),
         backgroundColor: Colors.transparent,
@@ -54,10 +67,23 @@ class _OrderPageState extends State<OrderPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Delivery Address',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    const Row(
+                      children: [
+                        Icon(
+                          Icons
+                              .location_on, // You can choose any icon from the Icons class
+                          color: Colors.black, // Set the color of the icon
+                          size: 24.0, // Set the size of the icon
+                        ),
+                        SizedBox(
+                            width:
+                                8), // Add some space between the icon and the text
+                        Text(
+                          'Delivery Address',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 8),
                     Row(
@@ -92,6 +118,50 @@ class _OrderPageState extends State<OrderPage> {
                 ),
               ),
               const Divider(),
+              Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Row(
+                          children: [
+                            Icon(
+                              Icons
+                                  .payment, // Choose an appropriate icon from the Icons class
+                              color: Colors.black, // Set the color of the icon
+                              size: 24.0, // Set the size of the icon
+                            ),
+                            SizedBox(
+                                width:
+                                    8), // Add some space between the icon and the text
+                            Text(
+                              'Payment Method',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 18),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(selectedPaymentMethod != null
+                                ? '$selectedPaymentMethod'
+                                : 'No payment method selected'),
+                            IconButton(
+                                icon: const Icon(Icons.arrow_right),
+                                onPressed: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    builder: (context) {
+                                      return PaymentMethod(
+                                          onPaymentSelected: onPaymentSelected);
+                                    },
+                                  );
+                                })
+                          ],
+                        )
+                      ])),
+              const Divider(),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(top: 8, bottom: 8),
@@ -99,7 +169,6 @@ class _OrderPageState extends State<OrderPage> {
                       itemCount: value.cartItems.length,
                       itemBuilder: (context, index) {
                         var cartItem = value.cartItems[index];
-
                         return Padding(
                           padding: const EdgeInsets.all(12),
                           child: Container(
@@ -194,6 +263,7 @@ class _OrderPageState extends State<OrderPage> {
                     orderAddress: '123 Shipping Address',
                     shippingAddress: selectedAddress!,
                     phoneNumber: selectedPhoneNumber!,
+                    paymentType: selectedPaymentMethod!,
                     totalPrice: totalPrice,
                     items: Provider.of<CartModel>(context, listen: false)
                         .cartItems
