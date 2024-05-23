@@ -161,7 +161,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Product Detail'),
+        title: const Text('Product Detail'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(30.0),
@@ -196,10 +196,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TextFormField(
                   controller: _productNameController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       labelText: 'Product Name',
                       border: OutlineInputBorder()),
                   validator: (value) {
@@ -209,10 +209,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     return null;
                   },
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 TextFormField(
                   controller: _productPriceController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       labelText: 'Product Price',
                       border: OutlineInputBorder()),
                   keyboardType: TextInputType.number,
@@ -223,10 +223,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     return null;
                   },
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 TextFormField(
                   controller: _productThumbnailController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       labelText: 'Product Thumbnail URL',
                       border: OutlineInputBorder()),
                   validator: (value) {
@@ -236,10 +236,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     return null;
                   },
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 TextFormField(
                   controller: _productDescriptionController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       labelText: 'Product Description',
                       border: OutlineInputBorder()),
                   validator: (value) {
@@ -249,14 +249,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     return null;
                   },
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 Row(
                   children: [
                     Expanded(
                       flex: 7, // 70% width
                       child: TextFormField(
                         controller: _totalStockController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Product Total Stock',
                           border: OutlineInputBorder(),
                         ),
@@ -270,12 +270,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         },
                       ),
                     ),
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     // Add spacing between the text field and the button
                     Expanded(
                       flex: 3, // 30% width
                       child: Container(
-                        padding: EdgeInsets.symmetric(vertical: 8),
+                        padding: const EdgeInsets.symmetric(vertical: 8),
                         // Add padding to center the text vertically
                         child: buttonAdmin(
                           onTap: () {
@@ -289,9 +289,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     ),
                   ],
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 // Display current category name
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 // Dropdown buttons for selecting category and subcategory
                 DropdownButtonFormField<String>(
                   value: _selectedCategory != null
@@ -318,7 +318,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       }
                     });
                   },
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                       labelText: 'Product Main Category',
                       border: OutlineInputBorder()),
                   validator: (value) {
@@ -328,7 +328,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     return null;
                   },
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 DropdownButtonFormField<String>(
                   value: _selectedSubCategory != null
                       ? _selectedSubCategory!['sub_id'].toString()
@@ -341,7 +341,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     );
                   }).toList()
                     ..add(
-                      DropdownMenuItem<String>(
+                      const DropdownMenuItem<String>(
                         value: '', // Add an empty value for "New Sub Category"
                         child: Text('New Sub Category'),
                       ),
@@ -362,7 +362,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       }
                     });
                   },
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Product Sub Category',
                     border: OutlineInputBorder(),
                   ),
@@ -373,20 +373,20 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     return null;
                   },
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   children: [
                     _buildUpdateButton(),
                     _buildDeleteButton(),
                   ],
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 _activateButton(),
               ],
             ),
           ),
         )
-            : Center(child: CircularProgressIndicator()),
+            : const Center(child: CircularProgressIndicator()),
       ),
     );
   }
@@ -394,7 +394,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   Widget _buildUpdateButton() {
     return Expanded(
       child: DecoratedBox(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           borderRadius: BorderRadius.zero,
         ),
         child: buttons(
@@ -427,7 +427,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
             if (response.statusCode == 200) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
+                const SnackBar(
                   content: Text('Product updated successfully!'),
                   duration: Duration(seconds: 2),
                 ),
@@ -446,7 +446,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   Widget _buildDeleteButton() {
     return Expanded(
       child: DecoratedBox(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           borderRadius: BorderRadius.zero,
         ),
         child: buttons(
@@ -459,7 +459,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     .index}"));
             if (response.statusCode == 200) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
+                const SnackBar(
                   content: Text('Product deleted successfully!'),
                   duration: Duration(seconds: 2),
                 ),
@@ -480,7 +480,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       width: double.infinity,
       color: Colors.grey,
       child: DecoratedBox(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           borderRadius: BorderRadius.zero,
         ),
         child: buttons(
@@ -511,7 +511,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
             if (response.statusCode == 200) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
+                const SnackBar(
                   content: Text('Product activated successfully!'),
                   duration: Duration(seconds: 2),
                 ),
@@ -535,7 +535,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           future: fetchProductItems(widget.index),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             } else if (snapshot.hasError) {
@@ -550,10 +550,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Flexible(
+                      const Flexible(
                         flex: 2, // Takes 20% of the available space
                         child: Padding(
-                          padding: const EdgeInsets.only(top: 100.0),
+                          padding: EdgeInsets.only(top: 100.0),
                           child: Text(
                             'No items available for this product',
                             style: TextStyle(
@@ -572,8 +572,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             borderRadius: BorderRadius.circular(0),
                           ),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
+                        child: const Padding(
+                          padding: EdgeInsets.all(15.0),
                           child: Text(
                             'Create New Item',
                             style: TextStyle(
@@ -591,14 +591,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               List items = snapshot.data as List;
               return SingleChildScrollView(
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0), // Add horizontal padding
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0), // Add horizontal padding
                   constraints: BoxConstraints(
                     maxHeight: MediaQuery.of(context).size.height * 0.8,
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      SizedBox(height: 10), // Add some spacing
+                      const SizedBox(height: 10), // Add some spacing
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.4, // Set a specific height for the ListView
                         child: ListView.builder(
@@ -608,13 +608,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             return ListTile(
                               title: Text(
                                 'Item ID: ${items[index]['item_id']}',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 18, // Adjust fontsize as needed
                                 ),
                               ),
                               subtitle: Text(
                                 'Size: ${items[index]['size_name']}, Stock: ${items[index]['stock']}',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 18, // Adjust fontsize as needed
                                   fontWeight: FontWeight.bold, // Use FontWeight.bold for bold text
                                 ),
@@ -626,7 +626,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           },
                         ),
                       ),
-                      SizedBox(height: 10), // Add some spacing
+                      const SizedBox(height: 10), // Add some spacing
                       ElevatedButton(
                         onPressed: () {
                           showModalNewItemForm(context);
@@ -639,8 +639,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                             ), // Set borderRadius to 0 for no rounding
                           ),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(
+                        child: const Padding(
+                          padding: EdgeInsets.all(
                             15.0,
                           ),
                           child: Text(
@@ -652,7 +652,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 10), // Add some spacing
+                      const SizedBox(height: 10), // Add some spacing
                     ],
                   ),
                 ),
@@ -707,7 +707,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               children: [
                 TextFormField(
                   controller: _stockController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Stock',
                     border: OutlineInputBorder(),
                   ),
@@ -723,7 +723,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                   future: fetchProductSize(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
+                      return const CircularProgressIndicator();
                     } else if (snapshot.hasError) {
                       return Text('Error: ${snapshot.error}');
                     } else {
@@ -734,7 +734,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       return DropdownButtonFormField<String>(
                         value: _selectedSizeId,
                         items: [
-                          DropdownMenuItem(
+                          const DropdownMenuItem(
                             value: '0',
                             child: Text('Create New Option'),
                           ),
@@ -755,8 +755,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     }
                   },
                 ),
-                SizedBox(height: 15),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
+                const SizedBox(height: 15),
                 ElevatedButton(
                   onPressed: () {
                     if (_selectedSizeId == '0') {
@@ -772,8 +772,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       borderRadius: BorderRadius.circular(0),
                     ),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
+                  child: const Padding(
+                    padding: EdgeInsets.all(15.0),
                     child: Text(
                       'Create',
                       style: TextStyle(
@@ -797,12 +797,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       builder: (context) {
         String newSizeName = '';
         return AlertDialog(
-          title: Text('Enter Option Name'),
+          title: const Text('Enter Option Name'),
           content: TextField(
             onChanged: (value) {
               newSizeName = value;
             },
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               hintText: 'New Option Name',
             ),
           ),
@@ -813,7 +813,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 createNewSize(newSizeName);
                 Navigator.pop(context); // Close the dialog
               },
-              child: Text('Create'),
+              child: const Text('Create'),
             ),
           ],
         );
@@ -842,7 +842,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               backgroundColor: Colors.transparent,
               elevation: 0,
               child: Container(
-                padding: EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
                   color: Colors.transparent,
                   borderRadius: BorderRadius.circular(8.0),
@@ -861,7 +861,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             );
           },
         );
-        Future.delayed(Duration(seconds: 1), () {
+        Future.delayed(const Duration(seconds: 1), () {
           Navigator.pop(context);
         });
       } else {
@@ -873,7 +873,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               backgroundColor: Colors.transparent,
               elevation: 0,
               child: Container(
-                padding: EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
                   color: Colors.transparent,
                   borderRadius: BorderRadius.circular(8.0),
@@ -892,7 +892,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             );
           },
         );
-        Future.delayed(Duration(seconds: 1), () {
+        Future.delayed(const Duration(seconds: 1), () {
           Navigator.pop(context);
         });
       }
@@ -923,7 +923,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             backgroundColor: Colors.transparent,
             elevation: 0,
             child: Container(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
                 color: Colors.transparent,
                 borderRadius: BorderRadius.circular(8.0),
@@ -942,7 +942,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           );
         },
       );
-      Future.delayed(Duration(seconds: 1), () {
+      Future.delayed(const Duration(seconds: 1), () {
         Navigator.pop(context);
       });
       Navigator.of(context).pop(); // Close the modal bottom sheet
@@ -956,7 +956,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             backgroundColor: Colors.transparent,
             elevation: 0,
             child: Container(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
                 color: Colors.transparent,
                 borderRadius: BorderRadius.circular(8.0),
@@ -975,7 +975,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           );
         },
       );
-      Future.delayed(Duration(seconds: 1), () {
+      Future.delayed(const Duration(seconds: 1), () {
         Navigator.pop(context);
       });
     }
@@ -998,10 +998,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 TextFormField(
                   controller: _editItemController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Item Stock',
                     border: OutlineInputBorder(),
                   ),
@@ -1013,7 +1013,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     return null;
                   },
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 ElevatedButton(
                   onPressed: () async {
                     final formData = {
@@ -1029,7 +1029,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
                     if (response.statusCode == 200) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
+                        const SnackBar(
                           content: Text('Item updated successfully!'),
                           duration: Duration(seconds: 2),
                           behavior: SnackBarBehavior.floating,
@@ -1041,7 +1041,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text('Failed to update Item stock: ${response.statusCode}'),
-                          duration: Duration(seconds: 2),
+                          duration: const Duration(seconds: 2),
                           behavior: SnackBarBehavior.floating,
                         ),
                       );
@@ -1053,8 +1053,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       borderRadius: BorderRadius.circular(0),
                     ),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
+                  child: const Padding(
+                    padding: EdgeInsets.all(15.0),
                     child: Text(
                       'Update',
                       style: TextStyle(

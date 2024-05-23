@@ -6,8 +6,13 @@ import '../model/customer_detail.dart';
 
 class AddressManagement extends StatefulWidget {
   final void Function(String address, String phoneNumber)? onAddressSelected;
+  final bool enableSelection;
 
-  const AddressManagement({super.key, this.onAddressSelected});
+  const AddressManagement({
+    super.key,
+    this.onAddressSelected,
+    this.enableSelection = true,
+  });
 
   @override
   // ignore: library_private_types_in_public_api
@@ -335,11 +340,13 @@ class _AddressManagementState extends State<AddressManagement> {
                           ],
                         ),
                         onTap: () {
-                          widget.onAddressSelected!(
-                            deliveryAddresses[index].address,
-                            deliveryAddresses[index].phoneNumber,
-                          );
-                          Navigator.pop(context);
+                          if (widget.enableSelection) {
+                            widget.onAddressSelected!(
+                              deliveryAddresses[index].address,
+                              deliveryAddresses[index].phoneNumber,
+                            );
+                            Navigator.pop(context);
+                          }
                         },
                       );
                     },

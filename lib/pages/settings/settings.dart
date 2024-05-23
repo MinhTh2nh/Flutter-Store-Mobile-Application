@@ -29,14 +29,16 @@ class Settings extends StatelessWidget {
               icon: "lib/images/address.svg",
               press: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const AddressManagement(),
+                  builder: (context) => const AddressManagement(
+                    enableSelection: false,
+                  ),
                 ));
               },
             ),
             ProfileMenu(
               text: "My Orders",
               icon:
-              "lib/images/order.svg", // Replace with your actual orders icon path
+                  "lib/images/order.svg", // Replace with your actual orders icon path
               press: () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) =>
@@ -68,24 +70,28 @@ class Settings extends StatelessWidget {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 0.0), // Adjust content padding
+                      contentPadding: const EdgeInsets.fromLTRB(
+                          24.0, 20.0, 24.0, 0.0), // Adjust content padding
                       title: const Center(
                         child: Text('Log Out'), // Center the title
                       ),
                       content: Container(
-                        margin: const EdgeInsets.only(bottom: 10.0), // Add margin at the bottom
+                        margin: const EdgeInsets.only(
+                            bottom: 10.0), // Add margin at the bottom
                         child: const Text('Are you sure you want to log out?'),
                       ),
                       actions: <Widget>[
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Center the buttons and add space between them
+                          mainAxisAlignment: MainAxisAlignment
+                              .spaceEvenly, // Center the buttons and add space between them
                           children: [
                             SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.3, // Set button width to 30% of screen width
-                              child:
-                              ElevatedButton(
+                              width: MediaQuery.of(context).size.width *
+                                  0.3, // Set button width to 30% of screen width
+                              child: ElevatedButton(
                                 onPressed: () {
-                                  Navigator.of(context).pop(); // Close the dialog
+                                  Navigator.of(context)
+                                      .pop(); // Close the dialog
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.teal.shade200,
@@ -101,22 +107,25 @@ class Settings extends StatelessWidget {
                                     'Stay',
                                     style: TextStyle(
                                       fontSize: 15, // Adjust fontsize as needed
-                                      color: Colors.white, // Set text color to white
+                                      color: Colors
+                                          .white, // Set text color to white
                                     ),
                                   ),
                                 ),
                               ),
                             ),
                             SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.3, // Set button width to 30% of screen width
-                              child:
-                              ElevatedButton(
+                              width: MediaQuery.of(context).size.width *
+                                  0.3, // Set button width to 30% of screen width
+                              child: ElevatedButton(
                                 onPressed: () async {
                                   // Perform logout action
-                                  final customer = CustomerModel(email: '', password: '');
+                                  final customer =
+                                      CustomerModel(email: '', password: '');
                                   await customer.logoutUser();
                                   // ignore: use_build_context_synchronously
-                                  Navigator.pushReplacementNamed(context, '/sign_in');
+                                  Navigator.pushReplacementNamed(
+                                      context, '/sign_in');
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.red,
@@ -132,7 +141,8 @@ class Settings extends StatelessWidget {
                                     'Log Out',
                                     style: TextStyle(
                                       fontSize: 15, // Adjust fontsize as needed
-                                      color: Colors.white, // Set text color to white
+                                      color: Colors
+                                          .white, // Set text color to white
                                     ),
                                   ),
                                 ),
