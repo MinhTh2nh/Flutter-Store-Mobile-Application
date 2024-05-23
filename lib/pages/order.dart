@@ -86,34 +86,37 @@ class _OrderPageState extends State<OrderPage> {
                       ],
                     ),
                     const SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(selectedAddress != null
-                                ? '$selectedAddress'
-                                : 'No address selected'),
-                            Text(selectedPhoneNumber != null
-                                ? '$selectedPhoneNumber'
-                                : 'No phone number selected'),
-                          ],
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.arrow_right),
-                          onPressed: () {
-                            showModalBottomSheet(
-                              context: context,
-                              builder: (context) {
-                                return AddressManagement(
-                                    onAddressSelected: onAddressSelected);
-                              },
-                            );
+                    InkWell(
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (context) {
+                            return AddressManagement(
+                                onAddressSelected: onAddressSelected);
                           },
-                        ),
-                      ],
-                    ),
+                        );
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(selectedAddress != null
+                                    ? '$selectedAddress'
+                                    : 'No address selected'),
+                                Text(selectedPhoneNumber != null
+                                    ? '$selectedPhoneNumber'
+                                    : 'No phone number selected'),
+                              ],
+                            ),
+                          ),
+                          const Icon(Icons.arrow_right),
+                        ],
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -141,24 +144,28 @@ class _OrderPageState extends State<OrderPage> {
                             ),
                           ],
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(selectedPaymentMethod != null
-                                ? '$selectedPaymentMethod'
-                                : 'No payment method selected'),
-                            IconButton(
-                                icon: const Icon(Icons.arrow_right),
-                                onPressed: () {
-                                  showModalBottomSheet(
-                                    context: context,
-                                    builder: (context) {
-                                      return PaymentMethod(
-                                          onPaymentSelected: onPaymentSelected);
-                                    },
-                                  );
-                                })
-                          ],
+                        InkWell(
+                          onTap: () {
+                            showModalBottomSheet(
+                              context: context,
+                              builder: (context) {
+                                return PaymentMethod(
+                                    onPaymentSelected: onPaymentSelected);
+                              },
+                            );
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(selectedPaymentMethod != null
+                                    ? '$selectedPaymentMethod'
+                                    : 'No payment method selected'),
+                              ),
+                              const Icon(Icons.arrow_right),
+                            ],
+                          ),
                         )
                       ])),
               const Divider(),

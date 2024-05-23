@@ -38,8 +38,8 @@ class PaymentMethod extends StatelessWidget {
           ),
           const Divider(),
           ListTile(
-            leading: const Icon(Icons.payment), // Icon for 'Online Banking'
-            title: const Text('Online Banking'),
+            leading: const Icon(Icons.payment), // Icon for 'E-Wallets'
+            title: const Text('E-Wallets'),
             onTap: () {
               onPaymentSelected('online banking');
               Navigator.pop(context);
