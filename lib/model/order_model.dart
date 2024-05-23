@@ -1,5 +1,4 @@
 // ignore_for_file: avoid_print, use_build_context_synchronously
-
 import 'dart:convert';
 import 'package:food_mobile_app/model/cart_model.dart';
 import 'package:http/http.dart' as http;
@@ -13,12 +12,14 @@ class Order {
   final String orderAddress;
   final String shippingAddress;
   final String phoneNumber;
+  final String paymentStatus;
   final String paymentType;
   final double totalPrice;
   final List<OrderItem> items;
 
   Order({
     required this.customerId,
+    required this.paymentStatus,
     required this.orderQuantity,
     required this.orderAddress,
     required this.shippingAddress,
@@ -35,6 +36,7 @@ class Order {
       'order_address': orderAddress,
       'shipping_address': shippingAddress,
       'phoneNumber': phoneNumber,
+      'payment_status': paymentStatus,
       'payment_type': paymentType, // 'When receive order', 'smart banking', 'online banking
       'total_price': totalPrice,
       'items': items.map((item) => item.toJson()).toList(),
@@ -93,7 +95,7 @@ Future<void> createOrder(BuildContext context, Order order) async {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const OrdersScreen()),
-        (Route<dynamic> route) => route
+            (Route<dynamic> route) => route
             .isFirst, // This predicate returns true if the route is the first route in the navigator (i.e., the Home page)
       );
       print('Order created successfully');

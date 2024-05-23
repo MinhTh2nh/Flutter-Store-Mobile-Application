@@ -72,8 +72,6 @@ class Products extends StatelessWidget {
                           );
                         },
                         child: Padding(
-                          // padding: const EdgeInsets.symmetric(
-                          //     horizontal: 5, vertical: 5),
                           padding: const EdgeInsets.all(5),
                           child: ProductTile(
                             product_name: product['product_name'],

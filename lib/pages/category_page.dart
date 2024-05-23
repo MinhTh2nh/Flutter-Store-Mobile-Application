@@ -67,63 +67,77 @@ class _CategoryContentState extends State<CategoryContent> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<CartModel>(
-      builder: (context, cartModel, child) {
-        if (cartModel.isLoading && cartModel.shopItems.isEmpty) {
-          return const Center(child: CircularProgressIndicator());
-        }
+    return
+      Container(
+        decoration: BoxDecoration(
+          color: Colors.grey.shade100,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const SizedBox(height: 12),
+            Consumer<CartModel>(
+              builder: (context, cartModel, child) {
+                if (cartModel.isLoading && cartModel.shopItems.isEmpty) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-        final items = cartModel.shopItems.where((product) {
-          if (widget.category != null) {
-            return product['category_name'] == widget.category;
-          } else if (widget.subcategory != null) {
-            return product['sub_name'] == widget.subcategory;
-          }
-          return true;
-        }).toList();
+                final items = cartModel.shopItems.where((product) {
+                  if (widget.category != null) {
+                    return product['category_name'] == widget.category;
+                  } else if (widget.subcategory != null) {
+                    return product['sub_name'] == widget.subcategory;
+                  }
+                  return true;
+                }).toList();
 
-        if (items.isEmpty) {
-          return const Center(child: Text('No products found.'));
-        }
+                if (items.isEmpty) {
+                  return const Center(child: Text('No products found.'));
+                }
 
-        return GridView.builder(
-          controller: _scrollController,
-          shrinkWrap: true,
-          padding: const EdgeInsets.all(8.0),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 1 / 1.1,
-          ),
-          itemCount: items.length,
-          itemBuilder: (context, index) {
-            var product = items[index];
-            return GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ProductDetailPage(
-                      productId: product['product_id'],
-                    ),
+                return GridView.builder(
+                  controller: _scrollController,
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.all(8.0),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 1 / 1.1,
                   ),
+                  itemCount: items.length,
+                  itemBuilder: (context, index) {
+                    var product = items[index];
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ProductDetailPage(
+                                  productId: product['product_id'],
+                                ),
+                          ),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: ProductTile(
+                          product_name: product['product_name'],
+                          product_price: product["product_price"].toString(),
+                          product_thumbnail: product["product_thumbnail"],
+                          total_stock: product['total_stock'],
+                          average_rating:
+                          (product['average_rating'] as num?)?.toDouble() ??
+                              0.0,
+                          onPressed: () {},
+                        ),
+                      ),
+                    );
+                  },
                 );
               },
-              child: Padding(
-                padding: const EdgeInsets.all(5),
-                child: ProductTile(
-                  product_name: product['product_name'],
-                  product_price: product["product_price"].toString(),
-                  product_thumbnail: product["product_thumbnail"],
-                  total_stock: product['total_stock'],
-                  average_rating:
-                      (product['average_rating'] as num?)?.toDouble() ?? 0.0,
-                  onPressed: () {},
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
+            )
+          ],
+        ),
+      );
   }
 }

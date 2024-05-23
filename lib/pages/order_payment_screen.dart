@@ -8,41 +8,23 @@ import 'package:food_mobile_app/components/address_management.dart';
 import '../components/payment_method.dart';
 import '../model/order_model.dart';
 import '../constants.dart';
-import 'order_payment_screen.dart';
 
-class OrderPage extends StatefulWidget {
-  static String routeName = "/order-page";
+class OrderPaymentScreen extends StatefulWidget {
+  final Order order;
 
-  const OrderPage({super.key});
+  const OrderPaymentScreen({required this.order, super.key});
+
 
   @override
   // ignore: library_private_types_in_public_api
-  _OrderPageState createState() => _OrderPageState();
+  _OrderPaymentScreenState createState() => _OrderPaymentScreenState();
 }
 
-class _OrderPageState extends State<OrderPage> {
+class _OrderPaymentScreenState extends State<OrderPaymentScreen> {
   String? selectedAddress;
   String? selectedPhoneNumber;
   String? selectedPaymentMethod;
   String paymentMethodStatus = "incompleted";
-
-  void onAddressSelected(String address, String phoneNumber) {
-    print(
-        'onAddressSelected called with address: $address and phone: $phoneNumber');
-
-    setState(() {
-      selectedAddress = address;
-      selectedPhoneNumber = phoneNumber;
-    });
-  }
-
-  void onPaymentSelected(String paymentMethod) {
-    print('Payment method selected: $paymentMethod');
-
-    setState(() {
-      selectedPaymentMethod = paymentMethod;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +35,7 @@ class _OrderPageState extends State<OrderPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Order',
+          'Order Payment ',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
         ),
         backgroundColor: Colors.transparent,
@@ -64,104 +46,6 @@ class _OrderPageState extends State<OrderPage> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Row(
-                      children: [
-                        Icon(
-                          Icons.location_on,
-                          // You can choose any icon from the Icons class
-                          color: Colors.black, // Set the color of the icon
-                          size: 24.0, // Set the size of the icon
-                        ),
-                        SizedBox(
-                            width:
-                            8), // Add some space between the icon and the text
-                        Text(
-                          'Delivery Address',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(selectedAddress != null
-                                ? '$selectedAddress'
-                                : 'No address selected'),
-                            Text(selectedPhoneNumber != null
-                                ? '$selectedPhoneNumber'
-                                : 'No phone number selected'),
-                          ],
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.arrow_right),
-                          onPressed: () {
-                            showModalBottomSheet(
-                              context: context,
-                              builder: (context) {
-                                return AddressManagement(
-                                    onAddressSelected: onAddressSelected);
-                              },
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              const Divider(),
-              Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Row(
-                          children: [
-                            Icon(
-                              Icons.payment,
-                              // Choose an appropriate icon from the Icons class
-                              color: Colors.black, // Set the color of the icon
-                              size: 24.0, // Set the size of the icon
-                            ),
-                            SizedBox(width: 8),
-                            // Add some space between the icon and the text
-                            Text(
-                              'Payment Method',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 18),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(selectedPaymentMethod != null
-                                ? '$selectedPaymentMethod'
-                                : 'No payment method selected'),
-                            IconButton(
-                                icon: const Icon(Icons.arrow_right),
-                                onPressed: () {
-                                  showModalBottomSheet(
-                                    context: context,
-                                    builder: (context) {
-                                      return PaymentMethod(
-                                          onPaymentSelected: onPaymentSelected);
-                                    },
-                                  );
-                                })
-                          ],
-                        )
-                      ])),
               const Divider(),
               Expanded(
                 child: Padding(
@@ -218,10 +102,6 @@ class _OrderPageState extends State<OrderPage> {
               const Divider(),
               Column(
                 children: [
-                  ListTile(
-                    title: const Text('Subtotal'),
-                    trailing: Text('\$${value.calculateTotal()}'),
-                  ),
                   ListTile(
                     title: const Text('Delivery Fee'),
                     trailing: Text('\$${deliveryFee.toStringAsFixed(2)}'),
