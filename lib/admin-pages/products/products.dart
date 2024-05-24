@@ -36,6 +36,7 @@ class _AdminProductPageState extends State<AdminProductPage> {
         Provider.of<CartModel>(context, listen: false).fetchProducts();
       }
     });
+    updateProductList();
   }
 
   @override
@@ -45,110 +46,115 @@ class _AdminProductPageState extends State<AdminProductPage> {
       drawer: const SideMenu(),
       body: SingleChildScrollView(
         controller: scrollController,
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Row(
-                children: [
-                  const Text(
-                    "List Of Products",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  const Spacer(),
-                  buttonAdmin(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ProductCreationForm(
-                                onUpdate: updateProductList)),
-                      );
-                    },
-                    title: "NEW",
-                    color: Colors.teal.shade200,
-                    textColor: Colors.white,
-                  )
-                ],
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.0),
-              child: Divider(),
-            ),
-            Consumer<CartModel>(
-              builder: (context, cartModel, child) {
-                if (cartModel.shopItems.isEmpty) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                cartModel.shopItems
-                    .sort((a, b) => a['product_id'].compareTo(b['product_id']));
-                return GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: cartModel.shopItems.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 1 / 1.1,
-                  ),
-                  itemBuilder: (context, index) {
-                    var product = cartModel.shopItems[index];
-                    bool isUnavailable = product['STATUS'] == "Unavailable";
-
-                    return GestureDetector(
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.grey.shade100,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                  children: [
+                    const Text(
+                      "List Of Products",
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    const Spacer(),
+                    buttonAdmin(
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ProductDetailPage(
-                              index: product['product_id'],
-                              onUpdate: updateProductList,
-                            ),
-                          ),
+                              builder: (context) => ProductCreationForm(
+                                  onUpdate: updateProductList)),
                         );
                       },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Stack(
-                            children: [
-                              ProductTile(
-                                product_name: product['product_name'],
-                                product_price:
-                                    product["product_price"].toString(),
-                                product_thumbnail: product["product_thumbnail"],
-                                total_stock: product[
-                                    'total_stock'], // Convert integer to string
-                                average_rating:
-                                    (product['average_rating'] as num?)
-                                            ?.toDouble() ??
-                                        0.0,
-                                onPressed:
-                                    () {}, // Placeholder onPressed function
+                      title: "NEW",
+                      color: Colors.teal.shade200,
+                      textColor: Colors.white,
+                    )
+                  ],
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.all(0.0),
+                child: Divider(),
+              ),
+              Consumer<CartModel>(
+                builder: (context, cartModel, child) {
+                  if (cartModel.shopItems.isEmpty) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  cartModel.shopItems
+                      .sort((a, b) => a['product_id'].compareTo(b['product_id']));
+                  return GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: cartModel.shopItems.length,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 1 / 1.1,
+                    ),
+                    itemBuilder: (context, index) {
+                      var product = cartModel.shopItems[index];
+                      bool isUnavailable = product['STATUS'] == "Unavailable";
+
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductDetailPage(
+                                index: product['product_id'],
+                                onUpdate: updateProductList,
                               ),
-                              if (isUnavailable)
-                                Positioned.fill(
-                                  child: Container(
-                                    color: Colors.grey.withOpacity(0.5),
-                                  ),
+                            ),
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(5),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Stack(
+                              children: [
+                                ProductTile(
+                                  product_name: product['product_name'],
+                                  product_price:
+                                  product["product_price"].toString(),
+                                  product_thumbnail: product["product_thumbnail"],
+                                  total_stock: product[
+                                  'total_stock'], // Convert integer to string
+                                  average_rating:
+                                  (product['average_rating'] as num?)
+                                      ?.toDouble() ??
+                                      0.0,
+                                  onPressed:
+                                      () {}, // Placeholder onPressed function
                                 ),
-                            ],
+                                if (isUnavailable)
+                                  Positioned.fill(
+                                    child: Container(
+                                      color: Colors.grey.withOpacity(0.5),
+                                    ),
+                                  ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-          ],
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
         ),
+        padding: const EdgeInsets.symmetric(vertical: 16),
       ),
     );
   }

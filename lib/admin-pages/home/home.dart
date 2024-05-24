@@ -104,7 +104,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
   void _calculateRealRevenue() {
     double total = 0.0;
     for (var order in _orderLists) {
-      if (order['order_status'] == 'successful') {
+      if (order['payment_status'] == 'completed') {
         total += order['total_price'];
       }
     }

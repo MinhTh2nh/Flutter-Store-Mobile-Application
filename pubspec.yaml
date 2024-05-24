@@ -50,6 +50,7 @@ dependencies:
   googleapis_auth: ^1.6.0
   gcloud: ^0.8.12
   mime: ^1.0.5
+  flutter_stripe: ^10.1.1
 
 dev_dependencies:
   flutter_test:
