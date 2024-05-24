@@ -11,8 +11,7 @@ class ProductDetailPage extends StatefulWidget {
   final int index;
   final void Function() onUpdate; // Declare the callback function
   const ProductDetailPage(
-      {Key? key, required this.index, required this.onUpdate})
-      : super(key: key);
+      {super.key, required this.index, required this.onUpdate});
 
   @override
   _ProductDetailPageState createState() => _ProductDetailPageState();

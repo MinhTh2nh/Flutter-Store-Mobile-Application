@@ -318,36 +318,45 @@ class _AddressManagementState extends State<AddressManagement> {
                   child: ListView.builder(
                     itemCount: deliveryAddresses.length,
                     itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(deliveryAddresses[index].address),
-                        subtitle: Text(deliveryAddresses[index].phoneNumber),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            IconButton(
-                              icon: const Icon(Icons.edit),
-                              onPressed: () {
-                                _showAddOrUpdateDialog(
-                                    address: deliveryAddresses[index]);
-                              },
+                      return Container(
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(
+                              color: Colors.grey.shade300,
                             ),
-                            IconButton(
-                              icon: const Icon(Icons.delete),
-                              onPressed: () {
-                                removeAddress(index);
-                              },
-                            ),
-                          ],
+                          ),
                         ),
-                        onTap: () {
-                          if (widget.enableSelection) {
-                            widget.onAddressSelected!(
-                              deliveryAddresses[index].address,
-                              deliveryAddresses[index].phoneNumber,
-                            );
-                            Navigator.pop(context);
-                          }
-                        },
+                        child: ListTile(
+                          title: Text(deliveryAddresses[index].address),
+                          subtitle: Text(deliveryAddresses[index].phoneNumber),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              IconButton(
+                                icon: const Icon(Icons.edit),
+                                onPressed: () {
+                                  _showAddOrUpdateDialog(
+                                      address: deliveryAddresses[index]);
+                                },
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.delete),
+                                onPressed: () {
+                                  removeAddress(index);
+                                },
+                              ),
+                            ],
+                          ),
+                          onTap: () {
+                            if (widget.enableSelection) {
+                              widget.onAddressSelected!(
+                                deliveryAddresses[index].address,
+                                deliveryAddresses[index].phoneNumber,
+                              );
+                              Navigator.pop(context);
+                            }
+                          },
+                        ),
                       );
                     },
                   ),

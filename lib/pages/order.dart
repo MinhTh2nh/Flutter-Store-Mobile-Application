@@ -290,7 +290,7 @@ class _OrderPageState extends State<OrderPage> {
                       orderAddress: '123 Shipping Address',
                       shippingAddress: selectedAddress!,
                       phoneNumber: selectedPhoneNumber!,
-                      paymentStatus: paymentMethodStatus!,
+                      paymentStatus: paymentMethodStatus,
                       paymentType: selectedPaymentMethod!,
                       totalPrice: totalPrice,
                       items: Provider.of<CartModel>(context, listen: false)
