@@ -42,7 +42,10 @@ class Order {
       'items': items.map((item) => item.toJson()).toList(),
     };
   }
+
 }
+
+
 
 class OrderItem {
   final double detailPrice;
@@ -69,7 +72,7 @@ Future<void> createOrder(BuildContext context, Order order) async {
       'https://flutter-store-mobile-application-backend.onrender.com/orders/create';
   try {
     final jsonData = jsonEncode(order.toJson());
-
+    print(jsonData);
     //send a POST request to the API endpoint
     final response = await http.post(
       Uri.parse(apiUrl),
