@@ -317,13 +317,12 @@ class _AdminOrderPageState extends State<AdminOrderPage> {
     final response = await http.delete(url);
 
     if (response.statusCode == 200) {
-      // Order deleted successfully
-      // Show a snackbar or toast message to inform the user
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Order deleted successfully'),
         ),
       );
+      updateOrderList(); // Refresh the list after deleting
     } else {
       // Failed to delete order
       // Show error message to the user

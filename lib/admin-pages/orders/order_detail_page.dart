@@ -22,6 +22,7 @@ class OrderDetailPage extends StatefulWidget {
 class _OrderDetailPageState extends State<OrderDetailPage> {
   late Future<Order> _orderFuture;
   String? selectedStatus;
+  String? selectedPaymentStatus;
 
   @override
   void initState() {
@@ -56,7 +57,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
       final response = await http.put(
         Uri.parse(path),
         headers: {"Content-Type": "application/json"},
-        body: json.encode({"order_status": selectedStatus}),
+        body: json.encode({"order_status": selectedStatus , "payment_status": selectedPaymentStatus}),
       );
       if (response.statusCode == 200) {
         // Successfully updated the status
@@ -95,7 +96,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
             );
           } else {
             final order = snapshot.data!;
-            selectedStatus ??= order.orderStatus; // Initialize selectedStatus if it's null
+            selectedStatus ??= order.orderStatus;
+            selectedPaymentStatus ??= order.orderPaymentStatus;
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: SingleChildScrollView(
@@ -236,6 +238,54 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                       ],
                     ),
                     const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "The Order Payment Status:",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.teal.shade200,
+                          ),
+                          child:
+                          DropdownButton<String>(
+                            value: selectedPaymentStatus,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedPaymentStatus = newValue;
+                              });
+                            },
+                            items: <String>[
+                              'incompleted',
+                              'completed',
+                            ].map((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    value[0].toUpperCase() + value.substring(1),
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                            style: TextStyle(color: Colors.black),
+                            dropdownColor: Colors.grey.shade200,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
                     ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
@@ -321,6 +371,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
         return Order(
           orderId: responseData['order_id'],
           orderStatus: responseData['order_status'],
+          orderPaymentStatus : responseData['payment_status'],
+          orderPaymentMethod : responseData['payment_type'],
           orderDate: responseData['order_date'],
           orderPrice: responseData['total_price'].toString(),
           orderAddress: responseData['order_address'],
@@ -355,10 +407,11 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     }
   }
 }
-
 class Order {
   final int orderId;
   final String orderStatus;
+  final String orderPaymentStatus;
+  final String orderPaymentMethod;
   final String orderAddress;
   final String shippingAddress;
   final String? phoneNumber; // Nullable phone number
@@ -370,12 +423,29 @@ class Order {
     required this.orderId,
     required this.orderStatus,
     required this.orderAddress,
+    required this.orderPaymentMethod,
+    required this.orderPaymentStatus,
     required this.shippingAddress,
     required this.phoneNumber,
     required this.orderDate,
     required this.orderPrice,
     required this.orderDetail,
   });
+
+  factory Order.fromJson(Map<String, dynamic> json) {
+    return Order(
+      orderId: json['order_id'],
+      orderStatus: json['order_status'] ?? '',
+      orderPaymentStatus: json['payment_status'] ?? '',
+      orderPaymentMethod: json['payment_type'] ?? '',
+      orderAddress: json['order_address'] ?? '',
+      shippingAddress: json['shipping_address'] ?? '',
+      phoneNumber: json['phoneNumber'],
+      orderDate: json['order_date'] ?? '',
+      orderPrice: json['total_price'].toString(),
+      orderDetail: (json['order_details'] as List<dynamic>).map((detail) => OrderDetail.fromJson(detail)).toList(),
+    );
+  }
 }
 
 class OrderDetail {
@@ -386,6 +456,13 @@ class OrderDetail {
     required this.product,
     required this.quantity,
   });
+
+  factory OrderDetail.fromJson(Map<String, dynamic> json) {
+    return OrderDetail(
+      product: Product.fromJson(json['product']),
+      quantity: json['quantity'],
+    );
+  }
 }
 
 class Product {
@@ -404,6 +481,17 @@ class Product {
     required this.subCategory,
     required this.size,
   });
+
+  factory Product.fromJson(Map<String, dynamic> json) {
+    return Product(
+      productName: json['product_name'] ?? '',
+      productPrice: double.parse(json['product_price'].toString()),
+      productThumbnail: json['product_thumbnail'] ?? '',
+      category: Category.fromJson(json['category']),
+      subCategory: SubCategory.fromJson(json['sub_category']),
+      size: Size.fromJson(json['size']),
+    );
+  }
 }
 
 class Category {
@@ -412,6 +500,12 @@ class Category {
   Category({
     required this.categoryName,
   });
+
+  factory Category.fromJson(Map<String, dynamic> json) {
+    return Category(
+      categoryName: json['category_name'] ?? '',
+    );
+  }
 }
 
 class SubCategory {
@@ -420,6 +514,12 @@ class SubCategory {
   SubCategory({
     required this.subName,
   });
+
+  factory SubCategory.fromJson(Map<String, dynamic> json) {
+    return SubCategory(
+      subName: json['sub_name'] ?? '',
+    );
+  }
 }
 
 class Size {
@@ -428,4 +528,10 @@ class Size {
   Size({
     required this.sizeName,
   });
+
+  factory Size.fromJson(Map<String, dynamic> json) {
+    return Size(
+      sizeName: json['size_name'] ?? '',
+    );
+  }
 }

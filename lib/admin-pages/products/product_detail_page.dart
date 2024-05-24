@@ -40,7 +40,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   bool _isDataLoaded = false;
   late String _path;
   var path =
-      "https://flutter-store-mobile-application-backend.onrender.com/products/get";
+      Uri.parse("https://flutter-store-mobile-application-backend.onrender.com/products/get");
   late CartModel _cartModel;
   String? _selectedSizeId = "";
 
@@ -72,7 +72,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       if (response.statusCode == 200) {
         final List<dynamic> subCategories = json.decode(response.body)['data'];
         setState(() {
-          _sub_categories = _cartModel.categories;
+          _sub_categories = subCategories;
         });
       } else {
         throw Exception(
@@ -304,23 +304,27 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       child: Text(category['category_name'] as String),
                     );
                   }).toList(),
-                  onChanged: (newValue) {
-                    setState(() {
-                      _selectedCategory = _categories.firstWhere(
-                              (category) =>
-                          category['category_id'].toString() ==
-                              newValue,
-                          orElse: () => null);
-                      if (_selectedCategory != null) {
-                        _productCategoryController.text =
-                        _selectedCategory!['category_name'];
-                        fetchSubCategories(int.parse(newValue!));
+                  onChanged: (newValue) async {
+                    if (newValue != null && newValue.isNotEmpty) {
+                      final selectedCategory = _categories.firstWhere(
+                            (category) => category['category_id'].toString() == newValue,
+                        orElse: () => null,
+                      );
+
+                      if (selectedCategory != null) { // Ensure sub-categories are fetched before updating the state
+                        setState(() {
+                          _selectedCategory = selectedCategory;
+                          _productCategoryController.text = _selectedCategory!['category_name'];
+                          fetchSubCategories(int.parse(newValue));
+                          _selectedSubCategory = null; // Reset sub-category selection when main category changes
+                        });
                       }
-                    });
+                    }
                   },
                   decoration: const InputDecoration(
-                      labelText: 'Product Main Category',
-                      border: OutlineInputBorder()),
+                    labelText: 'Product Main Category',
+                    border: OutlineInputBorder(),
+                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please select or enter a product category';
@@ -328,15 +332,17 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     return null;
                   },
                 ),
+
                 const SizedBox(height: 15),
+
                 DropdownButtonFormField<String>(
                   value: _selectedSubCategory != null
-                      ? _selectedSubCategory!['sub_id'].toString()
+                      ? _selectedSubCategory!['sub_id']?.toString()
                       : null,
                   items: _sub_categories
                       .map<DropdownMenuItem<String>>((sub_category) {
                     return DropdownMenuItem<String>(
-                      value: sub_category['sub_id'].toString(),
+                      value: sub_category['sub_id']?.toString(),
                       child: Text(sub_category['sub_name'] as String),
                     );
                   }).toList()
@@ -348,14 +354,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     ),
                   onChanged: (newValue) {
                     setState(() {
-                      if (newValue != null && newValue.isNotEmpty) {
+                      if (newValue == '') {
+                        _showNewSubCategoryDialog(context, _selectedCategory!['category_id']);
+                      } else if (newValue != null && newValue.isNotEmpty) {
                         _selectedSubCategory = _sub_categories.firstWhere(
-                              (subCategory) => subCategory['sub_id'].toString() == newValue,
+                              (subCategory) => subCategory['sub_id']?.toString() == newValue,
                           orElse: () => null,
                         );
-                        print(_selectedSubCategory);
-                        _productSubCategoryController.text =
-                            _selectedSubCategory?['sub_id'];
+                        _productSubCategoryController.text = _selectedSubCategory?['sub_id']?.toString() ?? '';
                       } else {
                         _selectedSubCategory = null;
                         _productSubCategoryController.text = ''; // Clear the controller if no sub-category is selected
@@ -373,6 +379,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     return null;
                   },
                 ),
+
                 const SizedBox(height: 20),
                 Row(
                   children: [
@@ -407,7 +414,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               "product_price": _productPriceController.text,
               "product_thumbnail": _productThumbnailController.text,
               "product_description": _productDescriptionController.text,
-              "category_id": _productCategoryController.text,
+              "category_id": _selectedCategory?['category_id'],
               "sub_id": _selectedSubCategory?['sub_id'],
               "total_stock": _totalStockController.text,
               "status": "Available",
@@ -760,7 +767,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 ElevatedButton(
                   onPressed: () {
                     if (_selectedSizeId == '0') {
-                      // If size is "Create New Option", show dialog for user to input new size
                       showNewSizeDialog(context);
                     } else {
                       submitFormData();
@@ -820,7 +826,121 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       },
     );
   }
+  void _showNewSubCategoryDialog(BuildContext context , int category_id) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        String newSizeName = '';
+        return AlertDialog(
+          title: const Text('Enter Sub Category Name'),
+          content: TextField(
+            onChanged: (value) {
+              newSizeName = value;
+            },
+            decoration: const InputDecoration(
+              hintText: 'New Subcategory Name',
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                // Make a POST request to create a new size with newSizeName
+                createNewSubName(newSizeName , category_id);
+                Navigator.pop(context); // Close the dialog
+              },
+              child: const Text('Create'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+  Future<void> createNewSubName(String newSizeName , int category_id) async {
+    if (newSizeName != null && newSizeName.isNotEmpty) {
+      final formData = {
+        "sub_name": newSizeName,
+        "category_id" : category_id,
+      };
+      // Send HTTP POST request
+      final response = await http.post(
+        Uri.parse(
+            "https://flutter-store-mobile-application-backend.onrender.com/products/category/sub_category/create/"),
+        body: jsonEncode(formData),
+        headers: {'Content-Type': 'application/json'},
+      );
 
+      if (response.statusCode == 200) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Dialog(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              child: Container(
+                padding: const EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    AwesomeSnackbarContent(
+                      title: "Congratulations",
+                      message: "Options created successfully!",
+                      contentType: ContentType.success,
+                    ),
+                ],
+                ),
+              ),
+            );
+          },
+        );
+        Future.delayed(const Duration(seconds: 1), () {
+          Navigator.pop(context);
+          fetchSubCategories(category_id).then((_) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => ProductDetailPage(index: widget.index, onUpdate: () {  },),
+              ),
+            );
+          });
+        });
+      } else {
+        // Handle error response
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Dialog(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              child: Container(
+                padding: const EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    AwesomeSnackbarContent(
+                      title: "Oh no!!!",
+                      message: "Options created unsuccessfully!",
+                      contentType: ContentType.failure,
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+        Future.delayed(const Duration(seconds: 1), () {
+          Navigator.pop(context);
+        });
+      }
+    }
+  }
   Future<void> createNewSize(String newSizeName) async {
     if (newSizeName != null && newSizeName.isNotEmpty) {
       final formData = {
