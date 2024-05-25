@@ -5,6 +5,7 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:food_mobile_app/pages/paymentStripe.dart';
 import 'package:provider/provider.dart';
 import 'package:food_mobile_app/model/cart_model.dart';
+import '../makePayment.dart'; // Import the new function
 import '../model/order_model.dart';
 import '../constants.dart';
 
@@ -152,28 +153,7 @@ class _OrderPaymentScreenState extends State<OrderPaymentScreen> {
                   setState(() {
                     paymentMethodStatus = "completed";
                   });
-
                   // Create the order with the updated payment status
-                  order = Order(
-                    customerId: globalCustomerId!,
-                    orderQuantity: orderQuantity,
-                    paymentStatus: paymentMethodStatus,
-                    orderAddress: '123 Shipping Address',
-                    shippingAddress: widget.order.shippingAddress,
-                    phoneNumber: widget.order.phoneNumber,
-                    paymentType: selectedPaymentMethod!,
-                    totalPrice: totalPrice,
-                    items: Provider.of<CartModel>(context, listen: false)
-                        .cartItems
-                        .map((item) => OrderItem(
-                      detailPrice: item['product_price'].toDouble(),
-                      itemId: item['item_id'],
-                      quantity: item['quantity'],
-                    ))
-                        .toList(),
-                  );
-                  createOrder(context, order);
-
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(
                       "Payment Done",
@@ -195,8 +175,33 @@ class _OrderPaymentScreenState extends State<OrderPaymentScreen> {
                     backgroundColor: Colors.redAccent,
                   ));
                 }
-              } else {
-                // Handle other payment methods like PayPal or VNPay
+              }
+              else if (selectedPaymentMethod == "Paypal") {
+                // PayPal payment logic
+                startPaypalPayment(context, order, (number) async {
+                  // Payment done
+                  setState(() {
+                    paymentMethodStatus = "completed";
+                  });
+
+                  // Create the order with the updated payment status
+                  createOrder(context, order);
+
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(
+                      "Payment Done",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    backgroundColor: Colors.green,
+                  ));
+
+                  // Clear the cart
+                  Provider.of<CartModel>(context, listen: false).clearCart();
+                  // Navigate to a success page or perform other actions
+                });
+              }
+              else {
+                // Handle other payment methods like VNPay
                 // Example: Navigate to their respective payment screens
                 // createOrder(context, order);
               }

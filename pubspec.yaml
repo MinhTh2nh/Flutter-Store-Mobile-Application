@@ -39,18 +39,20 @@ dependencies:
   velocity_x: ^4.1.2 # Use the latest version available at the time
   crypto: ^3.0.0
   go_router: ^14.1.1
-  flutter_svg: ^2.0.10+1
-  http: ^1.2.1
+  flutter_svg: 2.0.9
+  http: 0.13.5
   flutter_rating_bar: ^4.0.0
   flutter_secure_storage: ^9.1.1
   intl: ^0.18.1
   fl_chart: ^0.68.0
   awesome_snackbar_content: ^0.1.3
   file_picker: ^8.0.3
-  googleapis_auth: ^1.6.0
+  googleapis_auth:
   gcloud: ^0.8.12
   mime: ^1.0.5
   flutter_stripe: ^10.1.1
+  http_auth: 1.0.1
+  webview_flutter: 3.0.4 # Downgraded to version 3.0.4
 
 dev_dependencies:
   flutter_test:

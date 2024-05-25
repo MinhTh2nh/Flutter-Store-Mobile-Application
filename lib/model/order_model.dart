@@ -12,7 +12,7 @@ class Order {
   final String orderAddress;
   final String shippingAddress;
   final String phoneNumber;
-  final String paymentStatus;
+  String paymentStatus;
   final String paymentType;
   final double totalPrice;
   final List<OrderItem> items;
@@ -44,8 +44,6 @@ class Order {
   }
 
 }
-
-
 
 class OrderItem {
   final double detailPrice;
