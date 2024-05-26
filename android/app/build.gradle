@@ -28,6 +28,38 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+subprojects{
+    afterEvaluate {
+        android {
+            namespace "com.example.food_mobile_app"
+            compileSdkVersion 30
+            ndkVersion "25.1.8937393"
+
+            compileOptions {
+                sourceCompatibility JavaVersion.VERSION_1_8
+                targetCompatibility JavaVersion.VERSION_1_8
+            }
+
+            defaultConfig {
+                applicationId "com.example.food_mobile_app"
+                minSdkVersion 21
+                targetSdkVersion 34
+                versionCode flutterVersionCode.toInteger()
+                versionName flutterVersionName
+                multiDexEnabled true
+            }
+
+            buildTypes {
+                release {
+                    // TODO: Add your own signing config for the release build.
+                    // Signing with the debug keys for now, so `flutter run --release` works.
+                    signingConfig signingConfigs.debug
+                }
+            }
+        }
+    }
+}
+
 android {
     namespace "com.example.food_mobile_app"
     compileSdk flutter.compileSdkVersion
@@ -40,7 +72,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.Estore"
+        applicationId "com.example.food_mobile_app"
         minSdkVersion 21
         targetSdkVersion 34
         versionCode flutterVersionCode.toInteger()
