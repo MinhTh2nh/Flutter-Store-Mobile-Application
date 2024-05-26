@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:food_mobile_app/pages/products.dart';
+import 'package:food_mobile_app/pages/products/products.dart';
 
 import 'section_title.dart';
 

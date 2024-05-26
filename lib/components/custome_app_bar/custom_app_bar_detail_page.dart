@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart'; // Import Provider package
 import '../../model/cart_model.dart';
-import '../../pages/cart_page.dart';
+import '../../pages/shopping_cart/cart_page.dart';
 
 class CustomAppBarForDetailPage extends StatefulWidget
     implements PreferredSizeWidget {

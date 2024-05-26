@@ -3,7 +3,7 @@ import '../../components/slide_menu.dart';
 import 'package:food_mobile_app/admin-pages/products/small_components/create_button.dart';
 import 'package:food_mobile_app/admin-pages/products/small_components/product_form.dart';
 import '../../components/custome_app_bar/custom_app_bar_admin.dart';
-import '../../components/product_tile.dart';
+import '../../pages/products/product_tile.dart';
 import '../../model/cart_model.dart';
 import 'package:provider/provider.dart';
 import '../products/product_detail_page.dart';

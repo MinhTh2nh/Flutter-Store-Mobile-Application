@@ -4,7 +4,7 @@ import 'package:food_mobile_app/model/cart_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../pages/order_management.dart';
+import '../pages/order_management/order_management.dart';
 
 class Order {
   final int customerId;

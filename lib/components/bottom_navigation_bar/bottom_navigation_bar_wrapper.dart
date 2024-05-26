@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../pages/home/home.dart';
-import '../../pages/products.dart';
+import '../../pages/products/products.dart';
 import '../../pages/settings/settings.dart';
 
 class BottomNavigationBarWrapper extends StatelessWidget {
