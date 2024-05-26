@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../model/cart_model.dart';
-import '../../pages/cart_page.dart';
-import '../seach_screen.dart';
+import '../../pages/shopping_cart/cart_page.dart';
+import '../../pages/products/seach_screen.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({super.key});

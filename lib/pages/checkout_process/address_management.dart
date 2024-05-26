@@ -1,8 +1,8 @@
 // ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import '../constants.dart';
-import '../model/customer_detail.dart';
+import '../../constants.dart';
+import '../../model/customer_detail.dart';
 
 class AddressManagement extends StatefulWidget {
   final void Function(String address, String phoneNumber)? onAddressSelected;

@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:food_mobile_app/model/cart_model.dart';
 import 'package:provider/provider.dart';
-import 'package:food_mobile_app/components/address_management.dart';
-import '../components/payment_method.dart';
-import '../model/order_model.dart';
-import '../constants.dart';
+import 'package:food_mobile_app/pages/checkout_process/address_management.dart';
+import 'payment_method.dart';
+import '../../model/order_model.dart';
+import '../../constants.dart';
 import 'order_payment_screen.dart';
 
 class OrderPage extends StatefulWidget {

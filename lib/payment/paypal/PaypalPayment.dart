@@ -2,7 +2,7 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'PaypalServices.dart';
-import 'model/order_model.dart';
+import '../../model/order_model.dart';
 
 class PaypalPayment extends StatefulWidget {
   final Order order;

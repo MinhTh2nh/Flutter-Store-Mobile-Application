@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../components/custome_app_bar/custom_app_bar.dart';
-import '../components/product_tile.dart';
-import '../model/cart_model.dart';
+import '../../components/custome_app_bar/custom_app_bar.dart';
+import 'product_tile.dart';
+import '../../model/cart_model.dart';
 import 'package:provider/provider.dart';
-import '../pages/product_detail_page.dart';
-import '../components/slider_buttons.dart';
+import 'product_detail_page.dart';
+import '../../components/slider_buttons.dart';
 
 class Products extends StatelessWidget {
   // ignore: use_key_in_widget_constructors

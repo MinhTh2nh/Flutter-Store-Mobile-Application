@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:food_mobile_app/components/buttons.dart';
-import 'package:food_mobile_app/pages/order.dart';
+import 'package:food_mobile_app/pages/checkout_process/order.dart';
 import 'package:provider/provider.dart';
-import '../model/cart_model.dart';
+import '../../model/cart_model.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({super.key});
