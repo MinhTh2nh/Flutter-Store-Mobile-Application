@@ -2,19 +2,20 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:food_mobile_app/pages/paymentStripe.dart';
+import 'package:food_mobile_app/pages/checkout_process/paymentStripe.dart';
 import 'package:provider/provider.dart';
 import 'package:food_mobile_app/model/cart_model.dart';
-import '../makePayment.dart'; // Import the new function
-import '../model/order_model.dart';
-import '../constants.dart';
+import '../../payment/paypal/makePayment.dart'; // Import the new function
+import '../../model/order_model.dart';
+import '../../constants.dart';
 
 class OrderPaymentScreen extends StatefulWidget {
   final Order order;
 
-  const OrderPaymentScreen({required this.order, Key? key}) : super(key: key);
+  const OrderPaymentScreen({required this.order, super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _OrderPaymentScreenState createState() => _OrderPaymentScreenState();
 }
 
@@ -88,13 +89,13 @@ class _OrderPaymentScreenState extends State<OrderPaymentScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
                 _buildPaymentMethodRow(
                     size, "Stripe", "lib/images/stripelogo.png", 1),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 _buildPaymentMethodRow(
                     size, "Paypal", "lib/images/paypallogo.png", 2),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 _buildPaymentMethodRow(
                     size, "VNPay", "lib/images/vnpay.png", 3),
               ],
@@ -154,7 +155,8 @@ class _OrderPaymentScreenState extends State<OrderPaymentScreen> {
                     paymentMethodStatus = "completed";
                   });
                   // Create the order with the updated payment status
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  // ignore: use_build_context_synchronously
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text(
                       "Payment Done",
                       style: TextStyle(color: Colors.white),
@@ -167,7 +169,7 @@ class _OrderPaymentScreenState extends State<OrderPaymentScreen> {
                   // Navigate to a success page or perform other actions
 
                 } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text(
                       "Payment Failed",
                       style: TextStyle(color: Colors.white),
@@ -187,7 +189,7 @@ class _OrderPaymentScreenState extends State<OrderPaymentScreen> {
                   // Create the order with the updated payment status
                   createOrder(context, order);
 
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text(
                       "Payment Done",
                       style: TextStyle(color: Colors.white),
@@ -207,7 +209,7 @@ class _OrderPaymentScreenState extends State<OrderPaymentScreen> {
               }
             } else {
               // Handle the case where payment method is not selected
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                 content: Text(
                   "Please select a payment method.",
                   style: TextStyle(color: Colors.white),
@@ -228,7 +230,7 @@ class _OrderPaymentScreenState extends State<OrderPaymentScreen> {
       height: 55,
       decoration: BoxDecoration(
         border: _type == value
-            ? Border.all(width: 1, color: Color(0xFFDB3022))
+            ? Border.all(width: 1, color: const Color(0xFFDB3022))
             : Border.all(width: 0.7, color: Colors.grey),
         borderRadius: BorderRadius.circular(5),
         color: Colors.transparent,
@@ -256,12 +258,12 @@ class _OrderPaymentScreenState extends State<OrderPaymentScreen> {
                   Text(
                     method,
                     style: _type == value
-                        ? TextStyle(
+                        ? const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
                       color: Colors.black,
                     )
-                        : TextStyle(
+                        : const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
                       color: Colors.grey,

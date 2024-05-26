@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../pages/product_detail_page.dart';
-import '../components/product_tile.dart';
-import '../model/cart_model.dart';
+import 'product_detail_page.dart';
+import 'product_tile.dart';
+import '../../model/cart_model.dart';
 
 class CategoryPage extends StatelessWidget {
   const CategoryPage({super.key, this.category, this.subcategory});

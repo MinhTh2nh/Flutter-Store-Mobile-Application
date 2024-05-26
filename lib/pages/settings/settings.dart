@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:food_mobile_app/components/address_management.dart';
+import 'package:food_mobile_app/pages/checkout_process/address_management.dart';
 import 'package:food_mobile_app/model/customer_model.dart';
-import 'package:food_mobile_app/pages/order_management.dart';
+import 'package:food_mobile_app/pages/order_management/order_management.dart';
 import '../../components/custome_app_bar/custom_app_bar.dart';
 import '../settings/small_components/profile_menu.dart';
 import '../settings/small_components/profile_pic.dart';

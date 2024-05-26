@@ -11,7 +11,7 @@ Widget buttons({
     style: ElevatedButton.styleFrom(
       backgroundColor: color,
       padding: const EdgeInsets.all(12),
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.zero,
       ),
     ),

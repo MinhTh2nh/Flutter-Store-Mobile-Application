@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:food_mobile_app/pages/home/small_components/categories.dart';
 import '../../components/custome_app_bar/custom_app_bar.dart';
-import '../../components/product_tile.dart';
+import '../products/product_tile.dart';
 import '../../model/cart_model.dart';
 import 'package:provider/provider.dart';
-import '../../pages/product_detail_page.dart';
-import '../category_page.dart';
+import '../products/product_detail_page.dart';
+import '../products/category_page.dart';
 import 'small_components/discount_banner.dart';
 import 'small_components/special_offers.dart';
-import 'package:food_mobile_app/components/slider_image.dart';
+import 'package:food_mobile_app/pages/home/slider_image.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

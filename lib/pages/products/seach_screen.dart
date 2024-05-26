@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:food_mobile_app/model/cart_model.dart';
 import 'package:provider/provider.dart';
-import '../../pages/products.dart';
-import '../pages/product_detail_page.dart';
+import 'products.dart';
+import 'product_detail_page.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});

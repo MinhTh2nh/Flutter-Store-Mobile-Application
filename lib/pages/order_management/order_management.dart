@@ -2,12 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import '../components/order_detail.dart';
-import '../model/order_detail_model.dart';
-import '../constants.dart';
+import 'order_detail.dart';
+import '../../model/order_detail_model.dart';
+import '../../constants.dart';
 import 'package:intl/intl.dart';
-import '../model/review_model.dart';
-import '../model/cart_model.dart';
+import '../../model/review_model.dart';
+import '../../model/cart_model.dart';
 
 class OrdersScreen extends StatefulWidget {
   const OrdersScreen({super.key});

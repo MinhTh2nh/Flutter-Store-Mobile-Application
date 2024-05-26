@@ -2,13 +2,13 @@
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
-import 'package:food_mobile_app/pages/order.dart';
-import '../components/custome_app_bar/custom_app_bar_detail_page.dart';
-import '../components/star_rating.dart';
-import '../model/cart_model.dart';
+import 'package:food_mobile_app/pages/checkout_process/order.dart';
+import '../../components/custome_app_bar/custom_app_bar_detail_page.dart';
+import 'star_rating.dart';
+import '../../model/cart_model.dart';
 import 'package:provider/provider.dart';
-import '../components/review_field.dart';
-import '../model/review_model.dart';
+import 'review_field.dart';
+import '../../model/review_model.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final int productId;
@@ -95,7 +95,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           product['product_thumbnail'],
                           width: double.infinity,
                           height: MediaQuery.of(context).size.height * 0.5,
-                          fit: BoxFit.cover,
+                          fit: BoxFit.contain,
                           errorBuilder: (context, error, stackTrace) =>
                               const Icon(Icons.error),
                         ),
