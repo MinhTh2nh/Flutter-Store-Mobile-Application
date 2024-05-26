@@ -95,7 +95,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           product['product_thumbnail'],
                           width: double.infinity,
                           height: MediaQuery.of(context).size.height * 0.5,
-                          fit: BoxFit.cover,
+                          fit: BoxFit.contain,
                           errorBuilder: (context, error, stackTrace) =>
                               const Icon(Icons.error),
                         ),
