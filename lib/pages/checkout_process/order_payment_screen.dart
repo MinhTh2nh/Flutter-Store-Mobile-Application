@@ -1,13 +1,13 @@
-// ignore_for_file: avoid_print
-
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-import 'package:food_mobile_app/pages/checkout_process/paymentStripe.dart';
+import 'package:food_mobile_app/payment/stripe/paymentStripe.dart';
 import 'package:provider/provider.dart';
 import 'package:food_mobile_app/model/cart_model.dart';
 import '../../payment/paypal/makePayment.dart'; // Import the new function
 import '../../model/order_model.dart';
 import '../../constants.dart';
+import '../../payment/vnpay/makePaymentVnpay.dart';
 
 class OrderPaymentScreen extends StatefulWidget {
   final Order order;
@@ -15,7 +15,6 @@ class OrderPaymentScreen extends StatefulWidget {
   const OrderPaymentScreen({required this.order, super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _OrderPaymentScreenState createState() => _OrderPaymentScreenState();
 }
 
@@ -28,7 +27,8 @@ class _OrderPaymentScreenState extends State<OrderPaymentScreen> {
   void initState() {
     super.initState();
     // Set the publishable key
-    Stripe.publishableKey = 'pk_test_51PJfH1EncpehfcF0tTPnvcpp8d4SxwQmYtYa9f1tOohG6wz4JsnYltX1BTDOCHrg9SVei5Ym0ME7H90yxP3pFrkw00IhjvE2mK';
+    Stripe.publishableKey =
+    'pk_test_51PJfH1EncpehfcF0tTPnvcpp8d4SxwQmYtYa9f1tOohG6wz4JsnYltX1BTDOCHrg9SVei5Ym0ME7H90yxP3pFrkw00IhjvE2mK';
   }
 
   Future<void> initPaymentSheet() async {
@@ -153,6 +153,24 @@ class _OrderPaymentScreenState extends State<OrderPaymentScreen> {
                   // Update payment status to completed
                   setState(() {
                     paymentMethodStatus = "completed";
+                    order = Order(
+                      customerId: globalCustomerId!,
+                      orderQuantity: orderQuantity,
+                      paymentStatus: paymentMethodStatus,
+                      orderAddress: '123 Shipping Address',
+                      shippingAddress: widget.order.shippingAddress,
+                      phoneNumber: widget.order.phoneNumber,
+                      paymentType: selectedPaymentMethod!,
+                      totalPrice: totalPrice,
+                      items: Provider.of<CartModel>(context, listen: false)
+                          .cartItems
+                          .map((item) => OrderItem(
+                        detailPrice: item['product_price'].toDouble(),
+                        itemId: item['item_id'],
+                        quantity: item['quantity'],
+                      ))
+                          .toList(),
+                    );
                   });
                   // Create the order with the updated payment status
                   // ignore: use_build_context_synchronously
@@ -164,10 +182,11 @@ class _OrderPaymentScreenState extends State<OrderPaymentScreen> {
                     backgroundColor: Colors.green,
                   ));
 
+                  createOrder(context, order);
+
                   // Clear the cart
                   Provider.of<CartModel>(context, listen: false).clearCart();
                   // Navigate to a success page or perform other actions
-
                 } catch (e) {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text(
@@ -177,13 +196,30 @@ class _OrderPaymentScreenState extends State<OrderPaymentScreen> {
                     backgroundColor: Colors.redAccent,
                   ));
                 }
-              }
-              else if (selectedPaymentMethod == "Paypal") {
+              } else if (selectedPaymentMethod == "Paypal") {
                 // PayPal payment logic
                 startPaypalPayment(context, order, (number) async {
                   // Payment done
                   setState(() {
                     paymentMethodStatus = "completed";
+                    order = Order(
+                      customerId: globalCustomerId!,
+                      orderQuantity: orderQuantity,
+                      paymentStatus: paymentMethodStatus,
+                      orderAddress: '123 Shipping Address',
+                      shippingAddress: widget.order.shippingAddress,
+                      phoneNumber: widget.order.phoneNumber,
+                      paymentType: selectedPaymentMethod!,
+                      totalPrice: totalPrice,
+                      items: Provider.of<CartModel>(context, listen: false)
+                          .cartItems
+                          .map((item) => OrderItem(
+                        detailPrice: item['product_price'].toDouble(),
+                        itemId: item['item_id'],
+                        quantity: item['quantity'],
+                      ))
+                          .toList(),
+                    );
                   });
 
                   // Create the order with the updated payment status
@@ -201,11 +237,54 @@ class _OrderPaymentScreenState extends State<OrderPaymentScreen> {
                   Provider.of<CartModel>(context, listen: false).clearCart();
                   // Navigate to a success page or perform other actions
                 });
-              }
-              else {
-                // Handle other payment methods like VNPay
-                // Example: Navigate to their respective payment screens
-                // createOrder(context, order);
+              } else if (selectedPaymentMethod == "VNPay") {
+                final String txnRef = _generateTxnRef();
+                String vndAmount = (order.totalPrice).toString();
+                String url =
+                    'https://vnpay-be-z22c.onrender.com/order/create_payment_url?amount=$vndAmount';
+                final String? result = await Navigator.push<String>(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => WebViewPage(url: url),
+                  ),
+                );
+
+                if (result != null) {
+                  if (result == '00') {
+                    setState(() {
+                      paymentMethodStatus = "completed";
+                      order = Order(
+                        customerId: globalCustomerId!,
+                        orderQuantity: orderQuantity,
+                        paymentStatus: paymentMethodStatus,
+                        orderAddress: '123 Shipping Address',
+                        shippingAddress: widget.order.shippingAddress,
+                        phoneNumber: widget.order.phoneNumber,
+                        paymentType: selectedPaymentMethod!,
+                        totalPrice: totalPrice,
+                        items: Provider.of<CartModel>(context, listen: false)
+                            .cartItems
+                            .map((item) => OrderItem(
+                          detailPrice: item['product_price'].toDouble(),
+                          itemId: item['item_id'],
+                          quantity: item['quantity'],
+                        ))
+                            .toList(),
+                      );
+                    });
+                    // Create the order with the updated payment status
+                    createOrder(context, order);
+                    // Payment was successful
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Payment Successful')),
+                    );
+                  } else {
+                    // Payment failed
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Payment Failed')),
+                    );
+                  }
+                }
               }
             } else {
               // Handle the case where payment method is not selected
@@ -221,6 +300,12 @@ class _OrderPaymentScreenState extends State<OrderPaymentScreen> {
         ),
       ),
     );
+  }
+
+  String _generateTxnRef() {
+    final random = Random();
+    final txnRef = List.generate(10, (index) => random.nextInt(10)).join();
+    return txnRef;
   }
 
   Widget _buildPaymentMethodRow(

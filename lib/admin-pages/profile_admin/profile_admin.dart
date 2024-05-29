@@ -63,7 +63,7 @@ class _AdminProfilePageState extends State<AdminProfilePage>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   Container(
-                                    height: MediaQuery.of(context).size.height * 0.2,
+                                    height: MediaQuery.of(context).size.height * 0.15,
                                     child: Image.asset(
                                       'lib/images/Image Banner 1.png',
                                       fit: BoxFit.cover,

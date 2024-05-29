@@ -22,14 +22,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   final TextEditingController _productNameController = TextEditingController();
   final TextEditingController _productPriceController = TextEditingController();
   final TextEditingController _productThumbnailController =
-  TextEditingController();
+      TextEditingController();
   final TextEditingController _productDescriptionController =
-  TextEditingController();
+      TextEditingController();
   final TextEditingController _totalStockController = TextEditingController();
   final TextEditingController _productCategoryController =
-  TextEditingController();
+      TextEditingController();
   final TextEditingController _productSubCategoryController =
-  TextEditingController();
+      TextEditingController();
   final TextEditingController _stockController = TextEditingController();
 
   List _categories = [];
@@ -38,8 +38,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   Map<String, dynamic>? _selectedSubCategory;
   bool _isDataLoaded = false;
   late String _path;
-  var path =
-      Uri.parse("https://flutter-store-mobile-application-backend.onrender.com/products/get");
+  var path = Uri.parse(
+      "https://flutter-store-mobile-application-backend.onrender.com/products/get");
   late CartModel _cartModel;
   String? _selectedSizeId = "";
 
@@ -49,8 +49,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   void initState() {
     super.initState();
     _path =
-    "https://flutter-store-mobile-application-backend.onrender.com/products/get/${widget
-        .index}";
+        "https://flutter-store-mobile-application-backend.onrender.com/products/get/${widget.index}";
     _cartModel = CartModel(); // Initialize CartModel
     _fetchCategories(); // Fetch categories data
     _fetchProductDetails();
@@ -95,7 +94,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         setState(() {
           _sub_categories = subCategories;
           _selectedSubCategory = _sub_categories.firstWhere(
-                (subcategory) => subcategory['sub_id'] == sub_id,
+            (subcategory) => subcategory['sub_id'] == sub_id,
             orElse: () => null,
           );
         });
@@ -124,7 +123,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         // Set selected category
         setState(() {
           _selectedCategory = _categories.firstWhere(
-                (category) => category['category_id'] == categoryId,
+            (category) => category['category_id'] == categoryId,
             orElse: () => null,
           );
 
@@ -134,15 +133,15 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               responseData['product_price'].toString();
           _productThumbnailController.text = responseData['product_thumbnail'];
           _productDescriptionController.text =
-          responseData['product_description'];
+              responseData['product_description'];
           _totalStockController.text = responseData['total_stock'].toString();
 
           // Set category and sub-category text controllers
           _productCategoryController.text =
               _selectedCategory?['category_id']?.toString() ?? '';
           _productSubCategoryController.text =
-              _selectedSubCategory?['sub_id']?.toString() ?? _productSubCategoryController.text;
-
+              _selectedSubCategory?['sub_id']?.toString() ??
+                  _productSubCategoryController.text;
 
           // Set data loaded flag
           _isDataLoaded = true;
@@ -164,234 +163,241 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(30.0),
-          child: _isDataLoaded
+        child: _isDataLoaded
             ? SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: SizedBox(
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width * 0.6,
-                    height: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.4,
-                    child: Image.network(
-                      _productThumbnailController.text,
-                      fit: BoxFit.cover,
-                      errorBuilder: (BuildContext context,
-                          Object exception, StackTrace? stackTrace) {
-                        // You can return an error image or a placeholder here
-                        return Image.asset(
-                          'lib/images/blank.png',
-                          fit: BoxFit.cover,
-                        );
-                      },
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                TextFormField(
-                  controller: _productNameController,
-                  decoration: const InputDecoration(
-                      labelText: 'Product Name',
-                      border: OutlineInputBorder()),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter product name';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 15),
-                TextFormField(
-                  controller: _productPriceController,
-                  decoration: const InputDecoration(
-                      labelText: 'Product Price',
-                      border: OutlineInputBorder()),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter product price';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 15),
-                TextFormField(
-                  controller: _productThumbnailController,
-                  decoration: const InputDecoration(
-                      labelText: 'Product Thumbnail URL',
-                      border: OutlineInputBorder()),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter product thumbnail URL';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 15),
-                TextFormField(
-                  controller: _productDescriptionController,
-                  decoration: const InputDecoration(
-                      labelText: 'Product Description',
-                      border: OutlineInputBorder()),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter product description';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 15),
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 7, // 70% width
-                      child: TextFormField(
-                        controller: _totalStockController,
-                        decoration: const InputDecoration(
-                          labelText: 'Product Total Stock',
-                          border: OutlineInputBorder(),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.6,
+                          height: MediaQuery.of(context).size.height * 0.4,
+                          child: Image.network(
+                            _productThumbnailController.text,
+                            fit: BoxFit.cover,
+                            errorBuilder: (BuildContext context,
+                                Object exception, StackTrace? stackTrace) {
+                              // You can return an error image or a placeholder here
+                              return Image.asset(
+                                'lib/images/blank.png',
+                                fit: BoxFit.cover,
+                              );
+                            },
+                          ),
                         ),
-                        keyboardType: TextInputType.number,
-                        enabled: false,
+                      ),
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        controller: _productNameController,
+                        decoration: const InputDecoration(
+                            labelText: 'Product Name',
+                            border: OutlineInputBorder()),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter product total stock';
+                            return 'Please enter product name';
                           }
                           return null;
                         },
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    // Add spacing between the text field and the button
-                    Expanded(
-                      flex: 3, // 30% width
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        // Add padding to center the text vertically
-                        child: buttonAdmin(
-                          onTap: () {
-                            showModalItemSheet(context);
-                          },
-                          title: "View Item",
-                          color: Colors.teal.shade200,
-                          textColor: Colors.white,
+                      const SizedBox(height: 15),
+                      TextFormField(
+                        controller: _productPriceController,
+                        decoration: const InputDecoration(
+                            labelText: 'Product Price',
+                            border: OutlineInputBorder()),
+                        keyboardType: TextInputType.number,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter product price';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 15),
+                      TextFormField(
+                        controller: _productThumbnailController,
+                        decoration: const InputDecoration(
+                            labelText: 'Product Thumbnail URL',
+                            border: OutlineInputBorder()),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter product thumbnail URL';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 15),
+                      TextFormField(
+                        controller: _productDescriptionController,
+                        decoration: const InputDecoration(
+                            labelText: 'Product Description',
+                            border: OutlineInputBorder()),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter product description';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 15),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 7, // 70% width
+                            child: TextFormField(
+                              controller: _totalStockController,
+                              decoration: const InputDecoration(
+                                labelText: 'Product Total Stock',
+                                border: OutlineInputBorder(),
+                              ),
+                              keyboardType: TextInputType.number,
+                              enabled: false,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter product total stock';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          // Add spacing between the text field and the button
+                          Expanded(
+                            flex: 3, // 30% width
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                              // Add padding to center the text vertically
+                              child: buttonAdmin(
+                                onTap: () {
+                                  showModalItemSheet(context);
+                                },
+                                title: "View Item",
+                                color: Colors.teal.shade200,
+                                textColor: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 15),
+                      // Display current category name
+                      const SizedBox(height: 15),
+                      // Dropdown buttons for selecting category and subcategory
+                      DropdownButtonFormField<String>(
+                        value: _selectedCategory != null
+                            ? _selectedCategory!['category_id'].toString()
+                            : null,
+                        items: _categories
+                            .map<DropdownMenuItem<String>>((category) {
+                          return DropdownMenuItem<String>(
+                            value: category['category_id'].toString(),
+                            child: Text(category['category_name'] as String),
+                          );
+                        }).toList(),
+                        onChanged: (newValue) async {
+                          if (newValue != null && newValue.isNotEmpty) {
+                            final selectedCategory = _categories.firstWhere(
+                              (category) =>
+                                  category['category_id'].toString() ==
+                                  newValue,
+                              orElse: () => null,
+                            );
+
+                            if (selectedCategory != null) {
+                              // Ensure sub-categories are fetched before updating the state
+                              setState(() {
+                                _selectedCategory = selectedCategory;
+                                _productCategoryController.text =
+                                    _selectedCategory!['category_name'];
+                                fetchSubCategories(int.parse(newValue));
+                                _selectedSubCategory =
+                                    null; // Reset sub-category selection when main category changes
+                              });
+                            }
+                          }
+                        },
+                        decoration: const InputDecoration(
+                          labelText: 'Product Main Category',
+                          border: OutlineInputBorder(),
                         ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please select or enter a product category';
+                          }
+                          return null;
+                        },
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 15),
-                // Display current category name
-                const SizedBox(height: 15),
-                // Dropdown buttons for selecting category and subcategory
-                DropdownButtonFormField<String>(
-                  value: _selectedCategory != null
-                      ? _selectedCategory!['category_id'].toString()
-                      : null,
-                  items: _categories
-                      .map<DropdownMenuItem<String>>((category) {
-                    return DropdownMenuItem<String>(
-                      value: category['category_id'].toString(),
-                      child: Text(category['category_name'] as String),
-                    );
-                  }).toList(),
-                  onChanged: (newValue) async {
-                    if (newValue != null && newValue.isNotEmpty) {
-                      final selectedCategory = _categories.firstWhere(
-                            (category) => category['category_id'].toString() == newValue,
-                        orElse: () => null,
-                      );
 
-                      if (selectedCategory != null) { // Ensure sub-categories are fetched before updating the state
-                        setState(() {
-                          _selectedCategory = selectedCategory;
-                          _productCategoryController.text = _selectedCategory!['category_name'];
-                          fetchSubCategories(int.parse(newValue));
-                          _selectedSubCategory = null; // Reset sub-category selection when main category changes
-                        });
-                      }
-                    }
-                  },
-                  decoration: const InputDecoration(
-                    labelText: 'Product Main Category',
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please select or enter a product category';
-                    }
-                    return null;
-                  },
-                ),
+                      const SizedBox(height: 15),
 
-                const SizedBox(height: 15),
-
-                DropdownButtonFormField<String>(
-                  value: _selectedSubCategory != null
-                      ? _selectedSubCategory!['sub_id']?.toString()
-                      : null,
-                  items: _sub_categories
-                      .map<DropdownMenuItem<String>>((sub_category) {
-                    return DropdownMenuItem<String>(
-                      value: sub_category['sub_id']?.toString(),
-                      child: Text(sub_category['sub_name'] as String),
-                    );
-                  }).toList()
-                    ..add(
-                      const DropdownMenuItem<String>(
-                        value: '', // Add an empty value for "New Sub Category"
-                        child: Text('New Sub Category'),
+                      DropdownButtonFormField<String>(
+                        value: _selectedSubCategory != null
+                            ? _selectedSubCategory!['sub_id']?.toString()
+                            : null,
+                        items: _sub_categories
+                            .map<DropdownMenuItem<String>>((sub_category) {
+                          return DropdownMenuItem<String>(
+                            value: sub_category['sub_id']?.toString(),
+                            child: Text(sub_category['sub_name'] as String),
+                          );
+                        }).toList()
+                          ..add(
+                            const DropdownMenuItem<String>(
+                              value:
+                                  '', // Add an empty value for "New Sub Category"
+                              child: Text('New Sub Category'),
+                            ),
+                          ),
+                        onChanged: (newValue) {
+                          setState(() {
+                            if (newValue == '') {
+                              _showNewSubCategoryDialog(
+                                  context, _selectedCategory!['category_id']);
+                            } else if (newValue != null &&
+                                newValue.isNotEmpty) {
+                              _selectedSubCategory = _sub_categories.firstWhere(
+                                (subCategory) =>
+                                    subCategory['sub_id']?.toString() ==
+                                    newValue,
+                                orElse: () => null,
+                              );
+                              _productSubCategoryController.text =
+                                  _selectedSubCategory?['sub_id']?.toString() ??
+                                      '';
+                            } else {
+                              _selectedSubCategory = null;
+                              _productSubCategoryController.text =
+                                  ''; // Clear the controller if no sub-category is selected
+                            }
+                          });
+                        },
+                        decoration: const InputDecoration(
+                          labelText: 'Product Sub Category',
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please select or enter a product sub category';
+                          }
+                          return null;
+                        },
                       ),
-                    ),
-                  onChanged: (newValue) {
-                    setState(() {
-                      if (newValue == '') {
-                        _showNewSubCategoryDialog(context, _selectedCategory!['category_id']);
-                      } else if (newValue != null && newValue.isNotEmpty) {
-                        _selectedSubCategory = _sub_categories.firstWhere(
-                              (subCategory) => subCategory['sub_id']?.toString() == newValue,
-                          orElse: () => null,
-                        );
-                        _productSubCategoryController.text = _selectedSubCategory?['sub_id']?.toString() ?? '';
-                      } else {
-                        _selectedSubCategory = null;
-                        _productSubCategoryController.text = ''; // Clear the controller if no sub-category is selected
-                      }
-                    });
-                  },
-                  decoration: const InputDecoration(
-                    labelText: 'Product Sub Category',
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please select or enter a product sub category';
-                    }
-                    return null;
-                  },
-                ),
 
-                const SizedBox(height: 20),
-                Row(
-                  children: [
-                    _buildUpdateButton(),
-                    _buildDeleteButton(),
-                  ],
+                      const SizedBox(height: 20),
+                      Row(
+                        children: [
+                          _buildUpdateButton(),
+                          _buildDeleteButton(),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      _activateButton(),
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 10),
-                _activateButton(),
-              ],
-            ),
-          ),
-        )
+              )
             : const Center(child: CircularProgressIndicator()),
       ),
     );
@@ -423,8 +429,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
             final response = await http.put(
               Uri.parse(
-                  "https://flutter-store-mobile-application-backend.onrender.com/products/update/${widget
-                      .index}"),
+                  "https://flutter-store-mobile-application-backend.onrender.com/products/update/${widget.index}"),
               body: jsonEncode(formData),
               headers: {
                 'Content-Type': 'application/json',
@@ -461,8 +466,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           textColor: Colors.white,
           onPress: () async {
             final response = await http.put(Uri.parse(
-                "https://flutter-store-mobile-application-backend.onrender.com/products/delete/${widget
-                    .index}"));
+                "https://flutter-store-mobile-application-backend.onrender.com/products/delete/${widget.index}"));
             if (response.statusCode == 200) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
@@ -507,8 +511,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
             final response = await http.put(
               Uri.parse(
-                  "https://flutter-store-mobile-application-backend.onrender.com/products/update/${widget
-                      .index}"),
+                  "https://flutter-store-mobile-application-backend.onrender.com/products/update/${widget.index}"),
               body: jsonEncode(formData),
               headers: {
                 'Content-Type': 'application/json',
@@ -597,7 +600,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               List items = snapshot.data as List;
               return SingleChildScrollView(
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0), // Add horizontal padding
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  // Add horizontal padding
                   constraints: BoxConstraints(
                     maxHeight: MediaQuery.of(context).size.height * 0.8,
                   ),
@@ -606,7 +610,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     children: [
                       const SizedBox(height: 10), // Add some spacing
                       SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.4, // Set a specific height for the ListView
+                        height: MediaQuery.of(context).size.height * 0.4,
+                        // Set a specific height for the ListView
                         child: ListView.builder(
                           shrinkWrap: true,
                           itemCount: items.length,
@@ -617,13 +622,16 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 style: const TextStyle(
                                   fontSize: 18, // Adjust fontsize as needed
                                 ),
+                                overflow: TextOverflow.ellipsis,
                               ),
                               subtitle: Text(
                                 'Size: ${items[index]['size_name']}, Stock: ${items[index]['stock']}',
                                 style: const TextStyle(
                                   fontSize: 18, // Adjust fontsize as needed
-                                  fontWeight: FontWeight.bold, // Use FontWeight.bold for bold text
+                                  fontWeight: FontWeight
+                                      .bold, // Use FontWeight.bold for bold text
                                 ),
+                                overflow: TextOverflow.ellipsis,
                               ),
                               onTap: () {
                                 showModalEditItemForm(context, items[index]);
@@ -672,7 +680,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   Future<List<dynamic>> fetchProductItems(int product_id) async {
     final response =
-    await http.get(Uri.parse("${path}/itemList/${product_id}"));
+        await http.get(Uri.parse("${path}/itemList/${product_id}"));
     if (response.statusCode == 200) {
       final jsonData = json.decode(response.body)['data'] as List;
       return jsonData;
@@ -698,10 +706,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       builder: (context) {
         return SingleChildScrollView(
           padding: EdgeInsets.only(
-            bottom: MediaQuery
-                .of(context)
-                .viewInsets
-                .bottom,
+            bottom: MediaQuery.of(context).viewInsets.bottom,
             left: 20.0,
             right: 20.0,
             top: 20.0,
@@ -737,27 +742,31 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       _selectedSizeId = sizes.isNotEmpty
                           ? sizes.first['size_id'].toString()
                           : null;
-                      return DropdownButtonFormField<String>(
-                        value: _selectedSizeId,
-                        items: [
-                          const DropdownMenuItem(
-                            value: '0',
-                            child: Text('Create New Option'),
-                          ),
-                          ...sizes.map<DropdownMenuItem<String>>((size) {
-                            return DropdownMenuItem<String>(
-                              value: size['size_id'].toString(),
-                              child: Text(
-                                  "${size['size_id']}    ${size['size_name']}"),
-                            );
-                          }).toList(),
-                        ],
-                        onChanged: (newValue) {
-                          setState(() {
-                            _selectedSizeId = newValue;
-                          });
-                        },
-                      );
+                      return
+                        DropdownButtonFormField<String>(
+                          isExpanded: true,
+                          value: _selectedSizeId,
+                          items: [
+                            const DropdownMenuItem(
+                              value: '0',
+                              child: Text('Create New Option'),
+                            ),
+                            ...sizes.map<DropdownMenuItem<String>>((size) {
+                              return DropdownMenuItem<String>(
+                                value: size['size_id'].toString(),
+                                  child: Text(
+                                    "${size['size_name']}",
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                              );
+                            }).toList(),
+                          ],
+                          onChanged: (newValue) {
+                            setState(() {
+                              _selectedSizeId = newValue;
+                            });
+                          },
+                        );
                     }
                   },
                 ),
@@ -825,7 +834,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       },
     );
   }
-  void _showNewSubCategoryDialog(BuildContext context , int category_id) {
+
+  void _showNewSubCategoryDialog(BuildContext context, int category_id) {
     showDialog(
       context: context,
       builder: (context) {
@@ -844,7 +854,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             TextButton(
               onPressed: () {
                 // Make a POST request to create a new size with newSizeName
-                createNewSubName(newSizeName , category_id);
+                createNewSubName(newSizeName, category_id);
                 Navigator.pop(context); // Close the dialog
               },
               child: const Text('Create'),
@@ -854,11 +864,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       },
     );
   }
-  Future<void> createNewSubName(String newSizeName , int category_id) async {
+
+  Future<void> createNewSubName(String newSizeName, int category_id) async {
     if (newSizeName != null && newSizeName.isNotEmpty) {
       final formData = {
         "sub_name": newSizeName,
-        "category_id" : category_id,
+        "category_id": category_id,
       };
       // Send HTTP POST request
       final response = await http.post(
@@ -889,7 +900,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       message: "Options created successfully!",
                       contentType: ContentType.success,
                     ),
-                ],
+                  ],
                 ),
               ),
             );
@@ -901,7 +912,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (BuildContext context) => ProductDetailPage(index: widget.index, onUpdate: () {  },),
+                builder: (BuildContext context) => ProductDetailPage(
+                  index: widget.index,
+                  onUpdate: () {},
+                ),
               ),
             );
           });
@@ -940,6 +954,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       }
     }
   }
+
   Future<void> createNewSize(String newSizeName) async {
     if (newSizeName != null && newSizeName.isNotEmpty) {
       final formData = {
@@ -1017,6 +1032,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       }
     }
   }
+
   Future<void> submitFormData() async {
     // Prepare form data
     final formData = {
@@ -1026,7 +1042,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     };
     // Send HTTP POST request
     final response = await http.post(
-      Uri.parse("https://flutter-store-mobile-application-backend.onrender.com/products/item/create"),
+      Uri.parse(
+          "https://flutter-store-mobile-application-backend.onrender.com/products/item/create"),
       body: jsonEncode(formData),
       headers: {'Content-Type': 'application/json'},
     );
@@ -1101,10 +1118,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   }
 
   Future<void> showModalEditItemForm(BuildContext context, dynamic item) async {
-    final TextEditingController _editItemController = TextEditingController(text: item['stock'].toString());
+    final TextEditingController _editItemController =
+        TextEditingController(text: item['stock'].toString());
     await showModalBottomSheet(
       context: context,
-      isScrollControlled: true, // Ensure the modal sheet occupies the full height
+      isScrollControlled: true,
+      // Ensure the modal sheet occupies the full height
       builder: (context) {
         return SingleChildScrollView(
           child: Padding(
@@ -1141,7 +1160,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       "size_id": item['size_id']
                     };
                     final response = await http.put(
-                      Uri.parse("https://flutter-store-mobile-application-backend.onrender.com/products/update/product/item/${item['item_id']}"),
+                      Uri.parse(
+                          "https://flutter-store-mobile-application-backend.onrender.com/products/update/product/item/${item['item_id']}"),
                       body: jsonEncode(formData),
                       headers: {'Content-Type': 'application/json'},
                     );
@@ -1155,11 +1175,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         ),
                       );
                       Navigator.of(context).pop();
-                      fetchProductItems(widget.index); // Refresh the sub-categories list
+                      fetchProductItems(
+                          widget.index); // Refresh the sub-categories list
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('Failed to update Item stock: ${response.statusCode}'),
+                          content: Text(
+                              'Failed to update Item stock: ${response.statusCode}'),
                           duration: const Duration(seconds: 2),
                           behavior: SnackBarBehavior.floating,
                         ),
@@ -1190,5 +1212,4 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       },
     );
   }
-
 }
