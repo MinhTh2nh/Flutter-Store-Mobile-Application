@@ -291,7 +291,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                             ],
                           ),
                           Container(
-                            color: Colors.grey.shade200,
+                            color: Colors.grey.shade100,
                             // Set the background color of the bottom container
                             padding: const EdgeInsets.all(15),
                           ),

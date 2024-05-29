@@ -99,7 +99,7 @@ class OrderDetailScreen extends StatelessWidget {
                         ),
                         Text(
                           order.paymentStatus,
-                          style: const TextStyle(fontSize: 16),
+                          style: TextStyle(fontSize: 16,color: _getStatusPaymentColor(order.paymentStatus)),
                         ),
                       ],
                     ),
@@ -148,8 +148,10 @@ class OrderDetailScreen extends StatelessWidget {
                         ),
                         trailing: Text('\$${detail.product.productPrice}',
                             style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.red)),
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
+                              fontSize: 18
+                            )),
                       ),
                     );
                   },
@@ -184,6 +186,17 @@ Color _getStatusColor(String status) {
       return Colors.red;
     case 'processing':
       return Colors.purple;
+    default:
+      return Colors.grey;
+  }
+}
+
+Color _getStatusPaymentColor(String status) {
+  switch (status) {
+    case 'completed':
+      return Colors.green;
+    case 'incompleted':
+      return Colors.red;
     default:
       return Colors.grey;
   }

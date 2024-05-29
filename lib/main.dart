@@ -31,3 +31,91 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+// import 'package:flutter/material.dart';
+// import 'dart:math';
+//
+// import 'package:food_mobile_app/payment/vnpay/makePaymentVnpay.dart';
+//
+// void main() {
+//   runApp(const MyApp());
+// }
+//
+// class MyApp extends StatelessWidget {
+//   const MyApp({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'Payment Example',
+//       theme: ThemeData(
+//         primarySwatch: Colors.blue,
+//       ),
+//       initialRoute: '/',
+//       routes: {
+//         '/': (context) => const HomePage(),
+//         '/payment_status': (context) => const PaymentStatusPage(),
+//       },
+//     );
+//   }
+// }
+//
+// class HomePage extends StatelessWidget {
+//   const HomePage({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text('Home Page'),
+//       ),
+//       body: Center(
+//         child: ElevatedButton(
+//           onPressed: () async {
+//             final String txnRef = _generateTxnRef();
+//             const String vndAmount = '100000';
+//             const String url = 'https://vnpay-be-z22c.onrender.com/order/create_payment_url?amount=$vndAmount';
+//             final String? result = await Navigator.push<String>(
+//               context,
+//               MaterialPageRoute(
+//                 builder: (context) => WebViewPage(url: url),
+//               ),
+//             );
+//
+//             if (result != null) {
+//               if (result == '00') {
+//                 // Payment was successful
+//                 ScaffoldMessenger.of(context).showSnackBar(
+//                   const SnackBar(content: Text('Payment Successful')),
+//                 );
+//               } else {
+//                 // Payment failed
+//                 ScaffoldMessenger.of(context).showSnackBar(
+//                   const SnackBar(content: Text('Payment Failed')),
+//                 );
+//               }
+//             }
+//           },
+//           child: const Text('Launch Payment Page'),
+//         ),
+//       ),
+//     );
+//   }
+// }
+//
+// class PaymentStatusPage extends StatelessWidget {
+//   const PaymentStatusPage({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     final String code = ModalRoute.of(context)!.settings.arguments as String;
+//
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text('Payment Status'),
+//       ),
+//       body: Center(
+//         child: Text('Payment Status: $code'),
+//       ),
+//     );
+//   }
+// }
