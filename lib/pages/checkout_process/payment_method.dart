@@ -41,7 +41,7 @@ class PaymentMethod extends StatelessWidget {
             leading: const Icon(Icons.payment), // Icon for 'E-Wallets'
             title: const Text('E-Wallets'),
             onTap: () {
-              onPaymentSelected('online banking');
+              onPaymentSelected('E-Wallets');
               Navigator.pop(context);
             },
           ),

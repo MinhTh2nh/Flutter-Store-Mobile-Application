@@ -160,7 +160,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                       style: const TextStyle(fontSize: 18),
                                     ),
                                   ),
-                                  Container(
+                                  SizedBox(
                                     width: 35.0,
                                     child: RawMaterialButton(
                                       onPressed: () {
@@ -193,8 +193,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.start,
+                          spacing: 8.0, // Horizontal spacing between items
+                          runSpacing: 8.0, // Vertical spacing between rows
                           children: productItems.map<Widget>((item) {
                             return GestureDetector(
                               onTap: () {
@@ -205,7 +207,6 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                                 });
                               },
                               child: Container(
-                                margin: const EdgeInsets.all(8.0),
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 8.0, horizontal: 12.0),
                                 decoration: BoxDecoration(
