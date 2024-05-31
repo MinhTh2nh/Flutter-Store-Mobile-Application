@@ -53,9 +53,11 @@ class ProductTile extends StatelessWidget {
               fit: BoxFit.contain,
               errorBuilder: (BuildContext context, Object exception,
                   StackTrace? stackTrace) {
-                return Image.asset(
-                  'lib/images/blank.png',
-                  fit: BoxFit.cover,
+                return Center(
+                  child: Image.asset(
+                    'lib/images/blank.png',
+                    fit: BoxFit.cover,
+                  ),
                 );
               },
             ),
